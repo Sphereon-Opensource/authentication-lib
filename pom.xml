@@ -5,8 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sphereon.libs</groupId>
-    <artifactId>lib-tokenapi</artifactId>
+    <artifactId>lib-tokenapi-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>main</module>
+        <module>osgi</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -34,13 +39,6 @@
         <dependencies>
             <dependency>
                 <groupId>com.sphereon.ms</groupId>
-                <artifactId>sphereon-ms-spring-bom</artifactId>
-                <version>${sphereon-commons.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.sphereon.ms</groupId>
                 <artifactId>sphereon-ms-commons-bom</artifactId>
                 <version>${sphereon-commons.version}</version>
                 <type>pom</type>
@@ -51,26 +49,32 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.9.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -121,6 +125,26 @@
                 <version>1.5.0</version>
                 <configuration>
                     <!-- optional configuration -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.3.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${pom.groupId}.${pom.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${pom.artifactId}</Bundle-Name>
+                        <Bundle-Version>1.0.0</Bundle-Version>
+                        <Private-Package>com.sphereon.libs.tokenapi.impl</Private-Package>
+                        <Bundle-Activator>com.sphereon.libs.tokenapi.impl.Activator</Bundle-Activator>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional
+                        </Import-Package>
+                        <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                    </instructions>
                 </configuration>
             </plugin>
         </plugins>

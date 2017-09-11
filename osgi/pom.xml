@@ -31,12 +31,13 @@
                         <Bundle-Name>${pom.artifactId}</Bundle-Name>
                         <Bundle-Version>1.0.0</Bundle-Version>
                         <Private-Package>com.sphereon.libs.tokenapi.impl</Private-Package>
-                        <Bundle-Activator>com.sphereon.libs.tokenapi.impl.Activator</Bundle-Activator>
+                        <Bundle-Activator>com.sphereon.libs.tokenapi.impl.osgi.Activator</Bundle-Activator>
                         <Import-Package>
                             org.osgi.framework,
                             *;resolution:=optional
                         </Import-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                        <Embed-Transitive>true</Embed-Transitive>
                     </instructions>
                 </configuration>
             </plugin>

@@ -1,6 +1,8 @@
 package com.sphereon.libs.tokenapi;
 
-import com.sphereon.libs.tokenapi.granttypes.*;
+import com.sphereon.libs.tokenapi.config.PersistenceMode;
+import com.sphereon.libs.tokenapi.config.PersistenceType;
+import com.sphereon.libs.tokenapi.config.TokenApiConfiguration;
 
 @SuppressWarnings("unused")
 public interface TokenApi {
@@ -9,19 +11,12 @@ public interface TokenApi {
 
     void revokeToken(RevokeTokenRequest revokeTokenRequest);
 
-    GenerateTokenRequest newGenerateTokenRequest(String application, Grant grant);
+    TokenRequestFactory getTokenRequestFactory(String applicationName);
 
-    RevokeTokenRequest newRevokeTokenRequest(String application);
+    GrantFactory getGrantFactory(String applicationName);
 
-    ClientCredentialsGrant newClientCredentialsGrant();
+    TokenApiConfiguration configure(PersistenceType persistenceType, PersistenceMode persistenceMode);
 
-    PasswordGrant newPasswordGrant();
+    void persistConfiguration(TokenApiConfiguration tokenApiConfiguration);
 
-    RefreshTokenGrant newRefreshTokenGrant();
-
-    NtlmGrant newNtlmGrant();
-
-    KerberosGrant newKerberosGrant();
-
-    SAML2Grant newSAML2Grant();
 }

@@ -1,7 +1,5 @@
 package com.sphereon.libs.tokenapi;
 
-import java.util.Map;
-
 public interface TokenRequest {
     String getApplication();
 
@@ -12,8 +10,4 @@ public interface TokenRequest {
     String getConsumerSecret();
 
     void setConsumerSecret(String consumerSecret);
-
-    boolean isPreconfigured();
-
-    Map<String, String> getParameters();
 }

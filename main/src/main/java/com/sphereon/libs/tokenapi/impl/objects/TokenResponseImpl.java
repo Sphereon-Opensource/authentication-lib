@@ -1,12 +1,13 @@
-package com.sphereon.libs.tokenapi.impl;
+package com.sphereon.libs.tokenapi.impl.objects;
 
+import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.tokenapi.TokenResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;
 import java.util.Map;
 
-public class TokenResponseImpl implements TokenResponse {
+public class TokenResponseImpl extends AutoHashedObject implements TokenResponse {
 
     private String accessToken;
 

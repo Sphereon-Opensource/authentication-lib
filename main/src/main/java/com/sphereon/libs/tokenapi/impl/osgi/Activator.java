@@ -1,4 +1,4 @@
-package com.sphereon.libs.tokenapi.impl;
+package com.sphereon.libs.tokenapi.impl.osgi;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

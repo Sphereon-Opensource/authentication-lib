@@ -5,19 +5,22 @@ import com.google.gson.reflect.TypeToken;
 import com.sphereon.libs.tokenapi.GenerateTokenRequest;
 import com.sphereon.libs.tokenapi.TokenRequest;
 import com.sphereon.libs.tokenapi.granttypes.Grant;
+import com.sphereon.libs.tokenapi.impl.objects.BodyParameterKey;
+import com.sphereon.libs.tokenapi.impl.objects.TokenPathParameters;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Request;
+import org.springframework.util.Assert;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+@SuppressWarnings("PackageAccessibility")
 public class HttpDataBuilder {
 
-    private static final String TOKEN = "token";
-    private static final String REVOKE = "revoke";
     private static final Base64.Encoder BASE64_ENCODER = Base64.getEncoder();
     private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {
     }.getType();
@@ -25,8 +28,10 @@ public class HttpDataBuilder {
 
 
     public Request newTokenRequest(String urlBase, Headers headers, FormBody requestBody) {
+        Assert.notNull(urlBase, "No urlBase was specified");
+
         Request.Builder request = new Request.Builder()
-                .url(urlBase + TOKEN)
+                .url(urlBase + TokenPathParameters.TOKEN)
                 .headers(headers)
                 .post(requestBody);
         return request.build();
@@ -35,7 +40,7 @@ public class HttpDataBuilder {
 
     public Request newRevokeRequest(String urlBase, Headers headers, FormBody requestBody) {
         Request.Builder request = new Request.Builder()
-                .url(urlBase + REVOKE)
+                .url(urlBase + TokenPathParameters.REVOKE)
                 .headers(headers)
                 .post(requestBody);
         return request.build();
@@ -43,17 +48,26 @@ public class HttpDataBuilder {
 
 
     public FormBody buildBody(TokenRequest tokenRequest) {
-        // TODO: Assert
-        FormBody.Builder bodyBuilder = new FormBody.Builder();
+        Assert.notNull(tokenRequest, "No tokenRequest was specified");
+
+        Map<BodyParameterKey, String> parameterMap = new LinkedHashMap<>();
         if (tokenRequest instanceof GenerateTokenRequest) {
             Grant grant = ((GenerateTokenRequest) tokenRequest).getGrant();
-            grant.getParameters().forEach((key, value) ->
-                    bodyBuilder.add(key, value));
+            if (grant instanceof BodyParameters) {
+                BodyParameters bodyParameters = (BodyParameters) grant;
+                bodyParameters.loadParameters(parameterMap);
+            }
         }
-        if (tokenRequest.getParameters() != null) {
-            tokenRequest.getParameters().forEach((key, value) ->
-                    bodyBuilder.add(key, value));
+        if (tokenRequest instanceof BodyParameters) {
+            BodyParameters bodyParameters = (BodyParameters) tokenRequest;
+            bodyParameters.loadParameters(parameterMap);
         }
+
+        FormBody.Builder bodyBuilder = new FormBody.Builder();
+        parameterMap.forEach((key, value) -> {
+            Assert.notNull(value, "Body parameter " + key + " not set.");
+            bodyBuilder.add(key.getValue(), value);
+        });
         return bodyBuilder.build();
     }
 

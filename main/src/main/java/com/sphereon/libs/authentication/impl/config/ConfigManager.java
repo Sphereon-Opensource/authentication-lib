@@ -6,49 +6,51 @@ import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.propertyio.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ConfigManager {
+    private static final String PROPERTY_PREFIX = "sphereon.authentication-api";
     private static final String GATEWAY_URL = "https://gw.api.cloud.sphereon.com/";
 
-    private TokenApiConfiguration configuration;
 
-    private static final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+    private final TokenApiConfiguration configuration;
 
-    private PropertyConfig propertyIO;
+    private final String propertyPrefix;
+
+    private final PropertyConfigBackend propertyConfig;
 
 
     public ConfigManager(TokenApiConfiguration tokenApiConfiguration) {
         this.configuration = tokenApiConfiguration;
         if (StringUtils.isEmpty(configuration.getGatewayBaseUrl())) {
-            configuration.setGatewayBaseUrl(readProperty(PropertyKey.GATEWAY_BASE_URL, GATEWAY_URL));
+            this.configuration.setGatewayBaseUrl(readProperty(PropertyKey.GATEWAY_BASE_URL, GATEWAY_URL));
         }
-        propertyIO = selectPropertyIO();
+        this.propertyConfig = selectPropertyConfig();
+        this.propertyPrefix = PROPERTY_PREFIX + '.' + this.configuration.getApplication() + '.';
     }
 
 
-    private PropertyConfig selectPropertyIO() {
+    private PropertyConfigBackend selectPropertyConfig() {
         switch (configuration.getPersistenceType()) {
             case DISABLED:
-                return new NoopPropertyIO();
+                return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
                 File propertiesFile = new File(configuration.getStandalonePropertyFilePath());
-                return new PropertyFileIO(configuration.getPersistenceMode(), propertiesFile.toURI());
+                return new PropertyFileBackend(configuration.getPersistenceMode(), propertiesFile.toURI(), configuration.getApplication());
             case APPLICATION_PROPERTIES:
                 return createPropertyFileIoFromSpringConfig();
             case SYSTEM_ENVIRONMENT:
                 return new SystemEnvPropertyIO(configuration.getPersistenceMode());
             default:
-                return new InMemoryConfig();
+                return new InMemoryConfig(configuration.getPersistenceMode());
         }
     }
 
 
-    private PropertyConfig createPropertyFileIoFromSpringConfig() {
+    private PropertyConfigBackend createPropertyFileIoFromSpringConfig() {
         URL url = getClass().getClassLoader().getResource("/application.properties");
         if (url == null) {
             throw new RuntimeException("application.properties was not found in the classpath");
@@ -58,7 +60,7 @@ public class ConfigManager {
             persistenceMode = PersistenceMode.READ_ONLY;
         }
         try {
-            return new PropertyFileIO(persistenceMode, url.toURI());
+            return new PropertyFileBackend(persistenceMode, url.toURI(), configuration.getApplication());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Could not read property file URL " + url, e);
         }
@@ -71,17 +73,17 @@ public class ConfigManager {
 
 
     public void saveProperty(PropertyKey key, String value) {
-        propertyIO.saveProperty(key, value);
+        propertyConfig.saveProperty(this.propertyPrefix, key, value);
     }
 
 
     public String readProperty(PropertyKey key) {
-        return propertyIO.readProperty(key, null);
+        return this.propertyConfig.readProperty(this.propertyPrefix, key, null);
     }
 
 
     public String readProperty(PropertyKey key, String defaultValue) {
-        return propertyIO.readProperty(key, defaultValue);
+        return this.propertyConfig.readProperty(this.propertyPrefix, key, defaultValue);
     }
 
 

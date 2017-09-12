@@ -5,7 +5,7 @@ import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
-abstract class AbstractCommonsConfig implements PropertyConfig {
+abstract class AbstractCommonsConfig implements PropertyConfigBackend {
     protected final PersistenceMode persistenceMode;
     protected Configuration config;
 
@@ -16,11 +16,11 @@ abstract class AbstractCommonsConfig implements PropertyConfig {
 
 
     @Override
-    public String readProperty(PropertyKey key, String defaultValue) {
-        String value = config.getString(key.getPropertyKey());
+    public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
+        String value = config.getString(propertyPrefix + key.getPropertyKey());
         if (StringUtils.isEmpty(value)) {
             if (StringUtils.isNotBlank(defaultValue)) {
-                saveProperty(key, defaultValue);
+                saveProperty(propertyPrefix, key, defaultValue);
             }
             return defaultValue;
         }
@@ -29,9 +29,9 @@ abstract class AbstractCommonsConfig implements PropertyConfig {
 
 
     @Override
-    public void saveProperty(PropertyKey key, String value) {
-        if (persistenceMode == PersistenceMode.READ_WRITE) {
-            config.setProperty(key.getPropertyKey(), value);
+    public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
+        if (key.isCheckReadOnly() && persistenceMode == PersistenceMode.READ_WRITE) {
+            config.setProperty(propertyPrefix + key.getPropertyKey(), value);
         }
     }
 }

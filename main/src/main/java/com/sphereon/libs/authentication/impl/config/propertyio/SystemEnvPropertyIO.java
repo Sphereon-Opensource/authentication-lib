@@ -12,28 +12,29 @@ public class SystemEnvPropertyIO extends InMemoryConfig {
 
 
     @Override
-    public String readProperty(PropertyKey key, String defaultValue) {
-        String value = System.getenv(key.getPropertyKey());
+    public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
+
+        String value = System.getenv(propertyPrefix + key.getPropertyKey());
         if (StringUtils.isEmpty(value)) {
-            value = System.getProperty(key.getPropertyKey());
+            value = System.getProperty(propertyPrefix + key.getPropertyKey());
         }
         if (StringUtils.isEmpty(value)) {
             if (persistenceMode == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
-                saveProperty(key, defaultValue);
+                saveProperty(propertyPrefix, key, defaultValue);
             }
-            return super.readProperty(key, defaultValue);
+            return super.readProperty(propertyPrefix, key, defaultValue);
         }
         return value;
     }
 
 
     @Override
-    public void saveProperty(PropertyKey key, String value) {
+    public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
         if (persistenceMode == PersistenceMode.READ_WRITE) {
             if (key.isEncrypt()) {
                 // TODO: write encrypted version to log?
             }
         }
-        super.saveProperty(key, value);
+        super.saveProperty(propertyPrefix, key, value);
     }
 }

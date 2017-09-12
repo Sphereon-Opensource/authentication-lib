@@ -15,7 +15,7 @@ public class InMemoryConfig extends AbstractCommonsConfig {
         try {
             this.config = builder.getConfiguration();
         } catch (Exception e) {
-            throw new RuntimeException("Could not initialize PropertyFileIO / InMemoryConfig", e);
+            throw new RuntimeException("Could not initialize PropertyFileBackend / InMemoryConfig", e);
         }
     }
 }

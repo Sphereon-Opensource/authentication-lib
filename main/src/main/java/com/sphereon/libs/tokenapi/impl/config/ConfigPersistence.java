@@ -4,8 +4,8 @@ import com.sphereon.libs.tokenapi.config.TokenApiConfiguration;
 
 public interface ConfigPersistence {
 
-    void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager);
+    void loadConfig(ConfigManager configManager);
 
-    void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager);
+    void persistConfig(ConfigManager configManager);
 
 }

@@ -1,7 +1,6 @@
 package com.sphereon.libs.tokenapi.impl.objects;
 
 import com.sphereon.libs.tokenapi.GenerateTokenRequest;
-import com.sphereon.libs.tokenapi.config.TokenApiConfiguration;
 import com.sphereon.libs.tokenapi.granttypes.Grant;
 import com.sphereon.libs.tokenapi.impl.BodyParameters;
 import com.sphereon.libs.tokenapi.impl.config.ConfigManager;
@@ -20,8 +19,7 @@ public class GenerateTokenRequestImpl extends TokenRequestImpl implements Genera
     protected String scope;
 
 
-    public GenerateTokenRequestImpl(String application, Grant grant) {
-        super(application);
+    public GenerateTokenRequestImpl(Grant grant) {
         this.grant = grant;
     }
 
@@ -57,19 +55,19 @@ public class GenerateTokenRequestImpl extends TokenRequestImpl implements Genera
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        super.loadConfig(tokenApiConfiguration, configManager);
-        setScope(configManager.readProperty(tokenApiConfiguration, PropertyKey.SCOPE));
-        setValidityPeriod(Duration.parse(configManager.readProperty(tokenApiConfiguration, PropertyKey.VALIDITY_PERIOD)));
+    public void loadConfig(ConfigManager configManager) {
+        super.loadConfig(configManager);
+        setScope(configManager.readProperty(PropertyKey.SCOPE));
+        setValidityPeriod(Duration.parse(configManager.readProperty(PropertyKey.VALIDITY_PERIOD)));
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        super.loadConfig(tokenApiConfiguration, configManager);
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.SCOPE, getScope());
+    public void persistConfig(ConfigManager configManager) {
+        super.loadConfig(configManager);
+        configManager.saveProperty(PropertyKey.SCOPE, getScope());
         if (getValidityPeriod() != null) {
-            configManager.saveProperty(tokenApiConfiguration, PropertyKey.VALIDITY_PERIOD, getValidityPeriod().toString());
+            configManager.saveProperty(PropertyKey.VALIDITY_PERIOD, getValidityPeriod().toString());
         }
     }
 

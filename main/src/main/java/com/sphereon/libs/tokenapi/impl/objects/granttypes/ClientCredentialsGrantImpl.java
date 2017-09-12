@@ -19,11 +19,11 @@ public class ClientCredentialsGrantImpl extends AutoHashedObject implements Clie
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
+    public void loadConfig(ConfigManager configManager) {
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
+    public void persistConfig(ConfigManager configManager) {
     }
 }

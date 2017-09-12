@@ -36,13 +36,13 @@ public class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, BodyPa
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        setWindowsToken(configManager.readProperty(tokenApiConfiguration, PropertyKey.WINDOWS_TOKEN));
+    public void loadConfig(ConfigManager configManager) {
+        setWindowsToken(configManager.readProperty(PropertyKey.WINDOWS_TOKEN));
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.WINDOWS_TOKEN, getWindowsToken());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.WINDOWS_TOKEN, getWindowsToken());
     }
 }

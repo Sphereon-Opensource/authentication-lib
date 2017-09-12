@@ -5,6 +5,7 @@ import com.sphereon.libs.tokenapi.config.PersistenceMode;
 import com.sphereon.libs.tokenapi.config.PersistenceType;
 import com.sphereon.libs.tokenapi.config.TokenApiConfiguration;
 import com.sphereon.libs.tokenapi.impl.config.ConfigManager;
+import com.sphereon.libs.tokenapi.impl.config.TokenApiConfigurationImpl;
 import com.sphereon.libs.tokenapi.impl.objects.TokenResponseImpl;
 import okhttp3.*;
 import org.springframework.util.Assert;
@@ -18,20 +19,22 @@ public class TokenApiImpl implements TokenApi {
 
     private static final HttpDataBuilder httpDataBuilder = new HttpDataBuilder();
 
-    private OkHttpClient okHttpClient = new OkHttpClient();
+    private final ConfigManager configManager;
 
-    private ConfigManager configManager = new ConfigManager();
+    private final OkHttpClient okHttpClient = new OkHttpClient();
 
-    private TokenApiConfiguration tokenApiConfiguration;
+
+    public TokenApiImpl(TokenApiConfiguration tokenApiConfiguration) {
+        configManager = new ConfigManager(tokenApiConfiguration);
+    }
 
 
     @Override
     public TokenResponse generateToken(GenerateTokenRequest tokenRequest) {
         Assert.notNull(tokenRequest, "No tokenRequest was supplied");
-        createDefaultConfig();
         FormBody requestBody = httpDataBuilder.buildBody(tokenRequest);
         Headers headers = httpDataBuilder.buildHeaders(tokenRequest);
-        Request httpRequest = httpDataBuilder.newTokenRequest(tokenApiConfiguration.getGatewayBaseUrl(), headers, requestBody);
+        Request httpRequest = httpDataBuilder.newTokenRequest(configManager.getConfiguration().getGatewayBaseUrl(), headers, requestBody);
         try {
             Response response = okHttpClient.newCall(httpRequest).execute();
             String responseBody = getResponseBodyContent(response);
@@ -56,10 +59,9 @@ public class TokenApiImpl implements TokenApi {
 
     @Override
     public void revokeToken(RevokeTokenRequest revokeTokenRequest) {
-        createDefaultConfig();
         FormBody requestBody = httpDataBuilder.buildBody(revokeTokenRequest);
         Headers headers = httpDataBuilder.buildHeaders(revokeTokenRequest);
-        Request httpRequest = httpDataBuilder.newRevokeRequest(tokenApiConfiguration.getGatewayBaseUrl(), headers, requestBody);
+        Request httpRequest = httpDataBuilder.newRevokeRequest(configManager.getConfiguration().getGatewayBaseUrl(), headers, requestBody);
         try {
             Response response = okHttpClient.newCall(httpRequest).execute();
             if (response.code() != 200) {
@@ -72,36 +74,26 @@ public class TokenApiImpl implements TokenApi {
     }
 
 
-
-
     @Override
-    public TokenRequestFactory getTokenRequestFactory(String applicationName) {
-        return new TokenRequestFactoryImpl(applicationName, configManager, tokenApiConfiguration);
+    public TokenRequestFactory getTokenRequestFactory() {
+        return new TokenRequestFactoryImpl(configManager);
     }
 
 
     @Override
-    public GrantFactory getGrantFactory(String applicationName) {
-        return new GrantFactoryImpl(applicationName, configManager, tokenApiConfiguration);
-    }
-
-
-    private void createDefaultConfig() {
-        if (tokenApiConfiguration == null) {
-            configure(PersistenceType.DISABLED, PersistenceMode.READ_ONLY);
-        }
+    public GrantFactory getGrantFactory() {
+        return new GrantFactoryImpl(configManager);
     }
 
 
     @Override
-    public TokenApiConfiguration configure(PersistenceType persistenceType, PersistenceMode persistenceMode) {
-        tokenApiConfiguration = configManager.loadConfig(persistenceType, persistenceMode);
-        return tokenApiConfiguration;
+    public TokenApiConfiguration getConfiguration() {
+        return configManager.getConfiguration();
     }
 
 
     @Override
-    public void persistConfiguration(TokenApiConfiguration tokenApiConfiguration) {
-        configManager.persist(tokenApiConfiguration);
+    public void persistConfiguration() {
+        configManager.persist();
     }
 }

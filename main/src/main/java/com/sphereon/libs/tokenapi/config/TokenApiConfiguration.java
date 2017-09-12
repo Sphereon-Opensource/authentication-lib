@@ -1,6 +1,10 @@
 package com.sphereon.libs.tokenapi.config;
 
+import com.sphereon.libs.tokenapi.impl.config.TokenApiConfigurationImpl;
+
 public interface TokenApiConfiguration {
+
+    String getApplication();
 
     String getGatewayBaseUrl();
 
@@ -12,6 +16,9 @@ public interface TokenApiConfiguration {
 
     String getStandalonePropertyFilePath();
 
-    void setStandalonePropertyFilePath(String standalonePropertyFilePath);
+    TokenApiConfigurationImpl setStandalonePropertyFilePath(String standalonePropertyFilePath);
 
+    void setPersistenceType(PersistenceType persistenceType);
+
+    void setPersistenceMode(PersistenceMode persistenceMode);
 }

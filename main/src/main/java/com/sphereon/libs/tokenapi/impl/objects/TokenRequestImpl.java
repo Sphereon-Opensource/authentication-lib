@@ -13,22 +13,9 @@ import java.util.Map;
 
 public abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, BodyParameters, ConfigPersistence {
 
-    private final String application;
-
     private String consumerKey;
 
     private transient String consumerSecret;
-
-
-    protected TokenRequestImpl(String application) {
-        this.application = application;
-    }
-
-
-    @Override
-    public String getApplication() {
-        return application;
-    }
 
 
     @Override
@@ -56,20 +43,19 @@ public abstract class TokenRequestImpl extends AutoHashedObject implements Token
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
+    public void loadConfig(ConfigManager configManager) {
 
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.CONSUMER_KEY, getConsumerKey());
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.CONSUMER_SECRET, getConsumerSecret());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.CONSUMER_KEY, getConsumerKey());
+        configManager.saveProperty(PropertyKey.CONSUMER_SECRET, getConsumerSecret());
     }
 
 
     @Override
     public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
-
     }
 }

@@ -6,18 +6,25 @@ import com.sphereon.libs.tokenapi.config.TokenApiConfiguration;
 
 public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
-    private final PersistenceType persistenceType;
+    private final String application;
 
-    private final PersistenceMode persistenceMode;
+    private PersistenceType persistenceType;
+
+    private PersistenceMode persistenceMode;
 
     private String gatewayBaseUrl;
 
     private String standalonePropertyFilePath;
 
 
-    public TokenApiConfigurationImpl(PersistenceType persistenceType, PersistenceMode persistenceMode) {
-        this.persistenceType = persistenceType;
-        this.persistenceMode = persistenceMode;
+    public TokenApiConfigurationImpl(String application) {
+        this.application = application;
+    }
+
+
+    @Override
+    public String getApplication() {
+        return application;
     }
 
 
@@ -40,8 +47,20 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
 
     @Override
+    public void setPersistenceType(PersistenceType persistenceType) {
+        this.persistenceType = persistenceType;
+    }
+
+
+    @Override
     public PersistenceMode getPersistenceMode() {
         return persistenceMode;
+    }
+
+
+    @Override
+    public void setPersistenceMode(PersistenceMode persistenceMode) {
+        this.persistenceMode = persistenceMode;
     }
 
 
@@ -52,7 +71,10 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
 
     @Override
-    public void setStandalonePropertyFilePath(String standalonePropertyFilePath) {
+    public TokenApiConfigurationImpl setStandalonePropertyFilePath(String standalonePropertyFilePath) {
         this.standalonePropertyFilePath = standalonePropertyFilePath;
+        return this;
     }
+
+
 }

@@ -51,15 +51,15 @@ public class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        setKerberosRealm(configManager.readProperty(tokenApiConfiguration, PropertyKey.KERBEROS_REALM));
-        setKerberosToken(configManager.readProperty(tokenApiConfiguration, PropertyKey.KERBEROS_TOKEN));
+    public void loadConfig(ConfigManager configManager) {
+        setKerberosRealm(configManager.readProperty(PropertyKey.KERBEROS_REALM));
+        setKerberosToken(configManager.readProperty(PropertyKey.KERBEROS_TOKEN));
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.KERBEROS_REALM, getKerberosRealm());
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.KERBEROS_TOKEN, getKerberosToken());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.KERBEROS_REALM, getKerberosRealm());
+        configManager.saveProperty(PropertyKey.KERBEROS_TOKEN, getKerberosToken());
     }
 }

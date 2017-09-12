@@ -36,13 +36,13 @@ public class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTo
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        setRefreshToken(configManager.readProperty(tokenApiConfiguration, PropertyKey.REFRESH_TOKEN));
+    public void loadConfig(ConfigManager configManager) {
+        setRefreshToken(configManager.readProperty(PropertyKey.REFRESH_TOKEN));
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.REFRESH_TOKEN, getRefreshToken());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.REFRESH_TOKEN, getRefreshToken());
     }
 }

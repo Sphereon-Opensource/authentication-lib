@@ -52,19 +52,19 @@ public class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
+    public void loadConfig(ConfigManager configManager) {
         if (StringUtils.isNotEmpty(getUserName())) {
-            setUserName(configManager.readProperty(tokenApiConfiguration, PropertyKey.USER_NAME));
+            setUserName(configManager.readProperty(PropertyKey.USER_NAME));
         }
         if (StringUtils.isNotEmpty(getPassword())) {
-            setPassword(configManager.readProperty(tokenApiConfiguration, PropertyKey.PASSWORD));
+            setPassword(configManager.readProperty(PropertyKey.PASSWORD));
         }
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.USER_NAME, getUserName());
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.PASSWORD, getPassword());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.USER_NAME, getUserName());
+        configManager.saveProperty(PropertyKey.PASSWORD, getPassword());
     }
 }

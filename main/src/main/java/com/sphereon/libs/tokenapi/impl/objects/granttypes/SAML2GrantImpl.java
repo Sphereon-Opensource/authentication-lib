@@ -36,13 +36,13 @@ public class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, Body
 
 
     @Override
-    public void loadConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        setAssertion(configManager.readProperty(tokenApiConfiguration, PropertyKey.SAML2_ASSERTION));
+    public void loadConfig(ConfigManager configManager) {
+        setAssertion(configManager.readProperty(PropertyKey.SAML2_ASSERTION));
     }
 
 
     @Override
-    public void persistConfig(TokenApiConfiguration tokenApiConfiguration, ConfigManager configManager) {
-        configManager.saveProperty(tokenApiConfiguration, PropertyKey.SAML2_ASSERTION, getAssertion());
+    public void persistConfig(ConfigManager configManager) {
+        configManager.saveProperty(PropertyKey.SAML2_ASSERTION, getAssertion());
     }
 }

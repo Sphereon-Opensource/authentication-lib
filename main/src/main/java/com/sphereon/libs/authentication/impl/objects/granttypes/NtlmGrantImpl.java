@@ -2,15 +2,15 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.granttypes.NtlmGrant;
-import com.sphereon.libs.authentication.impl.BodyParameters;
+import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
-import com.sphereon.libs.authentication.impl.objects.BodyParameterKey;
+import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-public class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, BodyParameters, ConfigPersistence {
+class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, RequestParameters, ConfigPersistence {
 
     private String windowsToken;
 
@@ -27,9 +27,15 @@ public class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, BodyPa
 
 
     @Override
-    public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
-        parameterMap.put(BodyParameterKey.GRANT_TYPE, GrantTypeKey.NTLM.getValue());
-        parameterMap.put(BodyParameterKey.WINDOWS_TOKEN, getWindowsToken());
+    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
+
+    }
+
+
+    @Override
+    public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        parameterMap.put(RequestParameterKey.GRANT_TYPE, GrantTypeKey.NTLM.getValue());
+        parameterMap.put(RequestParameterKey.WINDOWS_TOKEN, getWindowsToken());
     }
 
 

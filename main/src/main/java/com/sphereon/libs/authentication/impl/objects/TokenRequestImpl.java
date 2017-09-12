@@ -3,14 +3,14 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.TokenRequest;
-import com.sphereon.libs.authentication.impl.BodyParameters;
+import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 
 import java.util.Map;
 
-public abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, BodyParameters, ConfigPersistence {
+abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, RequestParameters, ConfigPersistence {
 
     private String consumerKey;
 
@@ -55,6 +55,6 @@ public abstract class TokenRequestImpl extends AutoHashedObject implements Token
 
 
     @Override
-    public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
+    public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
     }
 }

@@ -1,6 +1,6 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-public enum BodyParameterKey {
+public enum RequestParameterKey {
 
     GRANT_TYPE("grant_type"),
     USER_NAME("username"),
@@ -17,7 +17,7 @@ public enum BodyParameterKey {
     private final String value;
 
 
-    BodyParameterKey(String value) {
+    RequestParameterKey(String value) {
         this.value = value;
     }
 

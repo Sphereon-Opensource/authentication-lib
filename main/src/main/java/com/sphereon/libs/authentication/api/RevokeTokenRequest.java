@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.api;
 
-public interface RevokeTokenRequest extends TokenRequest {
+import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilder;
+
+public interface RevokeTokenRequest extends RevokeTokenRequestBuilder {
 
     void setToken(String token);
 

@@ -2,15 +2,15 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
-import com.sphereon.libs.authentication.impl.BodyParameters;
+import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
-import com.sphereon.libs.authentication.impl.objects.BodyParameterKey;
+import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-public class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, BodyParameters, ConfigPersistence {
+class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, RequestParameters, ConfigPersistence {
 
     private String kerberosRealm;
 
@@ -40,10 +40,16 @@ public class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant
 
 
     @Override
-    public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
-        parameterMap.put(BodyParameterKey.GRANT_TYPE, GrantTypeKey.KERBEROS.getValue());
-        parameterMap.put(BodyParameterKey.KERBEROS_REALM, getKerberosRealm());
-        parameterMap.put(BodyParameterKey.KERBEROS_TOKEN, getKerberosToken());
+    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
+
+    }
+
+
+    @Override
+    public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        parameterMap.put(RequestParameterKey.GRANT_TYPE, GrantTypeKey.KERBEROS.getValue());
+        parameterMap.put(RequestParameterKey.KERBEROS_REALM, getKerberosRealm());
+        parameterMap.put(RequestParameterKey.KERBEROS_TOKEN, getKerberosToken());
     }
 
 

@@ -6,6 +6,8 @@ public interface TokenApiConfiguration {
 
     String getApplication();
 
+    void setApplication(String application);
+
     String getGatewayBaseUrl();
 
     void setGatewayBaseUrl(String gatewayBaseUrl);

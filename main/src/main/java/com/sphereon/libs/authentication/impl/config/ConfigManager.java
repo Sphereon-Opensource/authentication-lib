@@ -25,11 +25,11 @@ public class ConfigManager {
 
     public ConfigManager(TokenApiConfiguration tokenApiConfiguration) {
         this.configuration = tokenApiConfiguration;
+        this.propertyConfig = selectPropertyConfig();
+        this.propertyPrefix = PROPERTY_PREFIX + '.' + this.configuration.getApplication() + '.';
         if (StringUtils.isEmpty(configuration.getGatewayBaseUrl())) {
             this.configuration.setGatewayBaseUrl(readProperty(PropertyKey.GATEWAY_BASE_URL, GATEWAY_URL));
         }
-        this.propertyConfig = selectPropertyConfig();
-        this.propertyPrefix = PROPERTY_PREFIX + '.' + this.configuration.getApplication() + '.';
     }
 
 

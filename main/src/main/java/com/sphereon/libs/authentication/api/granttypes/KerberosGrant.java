@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.api.granttypes;
 
-public interface KerberosGrant extends Grant {
+import com.sphereon.libs.authentication.impl.objects.granttypes.KerberosBuilder;
+
+public interface KerberosGrant extends KerberosBuilder {
 
     void setKerberosRealm(String kerberosRealm);
 

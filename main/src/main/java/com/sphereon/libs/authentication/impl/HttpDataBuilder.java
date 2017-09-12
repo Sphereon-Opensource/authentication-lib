@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sphereon.libs.authentication.api.GenerateTokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.objects.BodyParameterKey;
+import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 import com.sphereon.libs.authentication.impl.objects.TokenPathParameters;
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -50,17 +50,17 @@ public class HttpDataBuilder {
     public FormBody buildBody(TokenRequest tokenRequest) {
         Assert.notNull(tokenRequest, "No tokenRequest was specified");
 
-        Map<BodyParameterKey, String> parameterMap = new LinkedHashMap<>();
+        Map<RequestParameterKey, String> parameterMap = new LinkedHashMap<>();
         if (tokenRequest instanceof GenerateTokenRequest) {
             Grant grant = ((GenerateTokenRequest) tokenRequest).getGrant();
-            if (grant instanceof BodyParameters) {
-                BodyParameters bodyParameters = (BodyParameters) grant;
-                bodyParameters.loadParameters(parameterMap);
+            if (grant instanceof RequestParameters) {
+                RequestParameters bodyParameters = (RequestParameters) grant;
+                bodyParameters.bodyParameters(parameterMap);
             }
         }
-        if (tokenRequest instanceof BodyParameters) {
-            BodyParameters bodyParameters = (BodyParameters) tokenRequest;
-            bodyParameters.loadParameters(parameterMap);
+        if (tokenRequest instanceof RequestParameters) {
+            RequestParameters bodyParameters = (RequestParameters) tokenRequest;
+            bodyParameters.bodyParameters(parameterMap);
         }
 
         FormBody.Builder bodyBuilder = new FormBody.Builder();

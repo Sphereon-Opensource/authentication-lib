@@ -14,6 +14,7 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.jasypt.salt.StringFixedSaltGenerator;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 public class PropertyFileBackend extends AbstractCommonsConfig {
@@ -30,11 +31,21 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         this.application = application;
         initEncryptor();
 
+        File configFile = new File(fileUri);
+        if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
+            configFile.getParentFile().mkdirs();
+        }
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+            }
+        }
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
                 new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
                         .configure(params.properties()
-                                .setFile(new File(fileUri))
+                                .setFile(configFile)
                                 .setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
         builder.setAutoSave(persistenceMode == PersistenceMode.READ_WRITE);
         try {

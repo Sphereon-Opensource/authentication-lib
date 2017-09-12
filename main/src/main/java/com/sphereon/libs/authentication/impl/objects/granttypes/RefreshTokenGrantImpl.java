@@ -2,15 +2,15 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.granttypes.RefreshTokenGrant;
-import com.sphereon.libs.authentication.impl.BodyParameters;
+import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
-import com.sphereon.libs.authentication.impl.objects.BodyParameterKey;
+import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-public class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTokenGrant, BodyParameters, ConfigPersistence {
+class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTokenGrant, RequestParameters, ConfigPersistence {
 
     private String refreshToken;
 
@@ -27,9 +27,15 @@ public class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTo
 
 
     @Override
-    public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
-        parameterMap.put(BodyParameterKey.GRANT_TYPE, GrantTypeKey.REFRESH_TOKEN.getValue());
-        parameterMap.put(BodyParameterKey.REFRESH_TOKEN, getRefreshToken());
+    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
+
+    }
+
+
+    @Override
+    public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        parameterMap.put(RequestParameterKey.GRANT_TYPE, GrantTypeKey.REFRESH_TOKEN.getValue());
+        parameterMap.put(RequestParameterKey.REFRESH_TOKEN, getRefreshToken());
     }
 
 

@@ -6,7 +6,7 @@ import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 
 public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
-    private final String application;
+    private String application = "default-application";
 
     private PersistenceType persistenceType;
 
@@ -17,14 +17,15 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
     private String standalonePropertyFilePath;
 
 
-    public TokenApiConfigurationImpl(String application) {
-        this.application = application;
+    @Override
+    public String getApplication() {
+        return application;
     }
 
 
     @Override
-    public String getApplication() {
-        return application;
+    public void setApplication(String application) {
+        this.application = application;
     }
 
 

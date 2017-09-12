@@ -1,4 +1,6 @@
 package com.sphereon.libs.authentication.api.granttypes;
 
-public interface ClientCredentialsGrant extends Grant {
+import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialsBuilder;
+
+public interface ClientCredentialsGrant extends ClientCredentialsBuilder {
 }

@@ -4,6 +4,7 @@ import com.sphereon.libs.authentication.api.*;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.objects.TokenResponseImpl;
+import com.sphereon.libs.authentication.impl.objects.granttypes.GrantBuilder;
 import okhttp3.*;
 import org.springframework.util.Assert;
 
@@ -27,7 +28,7 @@ public class TokenApiImpl implements TokenApi {
 
 
     @Override
-    public TokenResponse generateToken(GenerateTokenRequest tokenRequest) {
+    public TokenResponse requestToken(GenerateTokenRequest tokenRequest) {
         Assert.notNull(tokenRequest, "No tokenRequest was supplied");
         FormBody requestBody = httpDataBuilder.buildBody(tokenRequest);
         Headers headers = httpDataBuilder.buildHeaders(tokenRequest);
@@ -76,18 +77,6 @@ public class TokenApiImpl implements TokenApi {
 
 
     @Override
-    public TokenRequestFactory getTokenRequestFactory() {
-        return new TokenRequestFactoryImpl(configManager);
-    }
-
-
-    @Override
-    public GrantFactory getGrantFactory() {
-        return new GrantFactoryImpl(configManager);
-    }
-
-
-    @Override
     public TokenApiConfiguration getConfiguration() {
         return configManager.getConfiguration();
     }
@@ -97,4 +86,26 @@ public class TokenApiImpl implements TokenApi {
     public void persistConfiguration() {
         configManager.persist();
     }
+
+
+    @Override
+    public <T extends GrantBuilder> T grantBuilder(Class<T> grantBuilderClass) {
+        try {
+            return grantBuilderClass.getConstructor(ConfigManager.class).newInstance(configManager);
+        } catch (Throwable t) {
+            throw new RuntimeException("Could not create a new instance of " + grantBuilderClass.getName(), t);
+        }
+    }
+    
+
+    @Override
+    public <T extends TokenRequestBuilder> T tokenRequestBuilder(Class<T> tokenRequestBuilderClass) {
+        try {
+            return tokenRequestBuilderClass.getConstructor(ConfigManager.class).newInstance(configManager);
+        } catch (Throwable t) {
+            throw new RuntimeException("Could not create a new instance of " + tokenRequestBuilderClass.getName(), t);
+        }
+    }
 }
+
+

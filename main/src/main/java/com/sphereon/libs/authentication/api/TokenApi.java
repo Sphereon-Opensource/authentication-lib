@@ -3,27 +3,44 @@ package com.sphereon.libs.authentication.api;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.granttypes.ClientCredentialsGrant;
+import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
+import com.sphereon.libs.authentication.api.granttypes.RefreshTokenGrant;
 import com.sphereon.libs.authentication.impl.TokenApiImpl;
 import com.sphereon.libs.authentication.impl.config.TokenApiConfigurationImpl;
+import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.GrantBuilder;
 
 @SuppressWarnings("unused")
 public interface TokenApi {
 
-    TokenResponse generateToken(GenerateTokenRequest tokenRequest);
+    TokenResponse requestToken(GenerateTokenRequest tokenRequest);
 
     void revokeToken(RevokeTokenRequest revokeTokenRequest);
-
-    TokenRequestFactory getTokenRequestFactory();
-
-    GrantFactory getGrantFactory();
 
     TokenApiConfiguration getConfiguration();
 
     void persistConfiguration();
 
+    <T extends GrantBuilder> T grantBuilder(Class<T> grantBuilderClass);
+
+    <T extends TokenRequestBuilder> T tokenRequestBuilder(Class<T> tokenRequestBuilderClass);
 
     interface ConfigurationUpdate {
         void update(TokenApiConfiguration tokenApiConfiguration);
+    }
+
+
+    final class TokenRequestBuilders {
+        public static final Class<GenerateTokenRequest.Builder> GENERATE = GenerateTokenRequest.Builder.class;
+        public static final Class<RevokeTokenRequestBuilder.Builder> REVOKE_TOKEN = RevokeTokenRequestBuilder.Builder.class;
+    }
+
+
+    final class GrantBuilders {
+        public static final Class<ClientCredentialsGrant.Builder> CLIENT_CREDENTIALS = ClientCredentialsGrant.Builder.class;
+        public static final Class<PasswordGrant.Builder> PASSWORD_GRANT = PasswordGrant.Builder.class;
+        public static final Class<RefreshTokenGrant.Builder> REFRESH_TOKEN_GRANT = RefreshTokenGrant.Builder.class;
     }
 
 
@@ -31,8 +48,8 @@ public interface TokenApi {
         private final TokenApiConfiguration tokenApiConfiguration;
 
 
-        public Builder(String application) {
-            tokenApiConfiguration = new TokenApiConfigurationImpl(application);
+        public Builder() {
+            tokenApiConfiguration = new TokenApiConfigurationImpl();
             tokenApiConfiguration.setPersistenceType(PersistenceType.DISABLED);
             tokenApiConfiguration.setPersistenceMode(PersistenceMode.READ_ONLY);
         }
@@ -40,6 +57,12 @@ public interface TokenApi {
 
         public TokenApi.Builder configure(ConfigurationUpdate configurationUpdate) {
             configurationUpdate.update(tokenApiConfiguration);
+            return this;
+        }
+
+
+        public TokenApi.Builder withApplication(String application) {
+            tokenApiConfiguration.setApplication(application);
             return this;
         }
 
@@ -69,7 +92,13 @@ public interface TokenApi {
 
 
         public TokenApi build() {
+            validate();
             return new TokenApiImpl(tokenApiConfiguration);
+        }
+
+
+        private void validate() {
+            // TODO
         }
     }
 }

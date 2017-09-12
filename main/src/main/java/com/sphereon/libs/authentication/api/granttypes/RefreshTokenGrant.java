@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.api.granttypes;
 
-public interface RefreshTokenGrant extends Grant {
+import com.sphereon.libs.authentication.impl.objects.granttypes.RefreshTokenGrantBuilder;
+
+public interface RefreshTokenGrant extends RefreshTokenGrantBuilder {
 
     void setRefreshToken(String refreshToken);
 }

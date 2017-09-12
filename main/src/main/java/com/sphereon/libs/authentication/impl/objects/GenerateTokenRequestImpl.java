@@ -2,7 +2,7 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.sphereon.libs.authentication.api.GenerateTokenRequest;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.BodyParameters;
+import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.Duration;
 import java.util.Map;
 
-public class GenerateTokenRequestImpl extends TokenRequestImpl implements GenerateTokenRequest, BodyParameters {
+class GenerateTokenRequestImpl extends TokenRequestImpl implements GenerateTokenRequest, RequestParameters {
 
     protected final Grant grant;
 
@@ -20,7 +20,7 @@ public class GenerateTokenRequestImpl extends TokenRequestImpl implements Genera
     protected String scope;
 
 
-    public GenerateTokenRequestImpl(Grant grant) {
+    GenerateTokenRequestImpl(Grant grant) {
         this.grant = grant;
     }
 
@@ -59,7 +59,10 @@ public class GenerateTokenRequestImpl extends TokenRequestImpl implements Genera
     public void loadConfig(ConfigManager configManager) {
         super.loadConfig(configManager);
         setScope(configManager.readProperty(PropertyKey.SCOPE));
-        setValidityPeriod(Duration.parse(configManager.readProperty(PropertyKey.VALIDITY_PERIOD)));
+        String validityPeriod = configManager.readProperty(PropertyKey.VALIDITY_PERIOD);
+        if (StringUtils.isNotBlank(validityPeriod)) {
+            setValidityPeriod(Duration.parse(validityPeriod));
+        }
     }
 
 
@@ -77,13 +80,18 @@ public class GenerateTokenRequestImpl extends TokenRequestImpl implements Genera
 
 
     @Override
-    public void loadParameters(Map<BodyParameterKey, String> parameterMap) {
-        super.loadParameters(parameterMap);
+    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
+    }
+
+
+    @Override
+    public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        super.bodyParameters(parameterMap);
         if (StringUtils.isNotBlank(getScope())) {
-            parameterMap.put(BodyParameterKey.SCOPE, getScope());
+            parameterMap.put(RequestParameterKey.SCOPE, getScope());
         }
         if (getValidityPeriod() != null) {
-            parameterMap.put(BodyParameterKey.VALIDITY_PERIOD, "" + getValidityPeriod().getSeconds());
+            parameterMap.put(RequestParameterKey.VALIDITY_PERIOD, "" + getValidityPeriod().getSeconds());
         }
     }
 }

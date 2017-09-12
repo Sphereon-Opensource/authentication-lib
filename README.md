@@ -1,1 +1,1 @@
-# lib-tokenapi
+# tokenapi-lib

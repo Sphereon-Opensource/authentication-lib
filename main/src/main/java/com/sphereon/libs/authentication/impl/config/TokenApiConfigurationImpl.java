@@ -1,5 +1,6 @@
 package com.sphereon.libs.authentication.impl.config;
 
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
@@ -16,6 +17,8 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
     private String standalonePropertyFilePath;
 
+    private Grant defaultGrant;
+
 
     @Override
     public String getApplication() {
@@ -23,7 +26,6 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
     }
 
 
-    @Override
     public void setApplication(String application) {
         this.application = application;
     }
@@ -47,7 +49,6 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
     }
 
 
-    @Override
     public void setPersistenceType(PersistenceType persistenceType) {
         this.persistenceType = persistenceType;
     }
@@ -59,7 +60,6 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
     }
 
 
-    @Override
     public void setPersistenceMode(PersistenceMode persistenceMode) {
         this.persistenceMode = persistenceMode;
     }
@@ -72,10 +72,17 @@ public class TokenApiConfigurationImpl implements TokenApiConfiguration {
 
 
     @Override
-    public TokenApiConfigurationImpl setStandalonePropertyFilePath(String standalonePropertyFilePath) {
-        this.standalonePropertyFilePath = standalonePropertyFilePath;
-        return this;
+    public Grant getDefaultGrant() {
+        return defaultGrant;
+    }
+
+    @Override
+    public void setDefaultGrant(Grant grant) {
+        this.defaultGrant = grant;
     }
 
 
+    public void setStandalonePropertyFilePath(String standalonePropertyFilePath) {
+        this.standalonePropertyFilePath = standalonePropertyFilePath;
+    }
 }

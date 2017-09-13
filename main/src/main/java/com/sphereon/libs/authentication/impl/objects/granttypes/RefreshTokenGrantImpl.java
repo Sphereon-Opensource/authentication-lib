@@ -7,6 +7,7 @@ import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -43,7 +44,9 @@ class RefreshTokenGrantImpl extends AutoHashedObject implements Grant, RequestPa
 
     @Override
     public void loadConfig(ConfigManager configManager) {
-        setRefreshToken(configManager.readProperty(PropertyKey.REFRESH_TOKEN));
+        if (StringUtils.isEmpty(getRefreshToken())) {
+            setRefreshToken(configManager.readProperty(PropertyKey.REFRESH_TOKEN));
+        }
     }
 
 

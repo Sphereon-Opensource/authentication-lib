@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.Duration;
 import java.util.Map;
 
-public class TokenResponseImpl extends AutoHashedObject implements TokenResponse {
+class TokenResponseImpl extends AutoHashedObject implements TokenResponse {
 
     private String accessToken;
 
@@ -20,7 +20,7 @@ public class TokenResponseImpl extends AutoHashedObject implements TokenResponse
     private Duration expiresIn;
 
 
-    public TokenResponseImpl(Map<String, String> parameters) {
+    TokenResponseImpl(Map<String, String> parameters) {
         accessToken = parameters.get("access_token");
         refreshToken = parameters.get("refresh_token");
         scope = parameters.get("scope");

@@ -57,10 +57,10 @@ class PasswordGrantImpl extends AutoHashedObject implements Grant, RequestParame
 
     @Override
     public void loadConfig(ConfigManager configManager) {
-        if (StringUtils.isNotEmpty(getUserName())) {
+        if (StringUtils.isEmpty(getUserName())) {
             setUserName(configManager.readProperty(PropertyKey.USER_NAME));
         }
-        if (StringUtils.isNotEmpty(getPassword())) {
+        if (StringUtils.isEmpty(getPassword())) {
             setPassword(configManager.readProperty(PropertyKey.PASSWORD));
         }
     }

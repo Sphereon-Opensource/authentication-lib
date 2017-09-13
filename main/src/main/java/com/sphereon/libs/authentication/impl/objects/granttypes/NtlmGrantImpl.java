@@ -7,6 +7,7 @@ import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -44,7 +45,9 @@ class NtlmGrantImpl extends AutoHashedObject implements Grant, RequestParameters
 
     @Override
     public void loadConfig(ConfigManager configManager) {
-        setWindowsToken(configManager.readProperty(PropertyKey.WINDOWS_TOKEN));
+        if (StringUtils.isEmpty(getWindowsToken())) {
+            setWindowsToken(configManager.readProperty(PropertyKey.WINDOWS_TOKEN));
+        }
     }
 
 

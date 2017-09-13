@@ -59,7 +59,7 @@ public interface GenerateTokenRequestBuilderPrivate {
         @Override
         public TokenRequest build() {
             validate();
-            GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(grant);
+            GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(grant, configManager);
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
             tokenRequest.setScope(scope);

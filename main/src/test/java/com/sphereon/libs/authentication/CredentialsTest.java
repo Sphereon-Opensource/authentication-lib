@@ -19,22 +19,21 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CredentialsTest extends TestCase {
 
     private static final String APPLICATION_NAME = "ExpiringTokens";
-
+    private static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
 
     private static final AtomicReference<String> refreshToken = new AtomicReference<>();
-    protected static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
 
 
     @Test
     public void test_10_ClientCredentials() {
         TokenApi tokenApi = new TokenApi.Builder().withApplication(APPLICATION_NAME).build();
-        TokenRequest tokenRequest = tokenApi.tokenRequestBuilder().generateTokenRequestBuilder()
+        TokenRequest tokenRequest = tokenApi.requestToken()
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withScope("UnitTest")
                 .withValidityPeriod(VALIDITY_PERIOD)
                 .build();
-        TokenResponse tokenResponse = tokenApi.requestToken(tokenRequest);
+        TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
         wait(VALIDITY_PERIOD);
     }
@@ -53,8 +52,11 @@ public class CredentialsTest extends TestCase {
                 .withPassword("K@A$yG@Vwpq4Ow1W@Q2b")
                 .build();
 
+        tokenApi.reconfigure()
+                .withDefaultGrant(grant)
+                .persist();
 
-        TokenRequest tokenRequest = tokenApi.tokenRequestBuilder().generateTokenRequestBuilder()
+        TokenRequest tokenRequest = tokenApi.requestToken()
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withGrant(grant)
@@ -62,16 +64,11 @@ public class CredentialsTest extends TestCase {
                 .withValidityPeriod(VALIDITY_PERIOD)
                 .build();
 
-        TokenResponse tokenResponse = tokenApi.requestToken(tokenRequest);
+        TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
         String refreshToken = tokenResponse.getRefreshToken();
         Assert.assertNotNull(refreshToken);
         wait(VALIDITY_PERIOD);
-
-        Grant grantPersisted = tokenApi.grantBuilder().refreshTokenGrantBuilder()
-                .withRefreshToken(this.refreshToken.get())
-                .build();
-        Assert.assertEquals(grant, grantPersisted);
         this.refreshToken.set(refreshToken);
     }
 
@@ -89,7 +86,7 @@ public class CredentialsTest extends TestCase {
                 .build();
 
 
-        TokenRequest tokenRequest = tokenApi.tokenRequestBuilder().generateTokenRequestBuilder()
+        TokenRequest tokenRequest = tokenApi.requestToken()
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withGrant(grant)
@@ -97,7 +94,7 @@ public class CredentialsTest extends TestCase {
                 .withValidityPeriod(VALIDITY_PERIOD)
                 .build();
 
-        TokenResponse tokenResponse = tokenApi.requestToken(tokenRequest);
+        TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
         Assert.assertNotNull(tokenResponse.getRefreshToken());
         wait(VALIDITY_PERIOD);

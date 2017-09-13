@@ -42,7 +42,7 @@ public interface RevokeTokenRequestBuilderPrivate {
 
         @Override
         public TokenRequest build() {
-            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl();
+            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configManager);
             revokeTokenRequest.setConsumerKey(consumerKey);
             revokeTokenRequest.setConsumerSecret(consumerSecret);
             revokeTokenRequest.setToken(currentToken);

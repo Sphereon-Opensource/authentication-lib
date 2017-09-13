@@ -26,7 +26,7 @@ public abstract class AutoHashedObject implements Serializable {
     private Object[] collectFieldValues(Object object) {
         List<Object> fieldValues = new ArrayList<>();
         if (object != null) {
-            FieldUtils.getAllFieldsList(this.getClass()).forEach(field -> {
+            FieldUtils.getAllFieldsList(object.getClass()).forEach(field -> {
                 if (!Modifier.isTransient(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
                     try {
                         fieldValues.add(FieldUtils.readField(field, object, true));

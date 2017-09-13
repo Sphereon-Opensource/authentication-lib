@@ -7,6 +7,7 @@ import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -57,8 +58,12 @@ class KerberosGrantImpl extends AutoHashedObject implements Grant, RequestParame
 
     @Override
     public void loadConfig(ConfigManager configManager) {
-        setKerberosRealm(configManager.readProperty(PropertyKey.KERBEROS_REALM));
-        setKerberosToken(configManager.readProperty(PropertyKey.KERBEROS_TOKEN));
+        if (StringUtils.isEmpty(getKerberosRealm())) {
+            setKerberosRealm(configManager.readProperty(PropertyKey.KERBEROS_REALM));
+        }
+        if (StringUtils.isEmpty(getKerberosToken())) {
+            setKerberosToken(configManager.readProperty(PropertyKey.KERBEROS_TOKEN));
+        }
     }
 
 

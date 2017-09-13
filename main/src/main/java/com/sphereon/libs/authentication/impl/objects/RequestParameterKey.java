@@ -11,7 +11,8 @@ public enum RequestParameterKey {
     KERBEROS_TOKEN("kerberos_token"),
     ASSERTION("assertion"),
     VALIDITY_PERIOD("validity_period"),
-    SCOPE("scope");
+    SCOPE("scope"),
+    AUTHORIZATION("Authorization");
 
 
     private final String value;

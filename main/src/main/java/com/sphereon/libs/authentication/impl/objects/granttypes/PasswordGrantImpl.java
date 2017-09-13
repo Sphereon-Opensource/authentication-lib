@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,11 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, RequestParameters, ConfigPersistence {
+class PasswordGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
 
     private String userName;
 
     private String password;
+
+
+    PasswordGrantImpl() {
+    }
 
 
     public String getUserName() {
@@ -23,7 +27,6 @@ class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, Reque
     }
 
 
-    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -34,7 +37,6 @@ class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, Reque
     }
 
 
-    @Override
     public void setPassword(String password) {
         this.password = password;
     }

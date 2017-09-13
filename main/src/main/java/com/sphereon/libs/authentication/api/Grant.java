@@ -1,4 +1,5 @@
 package com.sphereon.libs.authentication.api;
 
-public interface TokenRequest {
+public interface Grant {
+
 }

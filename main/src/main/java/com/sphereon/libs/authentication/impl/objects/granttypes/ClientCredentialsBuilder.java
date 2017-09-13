@@ -1,12 +1,12 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.libs.authentication.api.granttypes.ClientCredentialsGrant;
-import com.sphereon.libs.authentication.api.granttypes.Grant;
+import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.grantbuilders.GrantBuilder;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 
-public interface ClientCredentialsBuilder extends Grant {
+public interface ClientCredentialsBuilder {
 
-    final class Builder implements GrantBuilder<ClientCredentialsGrant> {
+    final class Builder implements GrantBuilder {
 
         private final ConfigManager configManager;
 
@@ -16,8 +16,8 @@ public interface ClientCredentialsBuilder extends Grant {
         }
 
 
-        public ClientCredentialsGrant build() {
-            ClientCredentialsGrant clientCredentialsGrant = new ClientCredentialsGrantImpl();
+        public Grant build() {
+            ClientCredentialsGrantImpl clientCredentialsGrant = new ClientCredentialsGrantImpl();
             configManager.loadGrant(clientCredentialsGrant);
             return clientCredentialsGrant;
         }

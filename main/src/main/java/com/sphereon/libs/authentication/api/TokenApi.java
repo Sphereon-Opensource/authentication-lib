@@ -3,44 +3,27 @@ package com.sphereon.libs.authentication.api;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
-import com.sphereon.libs.authentication.api.granttypes.ClientCredentialsGrant;
-import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
-import com.sphereon.libs.authentication.api.granttypes.RefreshTokenGrant;
+import com.sphereon.libs.authentication.api.grantbuilders.GrantBuilder;
 import com.sphereon.libs.authentication.impl.TokenApiImpl;
 import com.sphereon.libs.authentication.impl.config.TokenApiConfigurationImpl;
-import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilder;
-import com.sphereon.libs.authentication.impl.objects.granttypes.GrantBuilder;
 
 @SuppressWarnings("unused")
 public interface TokenApi {
 
-    TokenResponse requestToken(GenerateTokenRequest tokenRequest);
+    TokenResponse requestToken(TokenRequest tokenRequest);
 
-    void revokeToken(RevokeTokenRequest revokeTokenRequest);
+    void revokeToken(TokenRequest revokeTokenRequest);
 
     TokenApiConfiguration getConfiguration();
 
     void persistConfiguration();
 
-    <T extends GrantBuilder> T grantBuilder(Class<T> grantBuilderClass);
+    GrantBuilder.Builder grantBuilder();
 
-    <T extends TokenRequestBuilder> T tokenRequestBuilder(Class<T> tokenRequestBuilderClass);
+    TokenRequestBuilder.Builder tokenRequestBuilder();
 
     interface ConfigurationUpdate {
         void update(TokenApiConfiguration tokenApiConfiguration);
-    }
-
-
-    final class TokenRequestBuilders {
-        public static final Class<GenerateTokenRequest.Builder> GENERATE = GenerateTokenRequest.Builder.class;
-        public static final Class<RevokeTokenRequestBuilder.Builder> REVOKE_TOKEN = RevokeTokenRequestBuilder.Builder.class;
-    }
-
-
-    final class GrantBuilders {
-        public static final Class<ClientCredentialsGrant.Builder> CLIENT_CREDENTIALS = ClientCredentialsGrant.Builder.class;
-        public static final Class<PasswordGrant.Builder> PASSWORD_GRANT = PasswordGrant.Builder.class;
-        public static final Class<RefreshTokenGrant.Builder> REFRESH_TOKEN_GRANT = RefreshTokenGrant.Builder.class;
     }
 
 

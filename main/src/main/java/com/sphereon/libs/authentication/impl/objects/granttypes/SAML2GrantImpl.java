@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.granttypes.SAML2Grant;
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -10,7 +10,7 @@ import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestParameters, ConfigPersistence {
+class SAML2GrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
 
     private String assertion;
 
@@ -20,7 +20,6 @@ class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestPara
     }
 
 
-    @Override
     public void setAssertion(String assertion) {
         this.assertion = assertion;
     }

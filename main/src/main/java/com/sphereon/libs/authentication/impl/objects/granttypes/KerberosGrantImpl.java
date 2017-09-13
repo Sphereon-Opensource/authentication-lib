@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -10,11 +10,15 @@ import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, RequestParameters, ConfigPersistence {
+class KerberosGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
 
     private String kerberosRealm;
 
     private String kerberosToken;
+
+
+    KerberosGrantImpl() {
+    }
 
 
     public String getKerberosRealm() {
@@ -22,7 +26,6 @@ class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, Reque
     }
 
 
-    @Override
     public void setKerberosRealm(String kerberosRealm) {
         this.kerberosRealm = kerberosRealm;
     }
@@ -33,7 +36,6 @@ class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, Reque
     }
 
 
-    @Override
     public void setKerberosToken(String kerberosToken) {
         this.kerberosToken = kerberosToken;
     }

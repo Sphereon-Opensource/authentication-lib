@@ -1,12 +1,12 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
+import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.grantbuilders.GrantBuilder;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 
-public interface KerberosBuilder extends Grant {
+public interface KerberosBuilder {
 
-    final class Builder implements GrantBuilder<KerberosGrant> {
+    final class Builder implements GrantBuilder {
 
         private final ConfigManager configManager;
         private String kerberosRealm;
@@ -18,19 +18,19 @@ public interface KerberosBuilder extends Grant {
         }
 
 
-        public Builder withKerberosRealm(String kerberosRealm) {
+        public KerberosBuilder.Builder withKerberosRealm(String kerberosRealm) {
             this.kerberosRealm = kerberosRealm;
             return this;
         }
 
 
-        public Builder withKerberosToken(String kerberosToken) {
+        public KerberosBuilder.Builder withKerberosToken(String kerberosToken) {
             this.kerberosToken = kerberosToken;
             return this;
         }
 
 
-        public KerberosGrant build() {
+        public Grant build() {
             KerberosGrantImpl kerberosGrant = new KerberosGrantImpl();
             kerberosGrant.setKerberosRealm(kerberosRealm);
             kerberosGrant.setKerberosToken(kerberosToken);

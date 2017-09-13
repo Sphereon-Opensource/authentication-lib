@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.granttypes.RefreshTokenGrant;
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -10,9 +10,13 @@ import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTokenGrant, RequestParameters, ConfigPersistence {
+class RefreshTokenGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
 
     private String refreshToken;
+
+
+    RefreshTokenGrantImpl() {
+    }
 
 
     public String getRefreshToken() {
@@ -20,13 +24,11 @@ class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTokenGran
     }
 
 
-    @Override
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
 
-    @Override
     public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
 
     }

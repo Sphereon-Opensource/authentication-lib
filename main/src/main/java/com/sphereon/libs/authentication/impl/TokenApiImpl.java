@@ -1,10 +1,13 @@
 package com.sphereon.libs.authentication.impl;
 
-import com.sphereon.libs.authentication.api.*;
+import com.sphereon.libs.authentication.api.TokenApi;
+import com.sphereon.libs.authentication.api.TokenRequest;
+import com.sphereon.libs.authentication.api.TokenRequestBuilder;
+import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.grantbuilders.GrantBuilder;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.objects.TokenResponseImpl;
-import com.sphereon.libs.authentication.impl.objects.granttypes.GrantBuilder;
 import okhttp3.*;
 import org.springframework.util.Assert;
 
@@ -28,7 +31,7 @@ public class TokenApiImpl implements TokenApi {
 
 
     @Override
-    public TokenResponse requestToken(GenerateTokenRequest tokenRequest) {
+    public TokenResponse requestToken(TokenRequest tokenRequest) {
         Assert.notNull(tokenRequest, "No tokenRequest was supplied");
         FormBody requestBody = httpDataBuilder.buildBody(tokenRequest);
         Headers headers = httpDataBuilder.buildHeaders(tokenRequest);
@@ -46,7 +49,7 @@ public class TokenApiImpl implements TokenApi {
 
 
     @Override
-    public void revokeToken(RevokeTokenRequest revokeTokenRequest) {
+    public void revokeToken(TokenRequest revokeTokenRequest) {
         FormBody requestBody = httpDataBuilder.buildBody(revokeTokenRequest);
         Headers headers = httpDataBuilder.buildHeaders(revokeTokenRequest);
         Request httpRequest = httpDataBuilder.newRevokeRequest(configManager.getConfiguration().getGatewayBaseUrl(), headers, requestBody);
@@ -89,22 +92,14 @@ public class TokenApiImpl implements TokenApi {
 
 
     @Override
-    public <T extends GrantBuilder> T grantBuilder(Class<T> grantBuilderClass) {
-        try {
-            return grantBuilderClass.getConstructor(ConfigManager.class).newInstance(configManager);
-        } catch (Throwable t) {
-            throw new RuntimeException("Could not create a new instance of " + grantBuilderClass.getName(), t);
-        }
+    public TokenRequestBuilder.Builder tokenRequestBuilder() {
+        return new TokenRequestBuilder.Builder(configManager);
     }
-    
+
 
     @Override
-    public <T extends TokenRequestBuilder> T tokenRequestBuilder(Class<T> tokenRequestBuilderClass) {
-        try {
-            return tokenRequestBuilderClass.getConstructor(ConfigManager.class).newInstance(configManager);
-        } catch (Throwable t) {
-            throw new RuntimeException("Could not create a new instance of " + tokenRequestBuilderClass.getName(), t);
-        }
+    public GrantBuilder.Builder grantBuilder() {
+        return new GrantBuilder.Builder(configManager);
     }
 }
 

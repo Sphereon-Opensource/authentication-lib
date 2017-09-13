@@ -1,9 +1,9 @@
 package com.sphereon.libs.authentication.impl.config;
 
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
-import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.propertyio.*;
 import org.apache.commons.lang3.StringUtils;
 

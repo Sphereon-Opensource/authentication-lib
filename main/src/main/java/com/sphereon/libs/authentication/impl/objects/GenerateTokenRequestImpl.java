@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-import com.sphereon.libs.authentication.api.GenerateTokenRequest;
-import com.sphereon.libs.authentication.api.granttypes.Grant;
+import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.Duration;
 import java.util.Map;
 
-class GenerateTokenRequestImpl extends TokenRequestImpl implements GenerateTokenRequest, RequestParameters {
+class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest, RequestParameters {
 
     protected final Grant grant;
 
@@ -25,31 +25,26 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements GenerateToken
     }
 
 
-    @Override
     public Grant getGrant() {
         return grant;
     }
 
 
-    @Override
     public Duration getValidityPeriod() {
         return validityPeriod;
     }
 
 
-    @Override
     public void setValidityPeriod(Duration validityPeriod) {
         this.validityPeriod = validityPeriod;
     }
 
 
-    @Override
     public String getScope() {
         return scope;
     }
 
 
-    @Override
     public void setScope(String scope) {
         this.scope = scope;
     }

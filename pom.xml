@@ -10,6 +10,7 @@
     <modules>
         <module>main</module>
         <module>osgi</module>
+        <module>spring-boot-test</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -12,6 +12,7 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.jasypt.salt.StringFixedSaltGenerator;
 
@@ -78,7 +79,12 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         String value = super.readProperty(propertyPrefix, key, defaultValue);
         if (StringUtils.isNotEmpty(value)) {
             if (PropertyValueEncryptionUtils.isEncryptedValue(value)) {
-                value = PropertyValueEncryptionUtils.decrypt(value, encryptor);
+                try {
+                    value = PropertyValueEncryptionUtils.decrypt(value, encryptor);
+                } catch (EncryptionOperationNotPossibleException e) {
+                    throw new RuntimeException("Could not decrypt " + key.toString() + "=" + value);
+                }
+
             } else if (key.isEncrypt()) {
                 String encryptedValue = PropertyValueEncryptionUtils.encrypt(value, encryptor);
                 super.saveProperty(propertyPrefix, key, encryptedValue);
@@ -90,6 +96,9 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
+        if (StringUtils.isBlank(value)) {
+            return;
+        }
         if (key.isEncrypt() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
             value = PropertyValueEncryptionUtils.encrypt(value, encryptor);
         }

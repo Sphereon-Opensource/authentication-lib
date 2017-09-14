@@ -4,8 +4,10 @@ import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.backends.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -21,7 +23,7 @@ public class ConfigManager {
     private boolean reinit;
 
 
-    public ConfigManager(TokenApiConfiguration tokenApiConfiguration) {
+    ConfigManager(TokenApiConfiguration tokenApiConfiguration) {
         this.configuration = tokenApiConfiguration;
         init();
     }
@@ -41,8 +43,8 @@ public class ConfigManager {
             case STANDALONE_PROPERTY_FILE:
                 File propertiesFile = new File(configuration.getStandalonePropertyFilePath());
                 return new PropertyFileBackend(configuration.getPersistenceMode(), propertiesFile.toURI(), configuration.getApplication());
-            case APPLICATION_PROPERTIES:
-                return createPropertyFileIoFromSpringConfig();
+            case SPRING_APPLICATION_PROPERTIES:
+                return createSpringPropertyBackend();
             case SYSTEM_ENVIRONMENT:
                 return new SystemEnvPropertyBackend(configuration.getPersistenceMode());
             default:
@@ -51,8 +53,35 @@ public class ConfigManager {
     }
 
 
-    private PropertyConfigBackend createPropertyFileIoFromSpringConfig() {
-        URL url = getClass().getClassLoader().getResource("/application.properties");
+    private PropertyConfigBackend createSpringPropertyBackend() {
+        // FIXME: This is not sufficient:
+
+        URL url = null;
+        String propertiesLocation = System.getProperty("spring.config.location");
+        if (StringUtils.isNotEmpty(propertiesLocation)) {
+            try {
+                url = new File(propertiesLocation).toURI().toURL();
+            } catch (MalformedURLException e) {
+            }
+        }
+        if (url == null) {
+            try {
+                url = new File("config" + File.separator + "application.properties").toURI().toURL();
+            } catch (MalformedURLException e) {
+            }
+        }
+        if (url == null) {
+            try {
+                url = new File("application.properties").toURI().toURL();
+            } catch (MalformedURLException e) {
+            }
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("application.properties");
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("/application.properties");
+        }
         if (url == null) {
             throw new RuntimeException("application.properties was not found in the classpath");
         }

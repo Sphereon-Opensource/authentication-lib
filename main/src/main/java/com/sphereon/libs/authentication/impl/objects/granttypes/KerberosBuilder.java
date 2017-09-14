@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.GrantBuilder;
+import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
 
 public interface KerberosBuilder {
 
@@ -9,6 +10,11 @@ public interface KerberosBuilder {
 
         private String kerberosRealm;
         private String kerberosToken;
+
+
+        public static KerberosGrantBuilder newInstance() {
+            return new KerberosGrantBuilder();
+        }
 
 
         public KerberosGrantBuilder withKerberosRealm(String kerberosRealm) {
@@ -23,11 +29,26 @@ public interface KerberosBuilder {
         }
 
 
-        public Grant build() {
+        public KerberosGrant build() {
+            return build(true);
+        }
+
+
+        public KerberosGrant build(boolean validate) {
+            if (validate) {
+                validate();
+            }
             KerberosGrantImpl kerberosGrant = new KerberosGrantImpl();
             kerberosGrant.setKerberosRealm(kerberosRealm);
             kerberosGrant.setKerberosToken(kerberosToken);
             return kerberosGrant;
         }
+
+
+        private void validate() {
+            Assert.notNull(kerberosRealm, "Kerberos realm is not set in KerberosGrantBuilder");
+            Assert.notNull(kerberosToken, "Kerberos token is not set in KerberosGrantBuilder");
+        }
+
     }
 }

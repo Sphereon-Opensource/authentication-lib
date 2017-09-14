@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.GrantBuilder;
+import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
 
 public interface PasswordBuilder {
 
@@ -9,6 +10,11 @@ public interface PasswordBuilder {
 
         private String userName;
         private String password;
+
+
+        public static PasswordGrantBuilder newInstance() {
+            return new PasswordGrantBuilder();
+        }
 
 
         public PasswordGrantBuilder withUserName(String userName) {
@@ -23,11 +29,27 @@ public interface PasswordBuilder {
         }
 
 
-        public Grant build() {
+        public PasswordGrant build() {
+            return build(true);
+        }
+
+
+        public PasswordGrant build(boolean validate) {
+            if (validate) {
+                validate();
+            }
+
+
             PasswordGrantImpl passwordGrant = new PasswordGrantImpl();
             passwordGrant.setUserName(userName);
             passwordGrant.setPassword(password);
             return passwordGrant;
+        }
+
+
+        private void validate() {
+            Assert.notNull(userName, "User name is not set in PasswordBuilder");
+            Assert.notNull(password, "Password is not set in PasswordBuilder");
         }
     }
 }

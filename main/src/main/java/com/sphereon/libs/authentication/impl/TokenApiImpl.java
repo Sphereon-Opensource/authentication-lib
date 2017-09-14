@@ -4,7 +4,6 @@ import com.sphereon.libs.authentication.api.GenerateTokenRequestBuilder;
 import com.sphereon.libs.authentication.api.RevokeTokenRequestBuilder;
 import com.sphereon.libs.authentication.api.TokenApi;
 import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
-import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.objects.GenerateTokenRequestBuilderPrivate;
 import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilderPrivate;
 
@@ -12,31 +11,24 @@ import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilderPr
 class TokenApiImpl implements TokenApi {
 
 
-    private final ConfigManager configManager;
+    private final TokenApiConfiguration tokenApiConfiguration;
 
 
     TokenApiImpl(TokenApiConfiguration tokenApiConfiguration) {
-        configManager = new ConfigManager(tokenApiConfiguration);
+        this.tokenApiConfiguration = tokenApiConfiguration;
     }
 
 
     @Override
     public GenerateTokenRequestBuilder.Builder requestToken() {
-        return new GenerateTokenRequestBuilderPrivate.Builder(configManager);
+        return new GenerateTokenRequestBuilderPrivate.Builder(tokenApiConfiguration);
     }
 
 
     @Override
     public RevokeTokenRequestBuilder.Builder revokeToken() {
-        return new RevokeTokenRequestBuilderPrivate.Builder(configManager);
+        return new RevokeTokenRequestBuilderPrivate.Builder(tokenApiConfiguration);
     }
-
-
-    @Override
-    public TokenApiConfiguration.Configurator reconfigure() {
-        return new TokenApiConfiguration.Configurator(configManager);
-    }
-
 }
 
 

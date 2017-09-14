@@ -4,10 +4,8 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
+import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.config.ConfigManager;
-import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
-import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -17,13 +15,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Map;
 
-abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, RequestParameters, ConfigPersistence {
+abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, RequestParameters {
 
     protected static final Base64.Encoder base64Encoder = Base64.getEncoder();
 
     protected static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
 
-    protected final ConfigManager configManager;
+    protected final TokenApiConfiguration tokenApiConfiguration;
 
     private String consumerKey;
 
@@ -32,8 +30,8 @@ abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest
     protected String scope;
 
 
-    TokenRequestImpl(ConfigManager configManager) {
-        this.configManager = configManager;
+    public TokenRequestImpl(TokenApiConfiguration tokenApiConfiguration) {
+        this.tokenApiConfiguration = tokenApiConfiguration;
     }
 
 
@@ -92,24 +90,9 @@ abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest
             Response response = httpRequestHandler.execute(httpRequest);
             String responseBody = httpRequestHandler.getResponseBodyContent(response);
             Map<String, String> parameters = httpRequestHandler.parseJsonResponseBody(responseBody);
-            configManager.persist(this);
             return new TokenResponseImpl(parameters);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-    @Override
-    public void loadConfig(ConfigManager configManager) {
-        configManager.saveProperty(PropertyKey.SCOPE, getScope());
-    }
-
-
-    @Override
-    public void persistConfig(ConfigManager configManager) {
-        configManager.saveProperty(PropertyKey.CONSUMER_KEY, getConsumerKey());
-        configManager.saveProperty(PropertyKey.CONSUMER_SECRET, getConsumerSecret());
-    }
-
 }

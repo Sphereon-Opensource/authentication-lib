@@ -1,11 +1,14 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequestBuilder;
+import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
+import com.sphereon.libs.authentication.impl.config.ConfigManagerProvider;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialsBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;
 
@@ -13,7 +16,7 @@ public interface GenerateTokenRequestBuilderPrivate {
 
     class Builder implements TokenRequestBuilder {
 
-        private final ConfigManager configManager;
+        private final TokenApiConfiguration tokenApiConfiguration;
 
         private String consumerKey;
         private String consumerSecret;
@@ -22,8 +25,8 @@ public interface GenerateTokenRequestBuilderPrivate {
         private Duration validityPeriod;
 
 
-        public Builder(ConfigManager configManager) {
-            this.configManager = configManager;
+        public Builder(TokenApiConfiguration tokenApiConfiguration) {
+            this.tokenApiConfiguration = tokenApiConfiguration;
         }
 
 
@@ -60,21 +63,40 @@ public interface GenerateTokenRequestBuilderPrivate {
         @Override
         public TokenRequest build() {
             validate();
-            ConfigPersistence configPersistence = (ConfigPersistence)grant;
+            ConfigManagerProvider configManagerProvider = (ConfigManagerProvider) tokenApiConfiguration;
+            ConfigManager configManager = configManagerProvider.getConfigManager();
+            ConfigPersistence configPersistence = (ConfigPersistence) grant;
             configPersistence.loadConfig(configManager);
-            GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(grant, configManager);
+            GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(tokenApiConfiguration);
+            tokenRequest.setGrant(grant);
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
             tokenRequest.setScope(scope);
             tokenRequest.setValidityPeriod(validityPeriod);
-            configManager.loadTokenRequest(tokenRequest);
             return tokenRequest;
         }
 
 
         private void validate() {
-            if (grant == null) {
-                grant = new ClientCredentialsBuilder.ClientCredentialsGrantBuilder().build();
+            if (this.grant == null) {
+                this.grant = tokenApiConfiguration.getDefaultGrant();
+            }
+            if (this.grant == null) {
+                this.grant = new ClientCredentialsBuilder.ClientCredentialsGrantBuilder().build();
+            }
+
+            if (StringUtils.isEmpty(consumerKey)) {
+                this.consumerKey = tokenApiConfiguration.getConsumerKey();
+            }
+            if (StringUtils.isEmpty(consumerSecret)) {
+                this.consumerSecret = tokenApiConfiguration.getConsumerSecret();
+            }
+            if (StringUtils.isEmpty(scope)) {
+                this.scope = tokenApiConfiguration.getDefaultScope();
+            }
+
+            if (validityPeriod == null) {
+                this.validityPeriod = tokenApiConfiguration.getDefaultValidityPeriod();
             }
         }
     }

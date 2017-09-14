@@ -2,13 +2,14 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequestBuilder;
-import com.sphereon.libs.authentication.impl.config.ConfigManager;
+import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import org.apache.commons.lang3.StringUtils;
 
 public interface RevokeTokenRequestBuilderPrivate {
 
     class Builder implements TokenRequestBuilder {
 
-        private final ConfigManager configManager;
+        private final TokenApiConfiguration tokenApiConfiguration;
 
         private String consumerKey;
 
@@ -17,8 +18,14 @@ public interface RevokeTokenRequestBuilderPrivate {
         private String currentToken;
 
 
-        public Builder(ConfigManager configManager) {
-            this.configManager = configManager;
+        public Builder(TokenApiConfiguration tokenApiConfiguration) {
+            this.tokenApiConfiguration = tokenApiConfiguration;
+        }
+
+
+        public RevokeTokenRequestBuilderPrivate.Builder withCurrentToken() {
+            this.currentToken = currentToken;
+            return this;
         }
 
 
@@ -34,20 +41,28 @@ public interface RevokeTokenRequestBuilderPrivate {
         }
 
 
-        public RevokeTokenRequestBuilderPrivate.Builder withCurrentToken() {
-            this.currentToken = currentToken;
-            return this;
-        }
-
-
         @Override
         public TokenRequest build() {
-            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configManager);
+            validate();
+            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(tokenApiConfiguration);
             revokeTokenRequest.setConsumerKey(consumerKey);
             revokeTokenRequest.setConsumerSecret(consumerSecret);
             revokeTokenRequest.setToken(currentToken);
-            configManager.loadTokenRequest(revokeTokenRequest);
             return revokeTokenRequest;
+        }
+
+
+        private void validate() {
+            if (StringUtils.isEmpty(consumerKey)) {
+                this.consumerKey = tokenApiConfiguration.getConsumerKey();
+            }
+            if (StringUtils.isEmpty(consumerSecret)) {
+                this.consumerSecret = tokenApiConfiguration.getConsumerSecret();
+            }
+
+            if (StringUtils.isEmpty(currentToken)) {
+                throw new NullPointerException("RevokeTokenRequest.setToken() is not set");
+            }
         }
     }
 }

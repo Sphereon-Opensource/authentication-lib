@@ -1,4 +1,4 @@
-package com.sphereon.libs.authentication.impl.config.propertyio;
+package com.sphereon.libs.authentication.impl.config.backends;
 
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -6,7 +6,9 @@ import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 abstract class AbstractCommonsConfig implements PropertyConfigBackend {
+
     protected final PersistenceMode persistenceMode;
+
     protected Configuration config;
 
 
@@ -30,7 +32,7 @@ abstract class AbstractCommonsConfig implements PropertyConfigBackend {
 
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
-        if (key.isCheckReadOnly() && persistenceMode == PersistenceMode.READ_WRITE) {
+        if (persistenceMode == PersistenceMode.READ_WRITE || (!key.isCheckReadOnly() && persistenceMode == PersistenceMode.READ_ONLY)) {
             config.setProperty(propertyPrefix + key.getPropertyKey(), value);
         }
     }

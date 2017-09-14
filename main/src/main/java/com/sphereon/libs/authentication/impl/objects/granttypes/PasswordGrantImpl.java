@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.granttypes.GrantType;
+import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class PasswordGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
+class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, RequestParameters, ConfigPersistence {
 
     private String userName;
 
@@ -22,21 +23,25 @@ class PasswordGrantImpl extends AutoHashedObject implements Grant, RequestParame
     }
 
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
 
+    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
 
+    @Override
     public String getPassword() {
         return password;
     }
 
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
@@ -70,5 +75,11 @@ class PasswordGrantImpl extends AutoHashedObject implements Grant, RequestParame
     public void persistConfig(ConfigManager configManager) {
         configManager.saveProperty(PropertyKey.USER_NAME, getUserName());
         configManager.saveProperty(PropertyKey.PASSWORD, getPassword());
+    }
+
+
+    @Override
+    public GrantType getGrantType() {
+        return GrantType.PASSWORD;
     }
 }

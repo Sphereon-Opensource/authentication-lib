@@ -9,10 +9,11 @@ public enum RequestParameterKey {
     WINDOWS_TOKEN("windows_token"),
     KERBEROS_REALM("kerberos_realm"),
     KERBEROS_TOKEN("kerberos_token"),
-    ASSERTION("assertion"),
+    ASSERTION("assertions"),
     VALIDITY_PERIOD("validity_period"),
     SCOPE("scope"),
-    AUTHORIZATION("Authorization");
+    AUTHORIZATION("Authorization"),
+    TOKEN("token");
 
 
     private final String value;

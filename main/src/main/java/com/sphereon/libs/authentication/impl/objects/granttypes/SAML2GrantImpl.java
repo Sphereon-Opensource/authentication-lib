@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.granttypes.GrantType;
+import com.sphereon.libs.authentication.api.granttypes.SAML2Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,16 +12,18 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class SAML2GrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
+class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestParameters, ConfigPersistence {
 
     private String assertion;
 
 
+    @Override
     public String getAssertion() {
         return assertion;
     }
 
 
+    @Override
     public void setAssertion(String assertion) {
         this.assertion = assertion;
     }
@@ -50,5 +53,11 @@ class SAML2GrantImpl extends AutoHashedObject implements Grant, RequestParameter
     @Override
     public void persistConfig(ConfigManager configManager) {
         configManager.saveProperty(PropertyKey.SAML2_ASSERTION, getAssertion());
+    }
+
+
+    @Override
+    public GrantType getGrantType() {
+        return GrantType.SAML2;
     }
 }

@@ -1,13 +1,10 @@
-package com.sphereon.libs.authentication.impl.config.propertyio;
+package com.sphereon.libs.authentication.impl.config.backends;
 
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
 
 public class InMemoryConfig extends AbstractCommonsConfig {
-
-    private final PropertiesConfiguration config;
-
 
     public InMemoryConfig(PersistenceMode persistenceMode) {
         super(persistenceMode);

@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.granttypes.GrantType;
+import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class KerberosGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
+class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, RequestParameters, ConfigPersistence {
 
     private String kerberosRealm;
 
@@ -22,21 +23,25 @@ class KerberosGrantImpl extends AutoHashedObject implements Grant, RequestParame
     }
 
 
+    @Override
     public String getKerberosRealm() {
         return kerberosRealm;
     }
 
 
+    @Override
     public void setKerberosRealm(String kerberosRealm) {
         this.kerberosRealm = kerberosRealm;
     }
 
 
+    @Override
     public String getKerberosToken() {
         return kerberosToken;
     }
 
 
+    @Override
     public void setKerberosToken(String kerberosToken) {
         this.kerberosToken = kerberosToken;
     }
@@ -71,5 +76,11 @@ class KerberosGrantImpl extends AutoHashedObject implements Grant, RequestParame
     public void persistConfig(ConfigManager configManager) {
         configManager.saveProperty(PropertyKey.KERBEROS_REALM, getKerberosRealm());
         configManager.saveProperty(PropertyKey.KERBEROS_TOKEN, getKerberosToken());
+    }
+
+
+    @Override
+    public GrantType getGrantType() {
+        return GrantType.KERBEROS;
     }
 }

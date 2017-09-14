@@ -1,12 +1,12 @@
-package com.sphereon.libs.authentication.impl.config.propertyio;
+package com.sphereon.libs.authentication.impl.config.backends;
 
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import org.apache.commons.lang3.StringUtils;
 
-public class SystemEnvPropertyIO extends InMemoryConfig {
+public class SystemEnvPropertyBackend extends InMemoryConfig {
 
-    public SystemEnvPropertyIO(PersistenceMode persistenceMode) {
+    public SystemEnvPropertyBackend(PersistenceMode persistenceMode) {
         super(persistenceMode);
     }
 

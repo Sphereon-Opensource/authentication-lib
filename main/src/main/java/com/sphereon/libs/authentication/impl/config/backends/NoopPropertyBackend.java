@@ -1,4 +1,4 @@
-package com.sphereon.libs.authentication.impl.config.propertyio;
+package com.sphereon.libs.authentication.impl.config.backends;
 
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 

@@ -1,7 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
 import com.sphereon.commons.objects.AutoHashedObject;
-import com.sphereon.libs.authentication.api.Grant;
+import com.sphereon.libs.authentication.api.granttypes.GrantType;
+import com.sphereon.libs.authentication.api.granttypes.NtlmGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class NtlmGrantImpl extends AutoHashedObject implements Grant, RequestParameters, ConfigPersistence {
+class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, RequestParameters, ConfigPersistence {
 
     private String windowsToken;
 
@@ -20,11 +21,13 @@ class NtlmGrantImpl extends AutoHashedObject implements Grant, RequestParameters
     }
 
 
+    @Override
     public String getWindowsToken() {
         return windowsToken;
     }
 
 
+    @Override
     public void setWindowsToken(String windowsToken) {
         this.windowsToken = windowsToken;
     }
@@ -54,5 +57,11 @@ class NtlmGrantImpl extends AutoHashedObject implements Grant, RequestParameters
     @Override
     public void persistConfig(ConfigManager configManager) {
         configManager.saveProperty(PropertyKey.WINDOWS_TOKEN, getWindowsToken());
+    }
+
+
+    @Override
+    public GrantType getGrantType() {
+        return GrantType.NTLM;
     }
 }

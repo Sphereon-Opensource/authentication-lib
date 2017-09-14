@@ -4,6 +4,7 @@ import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequestBuilder;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
+import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialsBuilder;
 
 import java.time.Duration;
@@ -59,6 +60,8 @@ public interface GenerateTokenRequestBuilderPrivate {
         @Override
         public TokenRequest build() {
             validate();
+            ConfigPersistence configPersistence = (ConfigPersistence)grant;
+            configPersistence.loadConfig(configManager);
             GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(grant, configManager);
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
@@ -71,7 +74,7 @@ public interface GenerateTokenRequestBuilderPrivate {
 
         private void validate() {
             if (grant == null) {
-                grant = new ClientCredentialsBuilder.Builder(configManager).build();
+                grant = new ClientCredentialsBuilder.ClientCredentialsGrantBuilder().build();
             }
         }
     }

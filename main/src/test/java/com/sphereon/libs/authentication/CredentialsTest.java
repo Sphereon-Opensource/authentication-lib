@@ -47,7 +47,7 @@ public class CredentialsTest extends TestCase {
                 .setStandaloneConfigPath("./config/sphereon-auth.config")
                 .withPersistenceMode(PersistenceMode.READ_WRITE).build();
 
-        Grant grant = tokenApi.grantBuilder().passwordGrantBuilder()
+        Grant grant = new Grant.PasswordGrantBuilder()
                 .withUserName("SphereonTest")
                 .withPassword("K@A$yG@Vwpq4Ow1W@Q2b")
                 .build();
@@ -81,7 +81,7 @@ public class CredentialsTest extends TestCase {
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
                 .setStandaloneConfigPath("./config/sphereon-auth.config")
                 .withPersistenceMode(PersistenceMode.READ_WRITE).build();
-        Grant grant = tokenApi.grantBuilder().refreshTokenGrantBuilder()
+        Grant grant = new Grant.RefreshTokenGrantBuilder()
                 .withRefreshToken(refreshToken.get())
                 .build();
 

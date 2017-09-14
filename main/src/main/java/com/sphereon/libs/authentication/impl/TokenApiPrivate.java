@@ -1,5 +1,6 @@
 package com.sphereon.libs.authentication.impl;
 
+import com.sphereon.libs.authentication.api.Grant;
 import com.sphereon.libs.authentication.api.TokenApi;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
@@ -41,6 +42,12 @@ public interface TokenApiPrivate {
             tokenApiConfiguration.setStandalonePropertyFilePath(standaloneConfigPath);
             return this;
         }
+
+        public Builder withDefaultGrant(Grant grant) {
+            tokenApiConfiguration.setDefaultGrant(grant);
+            return this;
+        }
+
 
 
         public TokenApi build() {

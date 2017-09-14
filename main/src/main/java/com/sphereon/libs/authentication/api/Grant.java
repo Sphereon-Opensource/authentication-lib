@@ -1,5 +1,8 @@
 package com.sphereon.libs.authentication.api;
 
-public interface Grant {
+import com.sphereon.libs.authentication.impl.objects.granttypes.*;
+
+public interface Grant  extends ClientCredentialsBuilder, PasswordBuilder, RefreshTokenBuilder,
+        NtlmBuilder, KerberosBuilder {
 
 }

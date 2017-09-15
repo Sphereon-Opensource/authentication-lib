@@ -1,6 +1,7 @@
 package com.sphereon.libs.authentication;
 
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
+import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.*;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +19,11 @@ public class ConfigTest extends AbstractTest {
     protected static final String UI_TEST_PROPERTIES = "sphereon-ui-test.properties";
     protected static final String MANUAL_TEMPLATE_PROPERTIES = "/manual-template.properties";
     protected static final String MANUAL_PROPERTIES = "manual.properties";
+
+
+    public ConfigTest() {
+        System.setProperty("sphereon.testing", "true");
+    }
 
 
     @Test
@@ -168,6 +174,26 @@ public class ConfigTest extends AbstractTest {
 
 
     @Test
+    public void test_45_TestNoAutoEncrypt() throws Exception {
+        File manualPropertiesFile = new File("./config/" + MANUAL_PROPERTIES);
+        manualPropertiesFile.delete();
+        InputStream templateStream = getClass().getResourceAsStream(MANUAL_TEMPLATE_PROPERTIES);
+        FileUtils.copyInputStreamToFile(templateStream, manualPropertiesFile);
+        ApiConfiguration loadedConfig = new ApiConfiguration.Builder()
+                .withApplication(APPLICATION_NAME)
+                .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
+                .setStandaloneConfigPath("./config/" + MANUAL_PROPERTIES)
+                .withAutoEncryptSecrets(false)
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .build();
+
+        Assert.assertNotNull(loadedConfig);
+        assertPropertyValues(manualPropertiesFile, "authentication-api.expiring-tokens.consumer-secret=v1XDT6Mdh_5xcCod1fnyUMYsZXsa",
+                "authentication-api.expiring-tokens.password=K@A$yG@Vwpq4Ow1W@Q2b");
+    }
+
+
+    @Test
     public void test_50_InMemoryConfig() {
         PasswordGrant grant = new Grant.PasswordGrantBuilder()
                 .withUserName("testUser")
@@ -208,7 +234,9 @@ public class ConfigTest extends AbstractTest {
 
         ApiConfiguration config = new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
-                .withPersistenceType(PersistenceType.SYSTEM_ENVIRONMENT).build();
+                .withPersistenceType(PersistenceType.SYSTEM_ENVIRONMENT)
+                .withAutoEncryptSecrets(true)
+                .build();
         Assert.assertEquals(consumerKey, config.getConsumerKey());
         Assert.assertEquals(consumerSecret, config.getConsumerSecret());
 

@@ -42,13 +42,13 @@ public class ConfigManager {
                 return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
                 File propertiesFile = new File(configuration.getStandalonePropertyFilePath());
-                return new PropertyFileBackend(configuration.getApplication(), configuration.getPersistenceMode(), propertiesFile.toURI());
+                return new PropertyFileBackend(configuration, propertiesFile.toURI());
             case SPRING_APPLICATION_PROPERTIES:
                 return createSpringPropertyBackend();
             case SYSTEM_ENVIRONMENT:
-                return new SystemEnvPropertyBackend(configuration.getApplication());
+                return new SystemEnvPropertyBackend(configuration);
             default:
-                return new InMemoryConfig(configuration.getApplication());
+                return new InMemoryConfig(configuration);
         }
     }
 
@@ -57,7 +57,7 @@ public class ConfigManager {
         // FIXME: This is not sufficient:
 
         URL url = null;
-        String propertiesLocation = System.getProperty("spring.config.location");
+        String propertiesLocation = System.getProperty("spring.propertyConfig.location");
         if (StringUtils.isNotEmpty(propertiesLocation)) {
             try {
                 url = new File(propertiesLocation).toURI().toURL();
@@ -66,7 +66,7 @@ public class ConfigManager {
         }
         if (url == null) {
             try {
-                url = new File("config" + File.separator + "application.properties").toURI().toURL();
+                url = new File("propertyConfig" + File.separator + "application.properties").toURI().toURL();
             } catch (MalformedURLException e) {
             }
         }
@@ -85,12 +85,11 @@ public class ConfigManager {
         if (url == null) {
             throw new RuntimeException("application.properties was not found in the classpath");
         }
-        PersistenceMode persistenceMode = configuration.getPersistenceMode();
         if (url.getProtocol().startsWith("jar")) {
-            persistenceMode = PersistenceMode.READ_ONLY;
+            configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
         }
         try {
-            return new PropertyFileBackend(configuration.getApplication(), persistenceMode, url.toURI());
+            return new PropertyFileBackend(configuration, url.toURI());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Could not read property file URL " + url, e);
         }

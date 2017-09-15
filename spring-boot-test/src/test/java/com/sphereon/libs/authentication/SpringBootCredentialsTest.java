@@ -64,6 +64,7 @@ public class SpringBootCredentialsTest {
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .withAutoEncryptSecrets(true)
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withDefaultGrant(grant)
@@ -75,6 +76,7 @@ public class SpringBootCredentialsTest {
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
+                .withAutoEncryptSecrets(true)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .build();
 

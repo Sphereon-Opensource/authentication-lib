@@ -34,6 +34,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
     private Duration defaultValidityPeriod;
 
+    private boolean autoEncryptSecrets;
 
     private ConfigManager configManager;
 
@@ -165,6 +166,18 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
 
     @Override
+    public boolean isAutoEncryptSecrets() {
+        return autoEncryptSecrets;
+    }
+
+
+    @Override
+    public void setAutoEncryptSecrets(boolean autoEncryptSecrets) {
+        this.autoEncryptSecrets = autoEncryptSecrets;
+    }
+
+
+    @Override
     public void persist() {
         persistConfig(configManager);
     }
@@ -185,6 +198,8 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
         setPersistenceMode(PersistenceMode.fromString(configManager.readProperty(PropertyKey.PERSISTENCE_MODE, getPersistenceMode().toString())));
         setConsumerKey(configManager.readProperty(PropertyKey.CONSUMER_KEY, getConsumerKey()));
         setConsumerSecret(configManager.readProperty(PropertyKey.CONSUMER_SECRET, getConsumerSecret()));
+        String autoEncrypt = configManager.readProperty(PropertyKey.AUTO_ENCRYPT_SECRETS, Boolean.toString(isAutoEncryptSecrets()));
+        setAutoEncryptSecrets(Boolean.parseBoolean(autoEncrypt));
         createGrantFromType(configManager);
         if (defaultGrant != null) {
             ConfigPersistence grantConfigPersistence = (ConfigPersistence) defaultGrant;
@@ -233,6 +248,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
         configManager.saveProperty(PropertyKey.PERSISTENCE_MODE, getPersistenceMode().toString());
         configManager.saveProperty(PropertyKey.CONSUMER_KEY, getConsumerKey());
         configManager.saveProperty(PropertyKey.CONSUMER_SECRET, getConsumerSecret());
+        configManager.saveProperty(PropertyKey.AUTO_ENCRYPT_SECRETS, Boolean.toString(isAutoEncryptSecrets()));
         if (defaultGrant != null) {
             configManager.saveProperty(PropertyKey.GRANT_TYPE, defaultGrant.getGrantType().getFormattedValue());
         }

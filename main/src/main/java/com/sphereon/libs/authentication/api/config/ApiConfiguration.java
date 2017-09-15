@@ -47,5 +47,9 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setDefaultGrant(Grant grant);
 
+    boolean isAutoEncryptSecrets();
+
+    void setAutoEncryptSecrets(boolean autoEncryptSecrets);
+
     void persist();
 }

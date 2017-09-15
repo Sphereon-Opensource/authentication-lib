@@ -16,7 +16,8 @@ public enum PropertyKey {
     WINDOWS_TOKEN("windows-token", true),
     REFRESH_TOKEN("refresh-token", true),
     SAML2_ASSERTION("saml2-assertions", true),
-    GRANT_TYPE("grant-type", false);
+    GRANT_TYPE("grant-type", false),
+    AUTO_ENCRYPT_SECRETS("auto-encrypt", false);
 
 
     private final String propertyKey;

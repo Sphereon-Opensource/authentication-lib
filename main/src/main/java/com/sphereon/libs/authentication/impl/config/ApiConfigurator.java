@@ -47,6 +47,12 @@ public interface ApiConfigurator {
         }
 
 
+        public Builder withAutoEncryptSecrets(boolean autoEncryptSecrets) {
+            configuration.setAutoEncryptSecrets(autoEncryptSecrets);
+            return this;
+        }
+
+
         public Builder setStandaloneConfigPath(String standaloneConfigPath) {
             configuration.setStandalonePropertyFilePath(standaloneConfigPath);
             return this;
@@ -63,6 +69,7 @@ public interface ApiConfigurator {
             configuration.setGatewayBaseUrl(gatewayBaseUrl);
             return this;
         }
+
 
         public ApiConfiguration build() {
             ConfigPersistence configPersistence = configuration;

@@ -1,5 +1,6 @@
 package com.sphereon.libs.authentication.impl.config.backends;
 
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import org.apache.commons.configuration2.FileBasedConfiguration;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.properties.PropertyValueEncryptionUtils;
+import org.jasypt.salt.RandomSaltGenerator;
 import org.jasypt.salt.StringFixedSaltGenerator;
 
 import java.io.File;
@@ -26,12 +28,14 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
     private final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
 
-    private final String application;
+    private static final boolean isInUnitTest;
 
+    static {
+        isInUnitTest = "true".equalsIgnoreCase(System.getProperty("sphereon.testing"));
+    }
 
-    public PropertyFileBackend(String application, PersistenceMode persistenceMode, URI fileUri) {
-        super(persistenceMode);
-        this.application = application;
+    public PropertyFileBackend(ApiConfiguration configuration, URI fileUri) {
+        super(configuration, configuration.getPersistenceMode());
         initEncryptor();
 
         File configFile = new File(fileUri);
@@ -46,9 +50,9 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
                 new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(configClass)
                         .configure(params.properties()
                                 .setFile(configFile));
-        builder.setAutoSave(persistenceMode == PersistenceMode.READ_WRITE);
+        builder.setAutoSave(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE);
         try {
-            this.config = builder.getConfiguration();
+            this.propertyConfig = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Could not initialize PropertyFileBackend for " + fileUri, e);
         }
@@ -59,7 +63,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         if (!configFile.exists()) {
             try {
                 if (!configFile.createNewFile()) {
-                    throw new IOException("Could not create new config file.");
+                    throw new IOException("Could not create new propertyConfig file.");
                 }
                 if ("xml".equalsIgnoreCase(ext)) {
                     try (FileWriter writer = new FileWriter(configFile)) {
@@ -68,7 +72,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException("A problem occurred whilst creating initial config file " + configFile.getAbsolutePath(), e);
+                throw new RuntimeException("A problem occurred whilst creating initial propertyConfig file " + configFile.getAbsolutePath(), e);
             }
         }
     }
@@ -76,7 +80,11 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
     private void initEncryptor() {
         encryptor.setPassword(new String(libKey));
-        encryptor.setSaltGenerator(new StringFixedSaltGenerator(application));
+        if (isInUnitTest) {
+            encryptor.setSaltGenerator(new StringFixedSaltGenerator(apiConfiguration.getApplication()));
+        } else {
+            encryptor.setSaltGenerator(new RandomSaltGenerator());
+        }
     }
 
 
@@ -91,7 +99,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
                     throw new RuntimeException("Could not decrypt " + key.toString() + "=" + value);
                 }
 
-            } else if (key.isEncrypt()) {
+            } else if (key.isEncrypt() && apiConfiguration.isAutoEncryptSecrets()) {
                 String encryptedValue = PropertyValueEncryptionUtils.encrypt(value, encryptor);
                 super.tryForcedSaveProperty(propertyPrefix, key, encryptedValue);
             }
@@ -105,7 +113,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         if (StringUtils.isBlank(value)) {
             return;
         }
-        if (key.isEncrypt() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
+        if (key.isEncrypt() && apiConfiguration.isAutoEncryptSecrets() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
             value = PropertyValueEncryptionUtils.encrypt(value, encryptor);
         }
         super.saveProperty(propertyPrefix, key, value);

@@ -1,13 +1,14 @@
 package com.sphereon.libs.authentication.impl.config.backends;
 
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import org.apache.commons.lang3.StringUtils;
 
 public class SystemEnvPropertyBackend extends InMemoryConfig {
 
-    public SystemEnvPropertyBackend(String application) {
-        super(application);
+    public SystemEnvPropertyBackend(ApiConfiguration configuration) {
+        super(configuration);
     }
 
 
@@ -19,7 +20,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
             value = System.getProperty(propertyPrefix + key.getPropertyKey());
         }
         if (StringUtils.isEmpty(value)) {
-            if (persistenceMode == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
+            if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
                 saveProperty(propertyPrefix, key, defaultValue);
             }
             return super.readProperty(propertyPrefix, key, defaultValue);
@@ -30,7 +31,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
 
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
-        if (persistenceMode == PersistenceMode.READ_WRITE) {
+        if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE) {
             if (key.isEncrypt()) {
                 // TODO: write encrypted version to log?
             }

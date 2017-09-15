@@ -1,11 +1,11 @@
 package com.sphereon.libs.authentication.impl.objects;
 
 
-import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
+import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +21,7 @@ abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest
 
     protected static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
 
-    protected final TokenApiConfiguration tokenApiConfiguration;
+    protected final ApiConfiguration configuration;
 
     private String consumerKey;
 
@@ -30,8 +30,8 @@ abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest
     protected String scope;
 
 
-    public TokenRequestImpl(TokenApiConfiguration tokenApiConfiguration) {
-        this.tokenApiConfiguration = tokenApiConfiguration;
+    public TokenRequestImpl(ApiConfiguration configuration) {
+        this.configuration = configuration;
     }
 
 

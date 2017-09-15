@@ -8,7 +8,6 @@ import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
@@ -30,7 +29,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
     private final String application;
 
 
-    public PropertyFileBackend(PersistenceMode persistenceMode, URI fileUri, String application) {
+    public PropertyFileBackend(String application, PersistenceMode persistenceMode, URI fileUri) {
         super(persistenceMode);
         this.application = application;
         initEncryptor();
@@ -57,8 +56,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
                 new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(configClass)
                         .configure(params.properties()
-                                .setFile(configFile)
-                                .setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+                                .setFile(configFile));
         builder.setAutoSave(persistenceMode == PersistenceMode.READ_WRITE);
         try {
             this.config = builder.getConfiguration();
@@ -87,7 +85,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
             } else if (key.isEncrypt()) {
                 String encryptedValue = PropertyValueEncryptionUtils.encrypt(value, encryptor);
-                super.saveProperty(propertyPrefix, key, encryptedValue);
+                super.tryForcedSaveProperty(propertyPrefix, key, encryptedValue);
             }
         }
         return value;

@@ -2,32 +2,30 @@ package com.sphereon.libs.authentication.impl.config;
 
 public enum PropertyKey {
 
-    GATEWAY_BASE_URL("gateway-base-url", false, false),
-    PERSISTENCE_MODE("persistence-mode", false, false),
-    USER_NAME("username", false, true),
-    PASSWORD("password", true, true),
-    CONSUMER_KEY("consumer-key", false, true),
-    CONSUMER_SECRET("consumer-secret", true, true),
-    SCOPE("scope", false, true),
-    VALIDITY_PERIOD("validity-period", false, true),
-    KERBEROS_REALM("kerberos-realm", true, true),
-    KERBEROS_TOKEN("kerberos-token", true, true),
-    CURRENT_TOKEN("current-token", true, false),
-    WINDOWS_TOKEN("windows-token", true, true),
-    REFRESH_TOKEN("refresh-token", true, true),
-    SAML2_ASSERTION("saml2-assertions", true, true),
-    GRANT_TYPE("grant-type", false, false);
+    GATEWAY_BASE_URL("gateway-base-url", false),
+    PERSISTENCE_MODE("persistence-mode", false),
+    USER_NAME("username", false),
+    PASSWORD("password", true),
+    CONSUMER_KEY("consumer-key", false),
+    CONSUMER_SECRET("consumer-secret", true),
+    SCOPE("scope", false),
+    VALIDITY_PERIOD("validity-period", false),
+    KERBEROS_REALM("kerberos-realm", true),
+    KERBEROS_TOKEN("kerberos-token", true),
+    CURRENT_TOKEN("current-token", true),
+    WINDOWS_TOKEN("windows-token", true),
+    REFRESH_TOKEN("refresh-token", true),
+    SAML2_ASSERTION("saml2-assertions", true),
+    GRANT_TYPE("grant-type", false);
 
 
     private final String propertyKey;
     private final boolean encrypt;
-    private final boolean checkReadOnly;
 
 
-    PropertyKey(String value, boolean encrypt, boolean checkReadOnly) {
+    PropertyKey(String value, boolean encrypt) {
         this.propertyKey = value;
         this.encrypt = encrypt;
-        this.checkReadOnly = checkReadOnly;
     }
 
 
@@ -38,11 +36,6 @@ public enum PropertyKey {
 
     public boolean isEncrypt() {
         return encrypt;
-    }
-
-
-    public boolean isCheckReadOnly() {
-        return checkReadOnly;
     }
 
 

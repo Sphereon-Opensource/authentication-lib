@@ -1,4 +1,4 @@
-package com.sphereon.commons.assertions;
+package com.sphereon.libs.authentication.impl.commons.assertions;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;

@@ -1,6 +1,6 @@
 package com.sphereon.libs.authentication.api;
 
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.objects.GenerateTokenRequestBuilderPrivate;
 import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilderPrivate;
 
@@ -11,21 +11,21 @@ public interface TokenRequestBuilder {
 
     final class Builder {
 
-        private final TokenApiConfiguration tokenApiConfiguration;
+        private final ApiConfiguration configuration;
 
 
-        public Builder(TokenApiConfiguration tokenApiConfiguration) {
-            this.tokenApiConfiguration = tokenApiConfiguration;
+        public Builder(ApiConfiguration configuration) {
+            this.configuration = configuration;
         }
 
 
         public GenerateTokenRequestBuilder.Builder generateTokenRequestBuilder() {
-            return new GenerateTokenRequestBuilderPrivate.Builder(tokenApiConfiguration);
+            return new GenerateTokenRequestBuilderPrivate.Builder(configuration);
         }
 
 
         public RevokeTokenRequestBuilder.Builder revokeTokenRequestBuilder() {
-            return new RevokeTokenRequestBuilderPrivate.Builder(tokenApiConfiguration);
+            return new RevokeTokenRequestBuilderPrivate.Builder(configuration);
         }
     }
 }

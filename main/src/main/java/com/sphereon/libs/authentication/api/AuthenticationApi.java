@@ -1,9 +1,9 @@
 package com.sphereon.libs.authentication.api;
 
-import com.sphereon.libs.authentication.impl.TokenApiPrivate;
+import com.sphereon.libs.authentication.impl.AuthenticationApiPrivate;
 
 @SuppressWarnings("unused")
-public interface TokenApi extends TokenApiPrivate {
+public interface AuthenticationApi extends AuthenticationApiPrivate {
 
     GenerateTokenRequestBuilder.Builder requestToken();
 

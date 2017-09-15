@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.config;
 
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.backends.*;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +12,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ConfigManager {
-    private static final String PROPERTY_PREFIX = "sphereon.authentication-api";
+    private static final String PROPERTY_PREFIX = "authentication-api";
 
-    private final TokenApiConfiguration configuration;
+    private final ApiConfiguration configuration;
 
     private String propertyPrefix;
 
@@ -23,8 +23,8 @@ public class ConfigManager {
     private boolean reinit;
 
 
-    ConfigManager(TokenApiConfiguration tokenApiConfiguration) {
-        this.configuration = tokenApiConfiguration;
+    ConfigManager(ApiConfiguration configuration) {
+        this.configuration = configuration;
         init();
     }
 
@@ -42,13 +42,13 @@ public class ConfigManager {
                 return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
                 File propertiesFile = new File(configuration.getStandalonePropertyFilePath());
-                return new PropertyFileBackend(configuration.getPersistenceMode(), propertiesFile.toURI(), configuration.getApplication());
+                return new PropertyFileBackend(configuration.getApplication(), configuration.getPersistenceMode(), propertiesFile.toURI());
             case SPRING_APPLICATION_PROPERTIES:
                 return createSpringPropertyBackend();
             case SYSTEM_ENVIRONMENT:
-                return new SystemEnvPropertyBackend(configuration.getPersistenceMode());
+                return new SystemEnvPropertyBackend(configuration.getApplication());
             default:
-                return new InMemoryConfig(configuration.getPersistenceMode());
+                return new InMemoryConfig(configuration.getApplication());
         }
     }
 
@@ -90,14 +90,14 @@ public class ConfigManager {
             persistenceMode = PersistenceMode.READ_ONLY;
         }
         try {
-            return new PropertyFileBackend(persistenceMode, url.toURI(), configuration.getApplication());
+            return new PropertyFileBackend(configuration.getApplication(), persistenceMode, url.toURI());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Could not read property file URL " + url, e);
         }
     }
 
 
-    public TokenApiConfiguration getConfiguration() {
+    public ApiConfiguration getConfiguration() {
         return configuration;
     }
 

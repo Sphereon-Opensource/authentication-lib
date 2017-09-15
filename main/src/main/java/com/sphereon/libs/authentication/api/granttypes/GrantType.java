@@ -1,6 +1,6 @@
 package com.sphereon.libs.authentication.api.granttypes;
 
-import com.sphereon.commons.exceptions.EnumParseException;
+import com.sphereon.libs.authentication.impl.commons.exceptions.EnumParseException;
 import org.apache.commons.lang3.StringUtils;
 
 public enum GrantType {

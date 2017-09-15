@@ -1,5 +1,7 @@
 *.class
 
+# test
+config/
 
 # Package Files #
 *.jar

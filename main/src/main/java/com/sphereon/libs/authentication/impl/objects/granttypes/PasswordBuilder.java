@@ -1,8 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.GrantBuilder;
 import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
+import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 
 public interface PasswordBuilder {
 
@@ -38,7 +38,6 @@ public interface PasswordBuilder {
             if (validate) {
                 validate();
             }
-
 
             PasswordGrantImpl passwordGrant = new PasswordGrantImpl();
             passwordGrant.setUserName(userName);

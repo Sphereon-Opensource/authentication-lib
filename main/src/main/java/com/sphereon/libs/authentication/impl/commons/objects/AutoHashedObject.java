@@ -1,4 +1,4 @@
-package com.sphereon.commons.objects;
+package com.sphereon.libs.authentication.impl.commons.objects;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 

@@ -1,7 +1,7 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-import com.sphereon.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.api.TokenResponse;
+import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;

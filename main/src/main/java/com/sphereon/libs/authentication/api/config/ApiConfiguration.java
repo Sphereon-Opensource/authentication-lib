@@ -1,11 +1,11 @@
 package com.sphereon.libs.authentication.api.config;
 
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.config.TokenApiConfigurator;
+import com.sphereon.libs.authentication.impl.config.ApiConfigurator;
 
 import java.time.Duration;
 
-public interface TokenApiConfiguration extends TokenApiConfigurator {
+public interface ApiConfiguration extends ApiConfigurator {
 
     String getApplication();
 

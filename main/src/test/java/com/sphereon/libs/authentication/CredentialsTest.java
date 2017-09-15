@@ -1,9 +1,9 @@
 package com.sphereon.libs.authentication;
 
-import com.sphereon.libs.authentication.api.TokenApi;
+import com.sphereon.libs.authentication.api.AuthenticationApi;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -18,17 +18,19 @@ public class CredentialsTest extends AbstractTest {
 
     private static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
 
+    private static final AtomicReference<String> prevToken = new AtomicReference<>();
     private static final AtomicReference<String> refreshToken = new AtomicReference<>();
 
 
     public CredentialsTest() {
+
     }
 
 
     @Test
     public void test_10_ClientCredentials() {
-        TokenApi tokenApi = new TokenApi.Builder().build();
-        TokenRequest tokenRequest = tokenApi.requestToken()
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
+        TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withScope("UnitTest")
@@ -36,6 +38,7 @@ public class CredentialsTest extends AbstractTest {
                 .build();
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
+        this.prevToken.set(tokenResponse.getAccessToken());
         wait(VALIDITY_PERIOD);
     }
 
@@ -43,9 +46,9 @@ public class CredentialsTest extends AbstractTest {
     @Test
     public void test_20_UserPassword() {
 
-        TokenApiConfiguration configuration = loadPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
+        ApiConfiguration configuration = createPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
 
-        TokenApi tokenApi = new TokenApi.Builder()
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
                 .withConfiguration(configuration)
                 .build();
 
@@ -54,7 +57,7 @@ public class CredentialsTest extends AbstractTest {
                 .withPassword("K@A$yG@Vwpq4Ow1W@Q2b")
                 .build();
 
-        TokenRequest tokenRequest = tokenApi.requestToken()
+        TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withGrant(grant)
                 .withScope("UnitTest")
                 .withValidityPeriod(VALIDITY_PERIOD)
@@ -64,17 +67,19 @@ public class CredentialsTest extends AbstractTest {
         Assert.assertNotNull(tokenResponse.getAccessToken());
         String refreshToken = tokenResponse.getRefreshToken();
         Assert.assertNotNull(refreshToken);
-        wait(VALIDITY_PERIOD);
+        Assert.assertNotEquals(this.prevToken.get(), tokenResponse.getAccessToken());
+        this.prevToken.set(tokenResponse.getAccessToken());
         this.refreshToken.set(refreshToken);
+        wait(VALIDITY_PERIOD);
     }
 
 
     @Test
     public void test_30_RefreshToken() {
         Assert.assertNotNull(refreshToken.get());
-        TokenApiConfiguration configuration = loadPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
+        ApiConfiguration configuration = loadPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
 
-        TokenApi tokenApi = new TokenApi.Builder()
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
                 .withConfiguration(configuration)
                 .build();
 
@@ -83,7 +88,7 @@ public class CredentialsTest extends AbstractTest {
                 .build();
 
 
-        TokenRequest tokenRequest = tokenApi.requestToken()
+        TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withGrant(grant)
                 .withScope("UnitTest")
                 .withValidityPeriod(VALIDITY_PERIOD)
@@ -92,6 +97,6 @@ public class CredentialsTest extends AbstractTest {
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
         Assert.assertNotNull(tokenResponse.getRefreshToken());
-        wait(VALIDITY_PERIOD);
+        Assert.assertNotEquals(this.prevToken.get(), tokenResponse.getAccessToken());
     }
 }

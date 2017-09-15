@@ -12,7 +12,7 @@ public class Activator implements BundleActivator {
      **/
 
     public void start(BundleContext bundleContext) {
-        System.out.println("Sphereon TokenAPI activated");
+        System.out.println("Sphereon AuthenticationApi activated");
     }
 
 
@@ -22,6 +22,6 @@ public class Activator implements BundleActivator {
      * @param bundleContext - the framework context for the bundle
      **/
     public void stop(BundleContext bundleContext) {
-        System.out.println("Sphereon TokenAPI deactivated");
+        System.out.println("Sphereon AuthenticationApi deactivated");
     }
 }

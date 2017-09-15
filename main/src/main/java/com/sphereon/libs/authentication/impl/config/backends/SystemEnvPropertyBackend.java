@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SystemEnvPropertyBackend extends InMemoryConfig {
 
-    public SystemEnvPropertyBackend(PersistenceMode persistenceMode) {
-        super(persistenceMode);
+    public SystemEnvPropertyBackend(String application) {
+        super(application);
     }
 
 

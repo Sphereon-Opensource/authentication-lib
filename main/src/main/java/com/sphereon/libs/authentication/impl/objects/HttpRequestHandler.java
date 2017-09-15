@@ -2,8 +2,8 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.impl.RequestParameters;
+import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 import okhttp3.*;
 
 import java.io.IOException;

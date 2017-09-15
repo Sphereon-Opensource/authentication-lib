@@ -1,30 +1,27 @@
 package com.sphereon.libs.authentication;
 
-import com.sphereon.libs.authentication.api.TokenApi;
+import com.sphereon.libs.authentication.api.AuthenticationApi;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.config.TestConfig;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SpringBootCredentialsTest extends AbstractTest {
+public class SpringBootCredentialsTest {
+
+    protected static final String APPLICATION_NAME = "springboot-test";
 
     private static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
 
@@ -35,39 +32,35 @@ public class SpringBootCredentialsTest extends AbstractTest {
     }
 
 
-
     @Test
-    public void test_10_UserPassword() {
+    public void springbootTest_10_UserPassword() {
 
-        TokenApiConfiguration configuration1 = createAppPropetiesFileConfiguration();
-        TokenApiConfiguration configuration2 = loadAppPropetiesFileConfiguration();
+        createAppPropetiesFileConfiguration();
+        ApiConfiguration configuration2 = loadAppPropetiesFileConfiguration();
 
-        TokenApi tokenApi = new TokenApi.Builder()
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
                 .withConfiguration(configuration2)
                 .build();
 
 
-        TokenRequest tokenRequest = tokenApi.requestToken()
+        TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withScope("UnitTest")
                 .withValidityPeriod(VALIDITY_PERIOD)
                 .build();
 
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
-        String refreshToken = tokenResponse.getRefreshToken();
-        Assert.assertNotNull(refreshToken);
-        wait(VALIDITY_PERIOD);
-        this.refreshToken.set(refreshToken);
+        Assert.assertNotNull(tokenResponse.getRefreshToken());
     }
 
 
-    private TokenApiConfiguration createAppPropetiesFileConfiguration() {
+    private ApiConfiguration createAppPropetiesFileConfiguration() {
         Grant grant = new Grant.PasswordGrantBuilder()
                 .withUserName("SphereonTest")
                 .withPassword("K@A$yG@Vwpq4Ow1W@Q2b")
                 .build();
 
-        return new TokenApiConfiguration.Builder()
+        return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
@@ -77,8 +70,9 @@ public class SpringBootCredentialsTest extends AbstractTest {
                 .build();
     }
 
-    private TokenApiConfiguration loadAppPropetiesFileConfiguration() {
-        return new TokenApiConfiguration.Builder()
+
+    private ApiConfiguration loadAppPropetiesFileConfiguration() {
+        return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)

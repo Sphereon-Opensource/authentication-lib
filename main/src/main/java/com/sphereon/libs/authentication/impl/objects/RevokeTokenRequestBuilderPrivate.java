@@ -2,14 +2,14 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequestBuilder;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
 public interface RevokeTokenRequestBuilderPrivate {
 
     class Builder implements TokenRequestBuilder {
 
-        private final TokenApiConfiguration tokenApiConfiguration;
+        private final ApiConfiguration configuration;
 
         private String consumerKey;
 
@@ -18,8 +18,8 @@ public interface RevokeTokenRequestBuilderPrivate {
         private String currentToken;
 
 
-        public Builder(TokenApiConfiguration tokenApiConfiguration) {
-            this.tokenApiConfiguration = tokenApiConfiguration;
+        public Builder(ApiConfiguration configuration) {
+            this.configuration = configuration;
         }
 
 
@@ -44,7 +44,7 @@ public interface RevokeTokenRequestBuilderPrivate {
         @Override
         public TokenRequest build() {
             validate();
-            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(tokenApiConfiguration);
+            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configuration);
             revokeTokenRequest.setConsumerKey(consumerKey);
             revokeTokenRequest.setConsumerSecret(consumerSecret);
             revokeTokenRequest.setToken(currentToken);
@@ -54,10 +54,10 @@ public interface RevokeTokenRequestBuilderPrivate {
 
         private void validate() {
             if (StringUtils.isEmpty(consumerKey)) {
-                this.consumerKey = tokenApiConfiguration.getConsumerKey();
+                this.consumerKey = configuration.getConsumerKey();
             }
             if (StringUtils.isEmpty(consumerSecret)) {
-                this.consumerSecret = tokenApiConfiguration.getConsumerSecret();
+                this.consumerSecret = configuration.getConsumerSecret();
             }
 
             if (StringUtils.isEmpty(currentToken)) {

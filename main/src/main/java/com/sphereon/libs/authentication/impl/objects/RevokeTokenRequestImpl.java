@@ -2,7 +2,7 @@ package com.sphereon.libs.authentication.impl.objects;
 
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -16,8 +16,8 @@ class RevokeTokenRequestImpl extends TokenRequestImpl implements TokenRequest, R
     protected String token;
 
 
-    RevokeTokenRequestImpl(TokenApiConfiguration tokenApiConfiguration) {
-        super(tokenApiConfiguration);
+    RevokeTokenRequestImpl(ApiConfiguration configuration) {
+        super(configuration);
     }
 
 
@@ -36,7 +36,7 @@ class RevokeTokenRequestImpl extends TokenRequestImpl implements TokenRequest, R
 
         FormBody requestBody = httpRequestHandler.buildBody(this);
         Headers headers = httpRequestHandler.buildHeaders(this);
-        Request httpRequest = httpRequestHandler.newRevokeRequest(tokenApiConfiguration.getGatewayBaseUrl(), headers, requestBody);
+        Request httpRequest = httpRequestHandler.newRevokeRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
         return executeRequest(httpRequest);
     }
 

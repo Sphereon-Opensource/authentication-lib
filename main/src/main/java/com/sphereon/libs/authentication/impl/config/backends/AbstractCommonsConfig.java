@@ -32,8 +32,16 @@ abstract class AbstractCommonsConfig implements PropertyConfigBackend {
 
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
-        if (persistenceMode == PersistenceMode.READ_WRITE || (!key.isCheckReadOnly() && persistenceMode == PersistenceMode.READ_ONLY)) {
+        if (persistenceMode == PersistenceMode.READ_WRITE) {
             config.setProperty(propertyPrefix + key.getPropertyKey(), value);
+        }
+    }
+
+
+    public void tryForcedSaveProperty(String propertyPrefix, PropertyKey key, String value) {
+        try {
+            config.setProperty(propertyPrefix + key.getPropertyKey(), value);
+        } catch (Exception ignored) {
         }
     }
 }

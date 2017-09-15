@@ -1,16 +1,16 @@
 package com.sphereon.libs.authentication.impl.config;
 
-import com.sphereon.commons.exceptions.EnumParseException;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
-import com.sphereon.libs.authentication.api.config.TokenApiConfiguration;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
+import com.sphereon.libs.authentication.impl.commons.exceptions.EnumParseException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;
 
-class TokenApiConfigurationImpl implements TokenApiConfiguration, ConfigPersistence, ConfigManagerProvider {
+class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, ConfigManagerProvider {
 
     private static final String DEFAULT_GATEWAY_URL = "https://gw.api.cloud.sphereon.com/";
 
@@ -38,7 +38,7 @@ class TokenApiConfigurationImpl implements TokenApiConfiguration, ConfigPersiste
     private ConfigManager configManager;
 
 
-    TokenApiConfigurationImpl() {
+    ApiConfigurationImpl() {
     }
 
 

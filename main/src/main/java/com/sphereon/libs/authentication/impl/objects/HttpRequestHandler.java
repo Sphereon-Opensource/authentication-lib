@@ -82,7 +82,7 @@ class HttpRequestHandler {
         Assert.notNull(responseBody, "The remote endpoint did not return a response body.");
         String responseBodyString = responseBody.string();
         Assert.isTrue(!"application/json".equals(responseBody.contentType()),
-                String.format("The remote endpoint responded with content type %s while application/json is expected. Content:\r\n%s",
+                String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
                         responseBody.contentType(), responseBodyString));
         return responseBodyString;
     }

@@ -39,18 +39,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
             configFile.getParentFile().mkdirs();
         }
         String ext = FilenameUtils.getExtension(configFile.getName());
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-                if ("xml".equalsIgnoreCase(ext)) {
-                    FileWriter writer = new FileWriter(configFile);
-                    writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
-                    writer.write("<properties></properties>\r\n");
-                    writer.close();
-                }
-            } catch (IOException e) {
-            }
-        }
+        ensureConfigFileExists(configFile, ext);
         Parameters params = new Parameters();
         Class<? extends FileBasedConfiguration> configClass = "xml".equalsIgnoreCase(ext) ? XMLConfiguration.class : PropertiesConfiguration.class;
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
@@ -62,6 +51,25 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
             this.config = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Could not initialize PropertyFileBackend for " + fileUri, e);
+        }
+    }
+
+
+    private void ensureConfigFileExists(File configFile, String ext) {
+        if (!configFile.exists()) {
+            try {
+                if (!configFile.createNewFile()) {
+                    throw new IOException("Could not create new config file.");
+                }
+                if ("xml".equalsIgnoreCase(ext)) {
+                    try (FileWriter writer = new FileWriter(configFile)) {
+                        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+                        writer.write("<properties></properties>\r\n");
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("A problem occurred whilst creating initial config file " + configFile.getAbsolutePath(), e);
+            }
         }
     }
 

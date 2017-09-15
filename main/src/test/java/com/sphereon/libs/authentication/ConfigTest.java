@@ -168,7 +168,7 @@ public class ConfigTest extends AbstractTest {
 
 
     @Test
-    public void test_01_InMemoryConfig() {
+    public void test_50_InMemoryConfig() {
         PasswordGrant grant = new Grant.PasswordGrantBuilder()
                 .withUserName("testUser")
                 .withPassword("testPassword")

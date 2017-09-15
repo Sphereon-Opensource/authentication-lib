@@ -23,7 +23,7 @@ public interface RevokeTokenRequestBuilderPrivate {
         }
 
 
-        public RevokeTokenRequestBuilderPrivate.Builder withCurrentToken() {
+        public RevokeTokenRequestBuilderPrivate.Builder withCurrentToken(String currentToken) {
             this.currentToken = currentToken;
             return this;
         }

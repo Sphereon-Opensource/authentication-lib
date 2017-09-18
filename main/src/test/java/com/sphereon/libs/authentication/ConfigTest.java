@@ -36,7 +36,7 @@ public class ConfigTest extends AbstractTest {
         Assert.assertEquals(savedConfig.getGatewayBaseUrl(), loadedConfig.getGatewayBaseUrl());
         Assert.assertEquals(savedConfig.getConsumerKey(), loadedConfig.getConsumerKey());
         Assert.assertEquals(savedConfig.getConsumerSecret(), loadedConfig.getConsumerSecret());
-        Assert.assertEquals(savedConfig.getStandalonePropertyFilePath(), loadedConfig.getStandalonePropertyFilePath());
+        Assert.assertEquals(savedConfig.getStandalonePropertyFile(), loadedConfig.getStandalonePropertyFile());
     }
 
 
@@ -50,7 +50,7 @@ public class ConfigTest extends AbstractTest {
         Assert.assertEquals(savedConfig.getGatewayBaseUrl(), loadedConfig.getGatewayBaseUrl());
         Assert.assertEquals(savedConfig.getConsumerKey(), loadedConfig.getConsumerKey());
         Assert.assertEquals(savedConfig.getConsumerSecret(), loadedConfig.getConsumerSecret());
-        Assert.assertEquals(savedConfig.getStandalonePropertyFilePath(), loadedConfig.getStandalonePropertyFilePath());
+        Assert.assertEquals(savedConfig.getStandalonePropertyFile(), loadedConfig.getStandalonePropertyFile());
     }
 
 
@@ -78,7 +78,7 @@ public class ConfigTest extends AbstractTest {
         Assert.assertEquals(config2.getGatewayBaseUrl(), config3.getGatewayBaseUrl());
         Assert.assertEquals(config2.getConsumerKey(), config3.getConsumerKey());
         Assert.assertEquals(config2.getConsumerSecret(), config3.getConsumerSecret());
-        Assert.assertEquals(config2.getStandalonePropertyFilePath(), config3.getStandalonePropertyFilePath());
+        Assert.assertEquals(config2.getStandalonePropertyFile(), config3.getStandalonePropertyFile());
 
         PasswordGrant loadedPasswordGrant = (PasswordGrant) config3.getDefaultGrant();
         Assert.assertEquals(passwordGrant.getUserName(), loadedPasswordGrant.getUserName());
@@ -182,7 +182,7 @@ public class ConfigTest extends AbstractTest {
         ApiConfiguration loadedConfig = new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigPath("./config/" + MANUAL_PROPERTIES)
+                .setStandaloneConfigFile(new File("./config/" + MANUAL_PROPERTIES))
                 .withAutoEncryptSecrets(false)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .build();

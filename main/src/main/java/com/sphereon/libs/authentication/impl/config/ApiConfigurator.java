@@ -5,6 +5,8 @@ import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 
+import java.io.File;
+
 public interface ApiConfigurator {
 
     final class Builder {
@@ -59,8 +61,8 @@ public interface ApiConfigurator {
         }
 
 
-        public Builder setStandaloneConfigPath(String standaloneConfigPath) {
-            configuration.setStandalonePropertyFilePath(standaloneConfigPath);
+        public Builder setStandaloneConfigFile(File standaloneConfigPath) {
+            configuration.setStandalonePropertyFile(standaloneConfigPath);
             return this;
         }
 

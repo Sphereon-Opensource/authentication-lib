@@ -31,13 +31,12 @@ public abstract class AbstractTest {
 
 
     protected ApiConfiguration createPropertyFileConfiguration(final String configFile) {
-        String standaloneConfigPath = "./config/" + configFile;
-        File f = new File(standaloneConfigPath);
-        f.delete();
+        File standaloneConfigFile = new File("./config/" + configFile);
+        standaloneConfigFile.delete();
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigPath(standaloneConfigPath)
+                .setStandaloneConfigFile(standaloneConfigFile)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
@@ -51,7 +50,7 @@ public abstract class AbstractTest {
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigPath("./config/" + configFile)
+                .setStandaloneConfigFile(new File("./config/" + configFile))
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
                 .withPersistenceMode(PersistenceMode.READ_WRITE)

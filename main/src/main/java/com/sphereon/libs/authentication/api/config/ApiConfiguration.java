@@ -3,6 +3,7 @@ package com.sphereon.libs.authentication.api.config;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.ApiConfigurator;
 
+import java.io.File;
 import java.time.Duration;
 
 public interface ApiConfiguration extends ApiConfigurator {
@@ -23,7 +24,7 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setPersistenceMode(PersistenceMode persistenceMode);
 
-    String getStandalonePropertyFilePath();
+    File getStandalonePropertyFile();
 
     String getDefaultScope();
 
@@ -33,7 +34,7 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setDefaultValidityPeriod(Duration validityPeriod);
 
-    void setStandalonePropertyFilePath(String standaloneConfigPath);
+    void setStandalonePropertyFile(File standalonePropertyFilePath);
 
     String getConsumerKey();
 

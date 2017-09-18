@@ -8,6 +8,7 @@ import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.impl.commons.exceptions.EnumParseException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.time.Duration;
 
 class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, ConfigManagerProvider {
@@ -22,7 +23,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
     private String gatewayBaseUrl = DEFAULT_GATEWAY_URL;
 
-    private String standalonePropertyFilePath;
+    private File standalonePropertyFile;
 
     private Grant defaultGrant;
 
@@ -95,14 +96,14 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
 
     @Override
-    public String getStandalonePropertyFilePath() {
-        return standalonePropertyFilePath;
+    public File getStandalonePropertyFile() {
+        return standalonePropertyFile;
     }
 
 
     @Override
-    public void setStandalonePropertyFilePath(String standalonePropertyFilePath) {
-        this.standalonePropertyFilePath = standalonePropertyFilePath;
+    public void setStandalonePropertyFile(File standalonePropertyFile) {
+        this.standalonePropertyFile = standalonePropertyFile;
         configManagerReinit();
     }
 

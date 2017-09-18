@@ -41,8 +41,8 @@ public class ConfigManager {
             case DISABLED:
                 return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
-                File propertiesFile = new File(configuration.getStandalonePropertyFilePath());
-                return new PropertyFileBackend(configuration, propertiesFile.toURI());
+                // TODO: check in validator
+                return new PropertyFileBackend(configuration, configuration.getStandalonePropertyFile().toURI());
             case SPRING_APPLICATION_PROPERTIES:
                 return createSpringPropertyBackend();
             case SYSTEM_ENVIRONMENT:

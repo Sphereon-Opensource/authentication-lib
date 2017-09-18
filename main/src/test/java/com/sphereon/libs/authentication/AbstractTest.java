@@ -40,6 +40,7 @@ public abstract class AbstractTest {
                 .setStandaloneConfigPath(standaloneConfigPath)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .withAutoEncryptSecrets(true)
+                .withAutoEncryptionPassword("UnitTestPassword")
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .build();
@@ -52,6 +53,7 @@ public abstract class AbstractTest {
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
                 .setStandaloneConfigPath("./config/" + configFile)
                 .withAutoEncryptSecrets(true)
+                .withAutoEncryptionPassword("UnitTestPassword")
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .build();
     }

@@ -36,6 +36,8 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
     private boolean autoEncryptSecrets;
 
+    private String autoEncryptionPassword;
+
     private ConfigManager configManager;
 
 
@@ -174,6 +176,18 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
     @Override
     public void setAutoEncryptSecrets(boolean autoEncryptSecrets) {
         this.autoEncryptSecrets = autoEncryptSecrets;
+    }
+
+
+    @Override
+    public String getAutoEncryptionPassword() {
+        return autoEncryptionPassword;
+    }
+
+
+    @Override
+    public void setAutoEncryptionPassword(String autoEncryptionPassword) {
+        this.autoEncryptionPassword = autoEncryptionPassword;
     }
 
 

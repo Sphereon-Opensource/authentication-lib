@@ -28,8 +28,9 @@ class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, RequestParame
 
 
     @Override
-    public void setWindowsToken(String windowsToken) {
+    public NtlmGrant setWindowsToken(String windowsToken) {
         this.windowsToken = windowsToken;
+        return this;
     }
 
 

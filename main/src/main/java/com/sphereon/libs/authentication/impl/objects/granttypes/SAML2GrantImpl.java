@@ -24,8 +24,9 @@ class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestPara
 
 
     @Override
-    public void setAssertion(String assertion) {
+    public SAML2Grant setAssertion(String assertion) {
         this.assertion = assertion;
+        return this;
     }
 
 

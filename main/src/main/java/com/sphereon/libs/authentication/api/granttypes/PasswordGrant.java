@@ -4,11 +4,11 @@ public interface PasswordGrant extends Grant {
 
     String getUserName();
 
-    void setUserName(String userName);
+    PasswordGrant setUserName(String userName);
 
     String getPassword();
 
-    void setPassword(String password);
+    PasswordGrant setPassword(String password);
 
 
 }

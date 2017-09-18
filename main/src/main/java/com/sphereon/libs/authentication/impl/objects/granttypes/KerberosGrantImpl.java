@@ -30,8 +30,9 @@ class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, Reque
 
 
     @Override
-    public void setKerberosRealm(String kerberosRealm) {
+    public KerberosGrant setKerberosRealm(String kerberosRealm) {
         this.kerberosRealm = kerberosRealm;
+        return this;
     }
 
 
@@ -42,8 +43,9 @@ class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, Reque
 
 
     @Override
-    public void setKerberosToken(String kerberosToken) {
+    public KerberosGrant setKerberosToken(String kerberosToken) {
         this.kerberosToken = kerberosToken;
+        return this;
     }
 
 

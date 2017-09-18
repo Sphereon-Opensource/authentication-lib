@@ -51,5 +51,9 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setAutoEncryptSecrets(boolean autoEncryptSecrets);
 
+    String getAutoEncryptionPassword();
+
+    void setAutoEncryptionPassword(String autoEncryptionPassword);
+
     void persist();
 }

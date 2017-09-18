@@ -4,6 +4,6 @@ public interface SAML2Grant extends Grant {
 
     String getAssertion();
 
-    void setAssertion(String assertion);
+    SAML2Grant setAssertion(String assertion);
 
 }

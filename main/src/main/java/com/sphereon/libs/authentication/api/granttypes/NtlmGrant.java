@@ -4,5 +4,5 @@ public interface NtlmGrant extends Grant {
 
     String getWindowsToken();
 
-    void setWindowsToken(String windowsToken);
+    NtlmGrant setWindowsToken(String windowsToken);
 }

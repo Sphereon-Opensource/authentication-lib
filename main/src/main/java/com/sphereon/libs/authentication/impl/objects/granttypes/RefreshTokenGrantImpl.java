@@ -28,8 +28,9 @@ class RefreshTokenGrantImpl extends AutoHashedObject implements RefreshTokenGran
 
 
     @Override
-    public void setRefreshToken(String refreshToken) {
+    public RefreshTokenGrant setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+        return this;
     }
 
 

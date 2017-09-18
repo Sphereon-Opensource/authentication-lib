@@ -30,8 +30,9 @@ class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, Reque
 
 
     @Override
-    public void setUserName(String userName) {
+    public PasswordGrant setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
 
@@ -42,8 +43,9 @@ class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, Reque
 
 
     @Override
-    public void setPassword(String password) {
+    public PasswordGrant setPassword(String password) {
         this.password = password;
+        return this;
     }
 
 

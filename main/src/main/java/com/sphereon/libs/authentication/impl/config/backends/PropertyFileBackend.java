@@ -28,11 +28,8 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
     private final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
 
-    private static final boolean isInUnitTest;
+    private static final boolean isInUnitTest = "true".equalsIgnoreCase(System.getProperty("sphereon.testing"));
 
-    static {
-        isInUnitTest = "true".equalsIgnoreCase(System.getProperty("sphereon.testing"));
-    }
 
     public PropertyFileBackend(ApiConfiguration configuration, URI fileUri) {
         super(configuration, configuration.getPersistenceMode());
@@ -79,7 +76,12 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
 
 
     private void initEncryptor() {
-        encryptor.setPassword(new String(libKey));
+        StringBuilder password = new StringBuilder();
+        if (StringUtils.isNotEmpty(apiConfiguration.getAutoEncryptionPassword())) {
+            password.append(apiConfiguration.getAutoEncryptionPassword()).append('.');
+        }
+        password.append(libKey);
+        encryptor.setPassword(password.toString());
         if (isInUnitTest) {
             encryptor.setSaltGenerator(new StringFixedSaltGenerator(apiConfiguration.getApplication()));
         } else {

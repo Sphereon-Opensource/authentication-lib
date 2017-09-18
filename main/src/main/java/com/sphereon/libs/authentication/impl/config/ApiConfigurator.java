@@ -53,6 +53,12 @@ public interface ApiConfigurator {
         }
 
 
+        public Builder withAutoEncryptionPassword(String autoEncryptionPassword) {
+            configuration.setAutoEncryptionPassword(autoEncryptionPassword);
+            return this;
+        }
+
+
         public Builder setStandaloneConfigPath(String standaloneConfigPath) {
             configuration.setStandalonePropertyFilePath(standaloneConfigPath);
             return this;

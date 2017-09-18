@@ -4,5 +4,5 @@ public interface RefreshTokenGrant extends Grant {
 
     String getRefreshToken();
 
-    void setRefreshToken(String refreshToken);
+    RefreshTokenGrant setRefreshToken(String refreshToken);
 }

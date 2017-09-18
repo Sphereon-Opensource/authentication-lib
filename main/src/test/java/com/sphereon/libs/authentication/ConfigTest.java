@@ -168,8 +168,8 @@ public class ConfigTest extends AbstractTest {
         FileUtils.copyInputStreamToFile(templateStream, manualPropertiesFile);
         ApiConfiguration loadedConfig = loadPropertyFileConfiguration(MANUAL_PROPERTIES);
         Assert.assertNotNull(loadedConfig);
-        assertPropertyValues(manualPropertiesFile, "authentication-api.expiring-tokens.consumer-secret=ENC(6vgOTmA0gNKv0/G3GaOu9hUf/mL8klR2dNLnxhh00MA=)",
-                "authentication-api.expiring-tokens.password=ENC(8DBFLfsbf8WhjmBZjDQJWQqJKs9+wCww)");
+        assertPropertyValues(manualPropertiesFile, "authentication-api.expiring-tokens.consumer-secret=ENC(Vx8S8kgVtnPDSrNeN/lnP+JzEnO/oxgZ6BIndA0q8ZU=)",
+                "authentication-api.expiring-tokens.password=ENC(nOkq9EenHSj7Eb8VQljbjGZSOUrKfFyZ)");
     }
 
 

@@ -121,7 +121,7 @@ The grant-type property supports the following values:
     - Parameters: saml2-assertion
 
 #### License
-Apache2 (preliminary)
+[Apache2](https://www.apache.org/licenses/LICENSE-2.0) (preliminary)
 
 ---
 

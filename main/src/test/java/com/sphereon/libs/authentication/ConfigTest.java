@@ -53,7 +53,13 @@ public class ConfigTest extends AbstractTest {
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .build();
-        ApiConfiguration loadedConfig = loadPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
+        ApiConfiguration loadedConfig = new ApiConfiguration.Builder()
+                .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
+                .setStandaloneConfigFile(new File("./config/" + SPHEREON_AUTH_PROPERTIES))
+                .withAutoEncryptSecrets(true)
+                .withAutoEncryptionPassword("UnitTestPassword")
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .build();
         Assert.assertEquals(savedConfig.getApplication(), loadedConfig.getApplication());
         Assert.assertEquals(savedConfig.getPersistenceType(), loadedConfig.getPersistenceType());
         Assert.assertEquals(savedConfig.getPersistenceMode(), loadedConfig.getPersistenceMode());

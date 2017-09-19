@@ -40,6 +40,7 @@ public interface ApiConfigurator {
 
         public Builder withPersistenceType(PersistenceType persistenceType) {
             configuration.setPersistenceType(persistenceType);
+            configuration.setPersistenceMode(PersistenceMode.READ_WRITE);
             return this;
         }
 
@@ -98,7 +99,7 @@ public interface ApiConfigurator {
                     Assert.notNull(configuration.getStandalonePropertyFile(), "In PersistentType.STANDALONE_PROPERTY_FILE the method setStandalonePropertyFile(File file) must be used.");
                     break;
                 case IN_MEMORY:
-                    Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE, "PersistenceMode.READ_WRITE is not valid for PersistentType.IN_MEMORY");
+                    Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE, "PersistenceMode.READ_ONLY is not valid for PersistentType.IN_MEMORY");
                     break;
             }
         }

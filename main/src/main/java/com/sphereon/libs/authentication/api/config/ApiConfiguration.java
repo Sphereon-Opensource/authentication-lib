@@ -1,0 +1,59 @@
+package com.sphereon.libs.authentication.api.config;
+
+import com.sphereon.libs.authentication.api.granttypes.Grant;
+import com.sphereon.libs.authentication.impl.config.ApiConfigurator;
+
+import java.io.File;
+
+public interface ApiConfiguration extends ApiConfigurator {
+
+    String getApplication();
+
+    void setApplication(String defaultApplication);
+
+    String getGatewayBaseUrl();
+
+    void setGatewayBaseUrl(String gatewayBaseUrl);
+
+    PersistenceType getPersistenceType();
+
+    void setPersistenceType(PersistenceType persistenceType);
+
+    PersistenceMode getPersistenceMode();
+
+    void setPersistenceMode(PersistenceMode persistenceMode);
+
+    File getStandalonePropertyFile();
+
+    String getDefaultScope();
+
+    void setDefaultScope(String scope);
+
+    Long getDefaultValidityPeriod();
+
+    void setDefaultValidityPeriod(Long validityPeriod);
+
+    void setStandalonePropertyFile(File standalonePropertyFilePath);
+
+    String getConsumerKey();
+
+    void setConsumerKey(String consumerKey);
+
+    String getConsumerSecret();
+
+    void setConsumerSecret(String consumerSecret);
+
+    Grant getDefaultGrant();
+
+    void setDefaultGrant(Grant grant);
+
+    boolean isAutoEncryptSecrets();
+
+    void setAutoEncryptSecrets(boolean autoEncryptSecrets);
+
+    String getAutoEncryptionPassword();
+
+    void setAutoEncryptionPassword(String autoEncryptionPassword);
+
+    void persist();
+}

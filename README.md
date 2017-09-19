@@ -37,7 +37,7 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
 # Use the artifact in your Maven pom or Gralde build configuration  
         <dependency>
             <groupId>com.sphereon.libs</groupId>
-            <artifactId>authentication-api-lib-bundle</artifactId>
+            <artifactId>authentication-api</artifactId> (Or authentication-api-bundle for an OSGI version)
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

@@ -46,10 +46,10 @@ class HttpRequestHandler {
         Map<RequestParameterKey, String> parameterMap = new LinkedHashMap<>();
         requestParameters.bodyParameters(parameterMap);
         FormBody.Builder bodyBuilder = new FormBody.Builder();
-        parameterMap.forEach((key, value) -> {
-            Assert.notNull(value, "Body parameter " + key + " not set.");
-            bodyBuilder.add(key.getValue(), value);
-        });
+        for (Map.Entry<RequestParameterKey, String> entry : parameterMap.entrySet()) {
+            Assert.notNull(entry.getValue(), "Body parameter " + entry.getKey() + " not set.");
+            bodyBuilder.add(entry.getKey().getValue(), entry.getValue());
+        }
         return bodyBuilder.build();
     }
 
@@ -60,10 +60,11 @@ class HttpRequestHandler {
         requestParameters.headerParameters(parameterMap);
 
         Headers.Builder headerBuilder = new Headers.Builder();
-        parameterMap.forEach((key, value) -> {
-            Assert.notNull(value, "Header parameter " + key + " not set.");
-            headerBuilder.add(key.getValue(), value);
-        });
+        for (Map.Entry<RequestParameterKey, String> entry : parameterMap.entrySet()) {
+            Assert.notNull(entry.getValue(), "Header parameter " + entry.getKey() + " not set.");
+            headerBuilder.add(entry.getKey().getValue(), entry.getValue());
+
+        }
         return headerBuilder.build();
     }
 

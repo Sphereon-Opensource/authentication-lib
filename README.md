@@ -73,7 +73,9 @@ Using the configuration manager reading from an existing property file
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .build();
                 
-        AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
+            .withConfiguration(configuration)
+            .build();
         TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withConfiguration("<value>")
                 .withScope("<value>")

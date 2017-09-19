@@ -10,7 +10,6 @@ import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredential
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.time.Duration;
 
 class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, ConfigManagerProvider {
 
@@ -34,7 +33,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
     private String defaultScope;
 
-    private Duration defaultValidityPeriod;
+    private Long defaultValidityPeriod;
 
     private boolean autoEncryptSecrets;
 
@@ -158,14 +157,13 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
 
     @Override
-    public Duration getDefaultValidityPeriod() {
+    public Long getDefaultValidityPeriod() {
         return this.defaultValidityPeriod;
     }
 
 
-    @Override
-    public void setDefaultValidityPeriod(Duration validityPeriod) {
-        this.defaultValidityPeriod = validityPeriod;
+    public void setDefaultValidityPeriod(Long validityPeriodInSeconds) {
+        this.defaultValidityPeriod = validityPeriodInSeconds;
     }
 
 
@@ -253,7 +251,8 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
                     break;
             }
 
-        } catch (EnumParseException ignored) {
+        } catch (EnumParseException e) {
+            throw new RuntimeException("Could not create default grant", e);
         }
     }
 

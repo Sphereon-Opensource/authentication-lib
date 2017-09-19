@@ -1,11 +1,9 @@
 package com.sphereon.libs.authentication.impl;
 
 import com.sphereon.libs.authentication.api.AuthenticationApi;
-import com.sphereon.libs.authentication.api.GenerateTokenRequestBuilder;
-import com.sphereon.libs.authentication.api.RevokeTokenRequestBuilder;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
-import com.sphereon.libs.authentication.impl.objects.GenerateTokenRequestBuilderPrivate;
-import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilderPrivate;
+import com.sphereon.libs.authentication.impl.objects.GenerateTokenRequestBuilder;
+import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilder;
 
 class AuthenticationApiImpl implements AuthenticationApi {
 
@@ -19,14 +17,14 @@ class AuthenticationApiImpl implements AuthenticationApi {
 
 
     @Override
-    public GenerateTokenRequestBuilder.Builder requestToken() {
-        return new GenerateTokenRequestBuilderPrivate.Builder(configuration);
+    public com.sphereon.libs.authentication.api.GenerateTokenRequestBuilder.Builder requestToken() {
+        return new GenerateTokenRequestBuilder.Builder(configuration);
     }
 
 
     @Override
-    public RevokeTokenRequestBuilder.Builder revokeToken() {
-        return new RevokeTokenRequestBuilderPrivate.Builder(configuration);
+    public com.sphereon.libs.authentication.api.RevokeTokenRequestBuilder.Builder revokeToken() {
+        return new RevokeTokenRequestBuilder.Builder(configuration);
     }
 }
 

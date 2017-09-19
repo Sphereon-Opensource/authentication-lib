@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,7 +22,7 @@ public class SpringBootCredentialsTest {
 
     protected static final String APPLICATION_NAME = "springboot-test";
 
-    private static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
+    private static final Long VALIDITY_PERIOD = 10L;
 
     private static final AtomicReference<String> refreshToken = new AtomicReference<>();
 

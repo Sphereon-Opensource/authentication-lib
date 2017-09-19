@@ -101,6 +101,8 @@ public interface ApiConfigurator {
                 case IN_MEMORY:
                     Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE, "PersistenceMode.READ_ONLY is not valid for PersistentType.IN_MEMORY");
                     break;
+                default:
+                    ;// No validations needed
             }
         }
     }

@@ -10,9 +10,8 @@ import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.Duration;
 
-public interface GenerateTokenRequestBuilderPrivate {
+public interface GenerateTokenRequestBuilder {
 
     class Builder implements TokenRequestBuilder {
 
@@ -22,7 +21,7 @@ public interface GenerateTokenRequestBuilderPrivate {
         private String consumerSecret;
         private Grant grant;
         private String scope;
-        private Duration validityPeriod;
+        private Long validityPeriodInSeconds;
 
 
         public Builder(ApiConfiguration configuration) {
@@ -30,32 +29,32 @@ public interface GenerateTokenRequestBuilderPrivate {
         }
 
 
-        public GenerateTokenRequestBuilderPrivate.Builder withConsumerKey(String consumerKey) {
+        public GenerateTokenRequestBuilder.Builder withConsumerKey(String consumerKey) {
             this.consumerKey = consumerKey;
             return this;
         }
 
 
-        public GenerateTokenRequestBuilderPrivate.Builder withConsumerSecret(String consumerSecret) {
+        public GenerateTokenRequestBuilder.Builder withConsumerSecret(String consumerSecret) {
             this.consumerSecret = consumerSecret;
             return this;
         }
 
 
-        public GenerateTokenRequestBuilderPrivate.Builder withGrant(Grant grant) {
+        public GenerateTokenRequestBuilder.Builder withGrant(Grant grant) {
             this.grant = grant;
             return this;
         }
 
 
-        public GenerateTokenRequestBuilderPrivate.Builder withScope(String scope) {
+        public GenerateTokenRequestBuilder.Builder withScope(String scope) {
             this.scope = scope;
             return this;
         }
 
 
-        public GenerateTokenRequestBuilderPrivate.Builder withValidityPeriod(Duration validityPeriod) {
-            this.validityPeriod = validityPeriod;
+        public GenerateTokenRequestBuilder.Builder withValidityPeriod(Long validityPeriodInSeconds) {
+            this.validityPeriodInSeconds = validityPeriodInSeconds;
             return this;
         }
 
@@ -72,7 +71,7 @@ public interface GenerateTokenRequestBuilderPrivate {
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
             tokenRequest.setScope(scope);
-            tokenRequest.setValidityPeriod(validityPeriod);
+            tokenRequest.setValidityPeriodInSeconds(validityPeriodInSeconds);
             return tokenRequest;
         }
 
@@ -95,8 +94,8 @@ public interface GenerateTokenRequestBuilderPrivate {
                 this.scope = configuration.getDefaultScope();
             }
 
-            if (validityPeriod == null) {
-                this.validityPeriod = configuration.getDefaultValidityPeriod();
+            if (validityPeriodInSeconds == null) {
+                this.validityPeriodInSeconds = configuration.getDefaultValidityPeriod();
             }
         }
     }

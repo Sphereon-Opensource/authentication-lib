@@ -5,7 +5,7 @@ import com.sphereon.libs.authentication.api.TokenRequestBuilder;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
-public interface RevokeTokenRequestBuilderPrivate {
+public interface RevokeTokenRequestBuilder {
 
     class Builder implements TokenRequestBuilder {
 
@@ -23,19 +23,19 @@ public interface RevokeTokenRequestBuilderPrivate {
         }
 
 
-        public RevokeTokenRequestBuilderPrivate.Builder withCurrentToken(String currentToken) {
+        public RevokeTokenRequestBuilder.Builder withCurrentToken(String currentToken) {
             this.currentToken = currentToken;
             return this;
         }
 
 
-        public RevokeTokenRequestBuilderPrivate.Builder withConsumerKey(String consumerKey) {
+        public RevokeTokenRequestBuilder.Builder withConsumerKey(String consumerKey) {
             this.consumerKey = consumerKey;
             return this;
         }
 
 
-        public RevokeTokenRequestBuilderPrivate.Builder withConsumerSecret(String consumerSecret) {
+        public RevokeTokenRequestBuilder.Builder withConsumerSecret(String consumerSecret) {
             this.consumerSecret = consumerSecret;
             return this;
         }

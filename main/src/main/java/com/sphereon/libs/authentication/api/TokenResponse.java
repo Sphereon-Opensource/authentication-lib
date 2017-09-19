@@ -1,7 +1,5 @@
 package com.sphereon.libs.authentication.api;
 
-import java.time.Duration;
-
 public interface TokenResponse {
 
     String getAccessToken();
@@ -20,7 +18,7 @@ public interface TokenResponse {
 
     void setTokenType(String tokenType);
 
-    Duration getExpiresIn();
+    Long getExpiresInSeconds();
 
-    void setExpiresIn(Duration expiresIn);
+    void setExpiresInSeconds(Long expiresIn);
 }

@@ -8,15 +8,15 @@ import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 import java.util.Map;
 
 abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
-    protected static final Base64.Encoder base64Encoder = Base64.getEncoder();
+    protected static final Base64 base64Encoder = new Base64();
 
     protected static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
 
@@ -68,7 +68,7 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
     public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
         try {
             String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
-            String authorizationHeader = String.format("Basic %s", base64Encoder.encodeToString(clientParameters.getBytes("UTF-8")));
+            String authorizationHeader = String.format("Basic %s", new String(base64Encoder.encode(clientParameters.getBytes("UTF-8"))));
             parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);

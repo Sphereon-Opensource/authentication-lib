@@ -10,13 +10,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CredentialsTest extends AbstractTest {
 
-    private static final Duration VALIDITY_PERIOD = Duration.ofSeconds(10);
+    private static final Long VALIDITY_PERIOD = 10L;
 
     private static final AtomicReference<String> prevToken = new AtomicReference<>();
     private static final AtomicReference<String> refreshToken = new AtomicReference<>();

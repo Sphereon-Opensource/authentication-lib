@@ -16,11 +16,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public abstract class AbstractTest {
 
@@ -97,7 +93,13 @@ public abstract class AbstractTest {
             Assert.assertTrue(firstEqToken > -1);
             String key = keyValue.substring(0, firstEqToken);
             String value = keyValue.substring(firstEqToken + 1);
-            Assert.assertEquals("The result for key " + key + " does not match", value, config.getString(key));
+            if (value.contains("ENC(*)")) {
+                if (!config.getString(key).contains("ENC(")) {
+                    Assert.assertEquals("The result for key " + key + " does not match", "ENC(*)", config.getString(key));
+                }
+            } else {
+                Assert.assertEquals("The result for key " + key + " does not match", value, config.getString(key));
+            }
         }
     }
 
@@ -160,44 +162,13 @@ public abstract class AbstractTest {
             theCaseInsensitiveEnvironmentField.setAccessible(insensitiveAccessibility);
         } catch (final ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("Failed setting environment variable <" + key + "> to <" + value + ">", e);
-        } catch (final NoSuchFieldException e) {
-            // we could not find theEnvironment
-            final Map<String, String> env = System.getenv();
-            Stream.of(Collections.class.getDeclaredClasses())
-                    // obtain the declared classes of type $UnmodifiableMap
-                    .filter(c1 -> "java.util.Collections$UnmodifiableMap".equals(c1.getName()))
-                    .map(c1 -> {
-                        try {
-                            return c1.getDeclaredField("m");
-                        } catch (final NoSuchFieldException e1) {
-                            throw new IllegalStateException("Failed setting environment variable <" + key + "> to <" + value + "> when locating in-class memory map of environment", e1);
-                        }
-                    })
-                    .forEach(field -> {
-                        try {
-                            final boolean fieldAccessibility = field.isAccessible();
-                            field.setAccessible(true);
-                            // we obtain the environment
-                            final Map<String, String> map = (Map<String, String>) field.get(env);
-                            if (value == null) {
-                                // remove if null
-                                map.remove(key);
-                            } else {
-                                map.put(key, value);
-                            }
-                            field.setAccessible(fieldAccessibility);
-                        } catch (final ConcurrentModificationException e1) {
-                        } catch (final IllegalAccessException e1) {
-                            throw new IllegalStateException("Failed setting environment variable <" + key + "> to <" + value + ">. Unable to access field!", e1);
-                        }
-                    });
         }
     }
 
 
-    protected void wait(Duration duration) {
+    protected void wait(Long duration) {
         try {
-            Thread.sleep(duration.toMillis() + 1000);
+            Thread.sleep(duration + 1000);
         } catch (InterruptedException e) {
         }
     }

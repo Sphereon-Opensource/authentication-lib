@@ -3,7 +3,6 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.Duration;
 import java.util.Map;
 
 class TokenResponseImpl implements TokenResponse {
@@ -16,7 +15,7 @@ class TokenResponseImpl implements TokenResponse {
 
     private String tokenType;
 
-    private Duration expiresIn;
+    private Long expiresInSeconds;
 
 
     TokenResponseImpl(Map<String, String> parameters) {
@@ -26,7 +25,7 @@ class TokenResponseImpl implements TokenResponse {
         tokenType = parameters.get("token_type");
         String stringExpiresIn = parameters.get("expires_in");
         if (StringUtils.isNotEmpty(stringExpiresIn)) {
-            expiresIn = Duration.ofSeconds(Long.parseLong(stringExpiresIn));
+            expiresInSeconds = Long.parseLong(stringExpiresIn);
         }
     }
 
@@ -80,14 +79,13 @@ class TokenResponseImpl implements TokenResponse {
 
 
     @Override
-    public Duration getExpiresIn() {
-        return expiresIn;
+    public Long getExpiresInSeconds() {
+        return expiresInSeconds;
     }
 
 
-    @Override
-    public void setExpiresIn(Duration expiresIn) {
-        this.expiresIn = expiresIn;
+    public void setExpiresInSeconds(Long expiresInSeconds) {
+        this.expiresInSeconds = expiresInSeconds;
     }
 
 
@@ -114,7 +112,7 @@ class TokenResponseImpl implements TokenResponse {
         if (getTokenType() != null ? !getTokenType().equals(that.getTokenType()) : that.getTokenType() != null) {
             return false;
         }
-        return getExpiresIn() != null ? getExpiresIn().equals(that.getExpiresIn()) : that.getExpiresIn() == null;
+        return getExpiresInSeconds() != null ? getExpiresInSeconds().equals(that.getExpiresInSeconds()) : that.getExpiresInSeconds() == null;
     }
 
 
@@ -124,7 +122,7 @@ class TokenResponseImpl implements TokenResponse {
         result = 31 * result + (getRefreshToken() != null ? getRefreshToken().hashCode() : 0);
         result = 31 * result + (getScope() != null ? getScope().hashCode() : 0);
         result = 31 * result + (getTokenType() != null ? getTokenType().hashCode() : 0);
-        result = 31 * result + (getExpiresIn() != null ? getExpiresIn().hashCode() : 0);
+        result = 31 * result + (getExpiresInSeconds() != null ? getExpiresInSeconds().hashCode() : 0);
         return result;
     }
 }

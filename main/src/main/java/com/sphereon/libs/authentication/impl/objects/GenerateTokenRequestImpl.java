@@ -9,7 +9,6 @@ import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Request;
 
-import java.time.Duration;
 import java.util.Map;
 
 class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest, RequestParameters {
@@ -17,7 +16,7 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
     protected Grant grant;
 
-    protected Duration validityPeriod;
+    protected Long validityPeriodInSeconds;
 
 
     GenerateTokenRequestImpl(ApiConfiguration configuration) {
@@ -35,13 +34,13 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
     }
 
 
-    public Duration getValidityPeriod() {
-        return validityPeriod;
+    public Long getValidityPeriodInSeconds() {
+        return validityPeriodInSeconds;
     }
 
 
-    public void setValidityPeriod(Duration validityPeriod) {
-        this.validityPeriod = validityPeriod;
+    public void setValidityPeriodInSeconds(Long validityPeriodInSeconds) {
+        this.validityPeriodInSeconds = validityPeriodInSeconds;
     }
 
 
@@ -64,8 +63,8 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
     @Override
     public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
-        if (getValidityPeriod() != null) {
-            parameterMap.put(RequestParameterKey.VALIDITY_PERIOD, "" + getValidityPeriod().getSeconds());
+        if (getValidityPeriodInSeconds() != null) {
+            parameterMap.put(RequestParameterKey.VALIDITY_PERIOD, "" + getValidityPeriodInSeconds());
         }
         if (getScope() != null) {
             parameterMap.put(RequestParameterKey.SCOPE, "" + getScope());

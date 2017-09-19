@@ -5,7 +5,7 @@ import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 
-public interface AuthenticationApiPrivate {
+public interface AuthenticationApiBuilder {
 
     final class Builder {
 

@@ -15,7 +15,7 @@ public enum PropertyKey {
     CURRENT_TOKEN("current-token", true),
     WINDOWS_TOKEN("windows-token", true),
     REFRESH_TOKEN("refresh-token", true),
-    SAML2_ASSERTION("saml2-assertions", true),
+    SAML2_ASSERTION("saml2-assertion", true),
     GRANT_TYPE("grant-type", false),
     AUTO_ENCRYPT_SECRETS("auto-encrypt", false);
 

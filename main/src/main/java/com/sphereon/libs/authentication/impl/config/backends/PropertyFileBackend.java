@@ -11,11 +11,8 @@ import org.apache.commons.configuration2.builder.ReloadingFileBasedConfiguration
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.properties.PropertyValueEncryptionUtils;
-import org.jasypt.salt.RandomSaltGenerator;
-import org.jasypt.salt.StringFixedSaltGenerator;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,16 +21,10 @@ import java.net.URI;
 
 public class PropertyFileBackend extends AbstractCommonsConfig {
 
-    private static final char[] libKey = "p9Ep%MSzac%*2txW".toCharArray();
-
-    private final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-
-    private static final boolean isInUnitTest = "true".equalsIgnoreCase(System.getProperty("sphereon.testing"));
 
 
     public PropertyFileBackend(ApiConfiguration configuration, URI fileUri) {
         super(configuration, configuration.getPersistenceMode());
-        initEncryptor();
 
         File configFile = new File(fileUri);
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
@@ -60,7 +51,7 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         if (!configFile.exists()) {
             try {
                 if (!configFile.createNewFile()) {
-                    throw new IOException("Could not create new propertyConfig file.");
+                    throw new IOException("Could not create new config file.");
                 }
                 if ("xml".equalsIgnoreCase(ext)) {
                     try (FileWriter writer = new FileWriter(configFile)) {
@@ -69,25 +60,11 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException("A problem occurred whilst creating initial propertyConfig file " + configFile.getAbsolutePath(), e);
+                throw new RuntimeException("A problem occurred whilst creating initial config file " + configFile.getAbsolutePath(), e);
             }
         }
     }
 
-
-    private void initEncryptor() {
-        StringBuilder password = new StringBuilder();
-        if (StringUtils.isNotEmpty(apiConfiguration.getAutoEncryptionPassword())) {
-            password.append(apiConfiguration.getAutoEncryptionPassword()).append('.');
-        }
-        password.append(libKey);
-        encryptor.setPassword(password.toString());
-        if (isInUnitTest) {
-            encryptor.setSaltGenerator(new StringFixedSaltGenerator(apiConfiguration.getApplication()));
-        } else {
-            encryptor.setSaltGenerator(new RandomSaltGenerator());
-        }
-    }
 
 
     @Override

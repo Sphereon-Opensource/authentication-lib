@@ -15,7 +15,6 @@
 <br>
 
 ## Key Features
-
 * Simple and clean request and configuration builders
 * Configuration manager (optional) with auto-encrypt functionality
 * Support for standard property and XML property files
@@ -23,7 +22,6 @@
 * System environment support
 
 ## How To Use
-
 To clone and use this library application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/) and your favorite Java IDE. 
 
 ```bash
@@ -40,7 +38,7 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
         <dependency>
             <groupId>com.sphereon.libs</groupId>
             <artifactId>lib-tokenapi-bundle</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
 ```
@@ -52,7 +50,6 @@ You can [find](https://mvnrepository.com) the latest version on mvnrepository.co
 -->
 
 ## Getting started
-
 Basic usage without configuration
 ```bash
         AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
@@ -85,8 +82,45 @@ Using the configuration manager reading from an existing property file
         TokenResponse tokenResponse = tokenRequest.execute();
 ```
 
-#### License
+The property configuration layout is as follows: (dummy/example values are shown)
+```bash
+authentication-api.demo-application.gateway-base-url = https://gw.api.cloud.com/
+authentication-api.demo-application.persistence-mode = READ_WRITE
+authentication-api.demo-application.auto-encrypt = true
+authentication-api.demo-application.consumer-key = cx2ReTjbfq5VbnR$f4$JJj8vTH5h
+authentication-api.demo-application.consumer-secret = ENC(5GLQ4Y2AfaXvd2tA/ctw5mjOKyHg3TwJo/JTT2Dr4paXYQ7a2P=)
+authentication-api.demo-application.grant-type = password
+authentication-api.demo-application.username = DemoUser
+authentication-api.demo-application.password = ENC(V29i2BP2mBTxaqsDk5HuzZOkZ9Qil5au)
+```
+Remarks
+* When no application is specified the .demo-application part will be omitted
+* The values in the configuration files always override the settings done by the API implementor.
+* When PersistentMode is set to READ_ONLY no settings from the configuration builder are being written to the property file, except when auto-encrypt = true.  
+* When auto-encrypt = true the secret fields will be encrypted if there is write access to the configuration file.  
 
+## Supported grant types
+The grant-type property supports the following values:
+    - client-credentials, password, refresh-token, ntlm, kerberos, saml2
+ Each of these types have their own set of parameters described here:
+ <i>(The parameter names shown are compatible with the property files.)</i>
+* ClientCredentialsGrant
+    - No parameters necessary, only client key and client secret will be used to generate a new token.
+    - No refresh token will be returned.
+* PasswordGrant
+    - Parameters: username and password from the API mananger account are required.
+    - A refresh token will be returned which can be used with RefreshTokenGrant.
+* RefreshTokenGrant
+    - Parameters: refresh-token, a previously obtained refresh token.
+    - A new refresh token will be returned.
+* NtlmGrant
+    - Parameters: windows-token, a pre-generated Windows NTLM token.
+* KerberosGrant
+    - Parameters: kerberos-realm and kerberos-token
+* SAML2Grant
+    - Parameters: saml2-assertion
+
+#### License
 Apache2 (preliminary)
 
 ---

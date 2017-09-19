@@ -4,6 +4,7 @@ import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
+import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 
 import java.io.File;
 
@@ -80,10 +81,26 @@ public interface ApiConfigurator {
 
 
         public ApiConfiguration build() {
+            validate();
             ConfigPersistence configPersistence = configuration;
             configPersistence.loadConfig(configuration.getConfigManager());
             configPersistence.persistConfig(configuration.getConfigManager());
             return configuration;
+        }
+
+
+        private void validate() {
+            switch (configuration.getPersistenceType()) {
+                case DISABLED:
+                    Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_ONLY, "PersistenceMode.READ_ONLY is not valid for PersistentType.DISABLED");
+                    break;
+                case STANDALONE_PROPERTY_FILE:
+                    Assert.notNull(configuration.getStandalonePropertyFile(), "In PersistentType.STANDALONE_PROPERTY_FILE the method setStandalonePropertyFile(File file) must be used.");
+                    break;
+                case IN_MEMORY:
+                    Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE, "PersistenceMode.READ_WRITE is not valid for PersistentType.IN_MEMORY");
+                    break;
+            }
         }
     }
 

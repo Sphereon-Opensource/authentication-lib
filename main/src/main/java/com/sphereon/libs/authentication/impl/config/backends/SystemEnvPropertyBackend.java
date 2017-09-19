@@ -4,6 +4,7 @@ import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.properties.PropertyValueEncryptionUtils;
 
 public class SystemEnvPropertyBackend extends InMemoryConfig {
 
@@ -32,8 +33,9 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
         if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE) {
-            if (key.isEncrypt()) {
-                // TODO: write encrypted version to log?
+            if (key.isEncrypt() && apiConfiguration.isAutoEncryptSecrets() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
+                String encryptedValue = PropertyValueEncryptionUtils.encrypt(value, encryptor);
+                System.out.printf("Can't auto-encrypt system environment variables. The encrypted value of %s%s is %s%n", propertyPrefix, key.getPropertyKey(), encryptedValue);
             }
         }
         super.saveProperty(propertyPrefix, key, value);

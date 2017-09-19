@@ -31,7 +31,11 @@ public class ConfigManager {
 
     private void init() {
         this.propertyConfig = selectPropertyConfig();
-        this.propertyPrefix = PROPERTY_PREFIX + '.' + this.configuration.getApplication() + '.';
+        if (StringUtils.isNotEmpty(configuration.getApplication())) {
+            this.propertyPrefix = PROPERTY_PREFIX + '.' + configuration.getApplication() + '.';
+        } else {
+            this.propertyPrefix = PROPERTY_PREFIX + '.';
+        }
         reinit = false;
     }
 
@@ -41,7 +45,6 @@ public class ConfigManager {
             case DISABLED:
                 return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
-                // TODO: check in validator
                 return new PropertyFileBackend(configuration, configuration.getStandalonePropertyFile().toURI());
             case SPRING_APPLICATION_PROPERTIES:
                 return createSpringPropertyBackend();
@@ -54,10 +57,8 @@ public class ConfigManager {
 
 
     private PropertyConfigBackend createSpringPropertyBackend() {
-        // FIXME: This is not sufficient:
-
         URL url = null;
-        String propertiesLocation = System.getProperty("spring.propertyConfig.location");
+        String propertiesLocation = System.getProperty("spring.config.location");
         if (StringUtils.isNotEmpty(propertiesLocation)) {
             try {
                 url = new File(propertiesLocation).toURI().toURL();
@@ -66,15 +67,18 @@ public class ConfigManager {
         }
         if (url == null) {
             try {
-                url = new File("propertyConfig" + File.separator + "application.properties").toURI().toURL();
+                url = new File("config" + File.separator + "application.properties").toURI().toURL();
             } catch (MalformedURLException e) {
             }
         }
         if (url == null) {
             try {
-                url = new File("application.properties").toURI().toURL();
+                url = new File("./application.properties").toURI().toURL();
             } catch (MalformedURLException e) {
             }
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("/config/application.properties");
         }
         if (url == null) {
             url = getClass().getClassLoader().getResource("application.properties");

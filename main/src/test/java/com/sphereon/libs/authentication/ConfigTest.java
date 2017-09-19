@@ -41,6 +41,29 @@ public class ConfigTest extends AbstractTest {
 
 
     @Test
+    public void test_12_ConfigSaveLoadNoApplication() {
+        File standaloneConfigFile = new File("./config/" + SPHEREON_AUTH_PROPERTIES);
+        standaloneConfigFile.delete();
+        ApiConfiguration savedConfig = new ApiConfiguration.Builder()
+                .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
+                .setStandaloneConfigFile(standaloneConfigFile)
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .withAutoEncryptSecrets(true)
+                .withAutoEncryptionPassword("UnitTestPassword")
+                .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
+                .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
+                .build();
+        ApiConfiguration loadedConfig = loadPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
+        Assert.assertEquals(savedConfig.getApplication(), loadedConfig.getApplication());
+        Assert.assertEquals(savedConfig.getPersistenceType(), loadedConfig.getPersistenceType());
+        Assert.assertEquals(savedConfig.getPersistenceMode(), loadedConfig.getPersistenceMode());
+        Assert.assertEquals(savedConfig.getGatewayBaseUrl(), loadedConfig.getGatewayBaseUrl());
+        Assert.assertEquals(savedConfig.getConsumerKey(), loadedConfig.getConsumerKey());
+        Assert.assertEquals(savedConfig.getConsumerSecret(), loadedConfig.getConsumerSecret());
+        Assert.assertEquals(savedConfig.getStandalonePropertyFile(), loadedConfig.getStandalonePropertyFile());
+    }
+
+    @Test
     public void test_15_ConfigSaveLoadXml() {
         ApiConfiguration savedConfig = createPropertyFileConfiguration(SPHEREON_AUTH_XML);
         ApiConfiguration loadedConfig = loadPropertyFileConfiguration(SPHEREON_AUTH_XML);

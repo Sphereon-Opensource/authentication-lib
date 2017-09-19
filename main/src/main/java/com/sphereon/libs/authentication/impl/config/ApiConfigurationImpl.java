@@ -15,7 +15,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
     private static final String DEFAULT_GATEWAY_URL = "https://gw.api.cloud.sphereon.com/";
 
-    private String application = "default-application";
+    private String application;
 
     private PersistenceType persistenceType;
 

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sphereon.libs</groupId>
+    <artifactId>lib-tokenapi-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>main</module>
+        <module>osgi</module>
+        <module>spring-boot-test</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <version.compiler.plugin>3.6.2</version.compiler.plugin>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sphereon-commons.version>1.0.0</sphereon-commons.version>
+        <commons-lang3.version>3.6</commons-lang3.version>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>sphereon-ms-releases</id>
+            <url>http://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-ms-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>sphereon-ms-snapshots</id>
+            <url>http://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-ms-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.sphereon.ms</groupId>
+                <artifactId>sphereon-ms-commons-bom</artifactId>
+                <version>${sphereon-commons.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler plugin enforces Java 1.8 compatibility and activates annotation processors -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <debug>true</debug>
+                    <debuglevel>lines,vars</debuglevel>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20</version>
+                <configuration>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!-- Keep changes in the local repo, push will be done afterwards -->
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
+                    <!-- Use a better name for the tag -->
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>${maven-scm-provider-gitexe.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <!-- optional configuration -->
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

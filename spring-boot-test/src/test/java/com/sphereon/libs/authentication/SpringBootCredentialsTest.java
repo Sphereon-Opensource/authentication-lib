@@ -7,6 +7,11 @@ import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -39,8 +44,33 @@ public class SpringBootCredentialsTest {
     public void springbootTest_10_UserPassword() throws Exception {
 
         createAppPropetiesFileConfiguration();
-        ApiConfiguration configuration2 = loadAppPropetiesFileConfiguration();
+        ApiConfiguration configuration2 = loadAppPropertiesFileConfiguration();
 
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
+                .withConfiguration(configuration2)
+                .build();
+
+
+        TokenRequest tokenRequest = authenticationApi.requestToken()
+                .withScope("UnitTest")
+                .withValidityPeriod(VALIDITY_PERIOD)
+                .build();
+
+        TokenResponse tokenResponse = tokenRequest.execute();
+        Assert.assertNotNull(tokenResponse.getAccessToken());
+        Assert.assertNotNull(tokenResponse.getRefreshToken());
+    }
+
+
+    @Test
+    public void springbootTest_20_PreConfiguredUserPassword() throws Exception {
+
+        File appPropsFile = new File("./config/application.properties");
+        loadPreconfiguredAppPropertiesFileConfiguration(appPropsFile);
+        assertPropertyValues(appPropsFile, "authentication-api." + APPLICATION_NAME + ".consumer-secret=ENC(*)",
+                "authentication-api." + APPLICATION_NAME + "password=ENC(*)");
+
+        ApiConfiguration configuration2 = loadAppPropertiesFileConfiguration();
         AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
                 .withConfiguration(configuration2)
                 .build();
@@ -79,7 +109,18 @@ public class SpringBootCredentialsTest {
     }
 
 
-    private ApiConfiguration loadAppPropetiesFileConfiguration() {
+    private ApiConfiguration loadPreconfiguredAppPropertiesFileConfiguration(File appPropsFile) throws Exception {
+        appPropsFile.delete();
+        Files.copy(Paths.get(getClass().getResource("/application-preconfigured.properties").toURI()), appPropsFile.toPath());
+
+        return new ApiConfiguration.Builder()
+                .withApplication(APPLICATION_NAME)
+                .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
+                .build();
+    }
+
+
+    private ApiConfiguration loadAppPropertiesFileConfiguration() {
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.SPRING_APPLICATION_PROPERTIES)
@@ -88,4 +129,27 @@ public class SpringBootCredentialsTest {
                 .build();
 
     }
+
+    protected void assertPropertyValues(File propertiesFile, String... keyValues) throws Exception {
+        Parameters params = new Parameters();
+        FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+                new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+                        .configure(params.properties().setFile(propertiesFile));
+        FileBasedConfiguration config = builder.getConfiguration();
+        for (String keyValue : keyValues) {
+            int firstEqToken = keyValue.indexOf("=");
+            Assert.assertTrue(firstEqToken > -1);
+            String key = keyValue.substring(0, firstEqToken);
+            String value = keyValue.substring(firstEqToken + 1);
+            if (value.contains("ENC(*)")) {
+                if (!config.getString(key).contains("ENC(")) {
+                    Assert.assertEquals("The result for key " + key + " does not match", "ENC(*)", config.getString(key));
+                }
+            } else {
+                Assert.assertEquals("The result for key " + key + " does not match", value, config.getString(key));
+            }
+        }
+    }
+
+
 }

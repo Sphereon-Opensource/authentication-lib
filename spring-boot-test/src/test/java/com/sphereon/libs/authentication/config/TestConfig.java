@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"com.sphereon.libs"})
+@ComponentScan(basePackages = {"com.sphereon.libs.authentication"})
 public class TestConfig {
 
 

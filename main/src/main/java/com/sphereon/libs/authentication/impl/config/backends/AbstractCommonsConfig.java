@@ -15,6 +15,7 @@ abstract class AbstractCommonsConfig implements PropertyConfigBackend {
     protected final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
 
     protected final ApiConfiguration apiConfiguration;
+
     private final PersistenceMode persistenceMode;
 
     protected Configuration propertyConfig;

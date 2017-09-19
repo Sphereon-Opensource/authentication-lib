@@ -37,10 +37,10 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
             Parameters params = new Parameters();
             Class<? extends FileBasedConfiguration> configClass = "xml".equalsIgnoreCase(ext) ? XMLConfiguration.class : PropertiesConfiguration.class;
             FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
-                    new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(configClass)
+                    new ReloadingFileBasedConfigurationBuilder<>(configClass)
                             .configure(params.properties()
                                     .setFile(configFile));
-            builder.setAutoSave(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE);
+            builder.setAutoSave(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE || configuration.isAutoEncryptSecrets());
             this.propertyConfig = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Could not initialize PropertyFileBackend for " + fileUri, e);
@@ -94,6 +94,9 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
         }
         if (key.isEncrypt() && apiConfiguration.isAutoEncryptSecrets() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
             value = PropertyValueEncryptionUtils.encrypt(value, encryptor);
+            if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_ONLY) {
+                super.tryForcedSaveProperty(propertyPrefix, key, value);
+            }
         }
         super.saveProperty(propertyPrefix, key, value);
     }

@@ -29,6 +29,7 @@ public class SpringBootCredentialsTest {
 
 
     public SpringBootCredentialsTest() {
+        System.setProperty("sphereon.testing", "true");
     }
 
 

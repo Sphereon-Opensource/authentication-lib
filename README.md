@@ -101,10 +101,10 @@ Remarks
 
 ## Supported grant types
 The grant-type property supports the following values:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client-credential, password, refresh-token, ntlm, kerberos, saml2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client-credential, password, refresh-token, ntlm, kerberos, saml2
 
- Each of these types have their own set of parameters described here:
- <i>(The parameter names shown are compatible with the property files.)</i>
+ Each of these types have their own set of parameters described here:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>(The parameter names shown are compatible with the property files.)</i>
 * ClientCredentialGrant
     - No parameters necessary, only client key and client secret will be used to generate a new token.
     - No refresh token will be returned.

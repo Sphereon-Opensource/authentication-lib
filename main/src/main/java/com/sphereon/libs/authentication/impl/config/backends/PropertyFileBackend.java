@@ -22,24 +22,25 @@ import java.net.URI;
 public class PropertyFileBackend extends AbstractCommonsConfig {
 
 
-
     public PropertyFileBackend(ApiConfiguration configuration, URI fileUri) {
         super(configuration, configuration.getPersistenceMode());
 
-        File configFile = new File(fileUri);
-        if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
-            configFile.getParentFile().mkdirs();
-        }
-        String ext = FilenameUtils.getExtension(configFile.getName());
-        ensureConfigFileExists(configFile, ext);
-        Parameters params = new Parameters();
-        Class<? extends FileBasedConfiguration> configClass = "xml".equalsIgnoreCase(ext) ? XMLConfiguration.class : PropertiesConfiguration.class;
-        FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
-                new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(configClass)
-                        .configure(params.properties()
-                                .setFile(configFile));
-        builder.setAutoSave(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE);
         try {
+            File configFile = new File(fileUri);
+            if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
+                if (!configFile.getParentFile().mkdirs()) {
+                    throw new IOException(String.format("File path %s does not exist and could not be created.", configFile.getParentFile().getAbsolutePath()));
+                }
+            }
+            String ext = FilenameUtils.getExtension(configFile.getName());
+            ensureConfigFileExists(configFile, ext);
+            Parameters params = new Parameters();
+            Class<? extends FileBasedConfiguration> configClass = "xml".equalsIgnoreCase(ext) ? XMLConfiguration.class : PropertiesConfiguration.class;
+            FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+                    new ReloadingFileBasedConfigurationBuilder<FileBasedConfiguration>(configClass)
+                            .configure(params.properties()
+                                    .setFile(configFile));
+            builder.setAutoSave(configuration.getPersistenceMode() == PersistenceMode.READ_WRITE);
             this.propertyConfig = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Could not initialize PropertyFileBackend for " + fileUri, e);
@@ -64,7 +65,6 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
             }
         }
     }
-
 
 
     @Override

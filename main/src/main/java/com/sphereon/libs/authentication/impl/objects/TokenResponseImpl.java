@@ -19,11 +19,11 @@ class TokenResponseImpl implements TokenResponse {
 
 
     TokenResponseImpl(Map<String, String> parameters) {
-        accessToken = parameters.get("access_token");
-        refreshToken = parameters.get("refresh_token");
-        scope = parameters.get("scope");
-        tokenType = parameters.get("token_type");
-        String stringExpiresIn = parameters.get("expires_in");
+        accessToken = parameters.get(ResponseParameterKey.ACCESS_TOKEN);
+        refreshToken = parameters.get(ResponseParameterKey.REFRESH_TOKEN);
+        scope = parameters.get(ResponseParameterKey.SCOPE);
+        tokenType = parameters.get(ResponseParameterKey.TOKEN_TYPE);
+        String stringExpiresIn = parameters.get(ResponseParameterKey.EXPIRES_IN);
         if (StringUtils.isNotEmpty(stringExpiresIn)) {
             expiresInSeconds = Long.parseLong(stringExpiresIn);
         }

@@ -7,7 +7,7 @@ import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigManagerProvider;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
-import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialsBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;
@@ -82,7 +82,7 @@ public interface GenerateTokenRequestBuilderPrivate {
                 this.grant = configuration.getDefaultGrant();
             }
             if (this.grant == null) {
-                this.grant = new ClientCredentialsBuilder.ClientCredentialsGrantBuilder().build();
+                this.grant = new ClientCredentialBuilder.ClientCredentialGrantBuilder().build();
             }
 
             if (StringUtils.isEmpty(consumerKey)) {

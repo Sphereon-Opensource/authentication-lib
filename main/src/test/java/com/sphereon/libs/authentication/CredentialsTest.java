@@ -28,7 +28,7 @@ public class CredentialsTest extends AbstractTest {
 
 
     @Test
-    public void test_10_ClientCredentials() {
+    public void test_10_ClientCredential() {
         AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
         TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")

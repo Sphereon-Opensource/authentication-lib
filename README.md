@@ -100,11 +100,12 @@ Remarks
 * When auto-encrypt = true the secret fields will be encrypted if there is write access to the configuration file.  
 
 ## Supported grant types
-The grant-type property supports the following values:
-    - client-credentials, password, refresh-token, ntlm, kerberos, saml2
+The grant-type property supports the following values:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client-credential, password, refresh-token, ntlm, kerberos, saml2
+
  Each of these types have their own set of parameters described here:
  <i>(The parameter names shown are compatible with the property files.)</i>
-* ClientCredentialsGrant
+* ClientCredentialGrant
     - No parameters necessary, only client key and client secret will be used to generate a new token.
     - No refresh token will be returned.
 * PasswordGrant

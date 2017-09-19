@@ -1,6 +1,6 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-import com.sphereon.libs.authentication.api.granttypes.ClientCredentialsGrant;
+import com.sphereon.libs.authentication.api.granttypes.ClientCredentialGrant;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
@@ -9,9 +9,9 @@ import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-class ClientCredentialsGrantImpl implements ClientCredentialsGrant, RequestParameters, ConfigPersistence {
+class ClientCredentialGrantImpl implements ClientCredentialGrant, RequestParameters, ConfigPersistence {
 
-    ClientCredentialsGrantImpl() {
+    ClientCredentialGrantImpl() {
     }
 
 

@@ -6,6 +6,7 @@ import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.impl.commons.exceptions.EnumParseException;
+import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -233,7 +234,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
             GrantType grantType = GrantType.fromString(grantTypeValue);
             switch (grantType) {
                 case CLIENT_CREDENTIALS:
-                    this.defaultGrant = new Grant.ClientCredentialsGrantBuilder().build(false);
+                    this.defaultGrant = new ClientCredentialBuilder.ClientCredentialGrantBuilder().build(false);
                     break;
                 case REFRESH_TOKEN:
                     this.defaultGrant = new Grant.RefreshTokenGrantBuilder().build(false);

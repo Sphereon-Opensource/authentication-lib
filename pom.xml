@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sphereon.libs</groupId>
-    <artifactId>lib-tokenapi-parent</artifactId>
+    <artifactId>authentication-api-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>main</module>

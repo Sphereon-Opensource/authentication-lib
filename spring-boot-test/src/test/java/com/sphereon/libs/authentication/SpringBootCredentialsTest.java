@@ -12,11 +12,14 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SpringBootCredentialsTest {
 
@@ -33,7 +36,7 @@ public class SpringBootCredentialsTest {
 
 
     @Test
-    public void springbootTest_10_UserPassword() {
+    public void springbootTest_10_UserPassword() throws Exception {
 
         createAppPropetiesFileConfiguration();
         ApiConfiguration configuration2 = loadAppPropetiesFileConfiguration();
@@ -54,7 +57,11 @@ public class SpringBootCredentialsTest {
     }
 
 
-    private ApiConfiguration createAppPropetiesFileConfiguration() {
+    private ApiConfiguration createAppPropetiesFileConfiguration() throws Exception {
+        File appPropsFile = new File("./config/application.properties");
+        appPropsFile.delete();
+        Files.copy(Paths.get(getClass().getResource("/application.properties").toURI()), appPropsFile.toPath());
+
         Grant grant = new Grant.PasswordGrantBuilder()
                 .withUserName("SphereonTest")
                 .withPassword("K@A$yG@Vwpq4Ow1W@Q2b")

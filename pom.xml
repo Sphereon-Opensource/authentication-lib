@@ -21,32 +21,8 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sphereon-commons.version>1.0.0</sphereon-commons.version>
         <commons-lang3.version>3.6</commons-lang3.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>sphereon-ms-releases</id>
-            <url>http://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-ms-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>sphereon-ms-snapshots</id>
-            <url>http://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-ms-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.sphereon.ms</groupId>
-                <artifactId>sphereon-ms-commons-bom</artifactId>
-                <version>${sphereon-commons.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>

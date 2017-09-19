@@ -176,7 +176,7 @@ public class ConfigTest extends AbstractTest {
 
 
     @Test
-    public void test_34_Saml2Grant() {
+    public void test_38_Saml2Grant() {
         ApiConfiguration config1 = createPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
         SAML2Grant initialGrant = new Grant.Saml2GrantBuilder()
                 .withAssertion("initialAssertion")

@@ -3,7 +3,6 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.api.granttypes.PasswordGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, RequestParameters, ConfigPersistence {
+class PasswordGrantImpl implements PasswordGrant, RequestParameters, ConfigPersistence {
 
     private String userName;
 
@@ -83,5 +82,31 @@ class PasswordGrantImpl extends AutoHashedObject implements PasswordGrant, Reque
     @Override
     public GrantType getGrantType() {
         return GrantType.PASSWORD;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PasswordGrantImpl)) {
+            return false;
+        }
+
+        PasswordGrantImpl that = (PasswordGrantImpl) o;
+
+        if (getUserName() != null ? !getUserName().equals(that.getUserName()) : that.getUserName() != null) {
+            return false;
+        }
+        return getPassword() != null ? getPassword().equals(that.getPassword()) : that.getPassword() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = getUserName() != null ? getUserName().hashCode() : 0;
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        return result;
     }
 }

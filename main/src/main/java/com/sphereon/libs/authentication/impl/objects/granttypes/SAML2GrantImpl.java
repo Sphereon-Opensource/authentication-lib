@@ -3,7 +3,6 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.api.granttypes.SAML2Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestParameters, ConfigPersistence {
+class SAML2GrantImpl implements SAML2Grant, RequestParameters, ConfigPersistence {
 
     private String assertion;
 
@@ -60,5 +59,26 @@ class SAML2GrantImpl extends AutoHashedObject implements SAML2Grant, RequestPara
     @Override
     public GrantType getGrantType() {
         return GrantType.SAML2;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SAML2GrantImpl)) {
+            return false;
+        }
+
+        SAML2GrantImpl that = (SAML2GrantImpl) o;
+
+        return getAssertion() != null ? getAssertion().equals(that.getAssertion()) : that.getAssertion() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return getAssertion() != null ? getAssertion().hashCode() : 0;
     }
 }

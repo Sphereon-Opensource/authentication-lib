@@ -3,7 +3,6 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.api.granttypes.NtlmGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, RequestParameters, ConfigPersistence {
+class NtlmGrantImpl implements NtlmGrant, RequestParameters, ConfigPersistence {
 
     private String windowsToken;
 
@@ -64,5 +63,26 @@ class NtlmGrantImpl extends AutoHashedObject implements NtlmGrant, RequestParame
     @Override
     public GrantType getGrantType() {
         return GrantType.NTLM;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof NtlmGrantImpl)) {
+            return false;
+        }
+
+        NtlmGrantImpl ntlmGrant = (NtlmGrantImpl) o;
+
+        return getWindowsToken() != null ? getWindowsToken().equals(ntlmGrant.getWindowsToken()) : ntlmGrant.getWindowsToken() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return getWindowsToken() != null ? getWindowsToken().hashCode() : 0;
     }
 }

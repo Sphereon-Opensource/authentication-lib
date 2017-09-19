@@ -3,14 +3,13 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 import com.sphereon.libs.authentication.api.granttypes.ClientCredentialsGrant;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.objects.RequestParameterKey;
 
 import java.util.Map;
 
-class ClientCredentialsGrantImpl extends AutoHashedObject implements ClientCredentialsGrant, RequestParameters, ConfigPersistence {
+class ClientCredentialsGrantImpl implements ClientCredentialsGrant, RequestParameters, ConfigPersistence {
 
     ClientCredentialsGrantImpl() {
     }
@@ -41,4 +40,5 @@ class ClientCredentialsGrantImpl extends AutoHashedObject implements ClientCrede
     public GrantType getGrantType() {
         return GrantType.CLIENT_CREDENTIALS;
     }
+
 }

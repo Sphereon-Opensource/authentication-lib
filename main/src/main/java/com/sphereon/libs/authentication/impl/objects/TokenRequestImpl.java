@@ -5,7 +5,6 @@ import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Map;
 
-abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest, RequestParameters {
+abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
     protected static final Base64.Encoder base64Encoder = Base64.getEncoder();
 
@@ -94,5 +93,39 @@ abstract class TokenRequestImpl extends AutoHashedObject implements TokenRequest
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TokenRequestImpl)) {
+            return false;
+        }
+
+        TokenRequestImpl that = (TokenRequestImpl) o;
+
+        if (configuration != null ? !configuration.equals(that.configuration) : that.configuration != null) {
+            return false;
+        }
+        if (getConsumerKey() != null ? !getConsumerKey().equals(that.getConsumerKey()) : that.getConsumerKey() != null) {
+            return false;
+        }
+        if (getConsumerSecret() != null ? !getConsumerSecret().equals(that.getConsumerSecret()) : that.getConsumerSecret() != null) {
+            return false;
+        }
+        return getScope() != null ? getScope().equals(that.getScope()) : that.getScope() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = configuration != null ? configuration.hashCode() : 0;
+        result = 31 * result + (getConsumerKey() != null ? getConsumerKey().hashCode() : 0);
+        result = 31 * result + (getConsumerSecret() != null ? getConsumerSecret().hashCode() : 0);
+        result = 31 * result + (getScope() != null ? getScope().hashCode() : 0);
+        return result;
     }
 }

@@ -7,7 +7,6 @@ import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.objects.GenerateTokenRequestBuilderPrivate;
 import com.sphereon.libs.authentication.impl.objects.RevokeTokenRequestBuilderPrivate;
 
-@SuppressWarnings("PackageAccessibility")
 class AuthenticationApiImpl implements AuthenticationApi {
 
 

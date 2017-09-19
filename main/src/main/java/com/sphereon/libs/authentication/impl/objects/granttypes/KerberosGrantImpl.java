@@ -3,7 +3,6 @@ package com.sphereon.libs.authentication.impl.objects.granttypes;
 import com.sphereon.libs.authentication.api.granttypes.GrantType;
 import com.sphereon.libs.authentication.api.granttypes.KerberosGrant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
-import com.sphereon.libs.authentication.impl.commons.objects.AutoHashedObject;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigPersistence;
 import com.sphereon.libs.authentication.impl.config.PropertyKey;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, RequestParameters, ConfigPersistence {
+class KerberosGrantImpl implements KerberosGrant, RequestParameters, ConfigPersistence {
 
     private String kerberosRealm;
 
@@ -84,5 +83,31 @@ class KerberosGrantImpl extends AutoHashedObject implements KerberosGrant, Reque
     @Override
     public GrantType getGrantType() {
         return GrantType.KERBEROS;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof KerberosGrantImpl)) {
+            return false;
+        }
+
+        KerberosGrantImpl that = (KerberosGrantImpl) o;
+
+        if (getKerberosRealm() != null ? !getKerberosRealm().equals(that.getKerberosRealm()) : that.getKerberosRealm() != null) {
+            return false;
+        }
+        return getKerberosToken() != null ? getKerberosToken().equals(that.getKerberosToken()) : that.getKerberosToken() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = getKerberosRealm() != null ? getKerberosRealm().hashCode() : 0;
+        result = 31 * result + (getKerberosToken() != null ? getKerberosToken().hashCode() : 0);
+        return result;
     }
 }

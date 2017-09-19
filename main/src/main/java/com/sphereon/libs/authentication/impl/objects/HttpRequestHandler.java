@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@SuppressWarnings("PackageAccessibility")
 class HttpRequestHandler {
 
     private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {

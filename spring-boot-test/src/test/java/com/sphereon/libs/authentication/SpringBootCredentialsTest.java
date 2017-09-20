@@ -63,7 +63,7 @@ public class SpringBootCredentialsTest {
 
 
     @Test
-    public void springbootTest_20_PreConfiguredUserPassword() throws Exception {
+    public void springbootTest_05_PreConfiguredUserPassword() throws Exception {
 
         File appPropsFile = new File("./config/application.properties");
         loadPreconfiguredAppPropertiesFileConfiguration(appPropsFile);

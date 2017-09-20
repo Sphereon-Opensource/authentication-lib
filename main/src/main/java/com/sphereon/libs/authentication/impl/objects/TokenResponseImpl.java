@@ -7,6 +7,8 @@ import java.util.Map;
 
 class TokenResponseImpl implements TokenResponse {
 
+    private static final int SAFETY_MARGIN_SECONDS = 5;
+
     private String accessToken;
 
     private String refreshToken;
@@ -16,6 +18,8 @@ class TokenResponseImpl implements TokenResponse {
     private String tokenType;
 
     private Long expiresInSeconds;
+
+    private final long responseTimeMs = System.currentTimeMillis();
 
 
     TokenResponseImpl(Map<String, String> parameters) {
@@ -37,20 +41,8 @@ class TokenResponseImpl implements TokenResponse {
 
 
     @Override
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-
-    @Override
     public String getRefreshToken() {
         return refreshToken;
-    }
-
-
-    @Override
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
 
@@ -61,20 +53,8 @@ class TokenResponseImpl implements TokenResponse {
 
 
     @Override
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-
-    @Override
     public String getTokenType() {
         return tokenType;
-    }
-
-
-    @Override
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
     }
 
 
@@ -84,8 +64,23 @@ class TokenResponseImpl implements TokenResponse {
     }
 
 
-    public void setExpiresInSeconds(Long expiresInSeconds) {
-        this.expiresInSeconds = expiresInSeconds;
+    @Override
+    public Long getResponseTimeMs() {
+        return responseTimeMs;
+    }
+
+
+    @Override
+    public boolean isExpired() {
+        if (expiresInSeconds == null) {
+            return false;
+        }
+
+        long expiresInSeconds = this.expiresInSeconds - SAFETY_MARGIN_SECONDS;
+        if (expiresInSeconds < 0) {
+            expiresInSeconds = 0;
+        }
+        return System.currentTimeMillis() > responseTimeMs + (expiresInSeconds * 1000);
     }
 
 

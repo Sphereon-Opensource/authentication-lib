@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
-public enum GrantTypeKey {
+import com.sphereon.commons.interfaces.StringValueEnum;
+
+public enum GrantTypeKey implements StringValueEnum {
 
     KERBEROS("kerberos"), CLIENT_CREDENTIALS("client_credentials"), NTLM("iwa:ntlm"), PASSWORD("password"), REFRESH_TOKEN("refresh_token"),
     SAML2("urn:ietf:params:oauth:grant-type:saml2-bearer");
@@ -13,6 +15,7 @@ public enum GrantTypeKey {
     }
 
 
+    @Override
     public String getValue() {
         return value;
     }

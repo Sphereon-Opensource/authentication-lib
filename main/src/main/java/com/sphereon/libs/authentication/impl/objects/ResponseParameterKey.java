@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-public enum ResponseParameterKey {
+import com.sphereon.commons.interfaces.StringValueEnum;
+
+public enum ResponseParameterKey implements StringValueEnum {
 
     ACCESS_TOKEN("access_token"), REFRESH_TOKEN("refresh_token"), SCOPE("scope"), TOKEN_TYPE("token_type"), EXPIRES_IN("expires_in");
 
@@ -13,14 +15,14 @@ public enum ResponseParameterKey {
     }
 
 
+    @Override
     public String getValue() {
         return value;
     }
-
 
 
     @Override
     public String toString() {
         return getValue();
     }
-    }
+}

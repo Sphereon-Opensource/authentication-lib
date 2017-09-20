@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-public enum TokenPathParameters {
+import com.sphereon.commons.interfaces.StringValueEnum;
+
+public enum TokenPathParameters implements StringValueEnum {
     TOKEN("token"), REVOKE("revoke");
 
 
@@ -12,6 +14,7 @@ public enum TokenPathParameters {
     }
 
 
+    @Override
     public String getValue() {
         return value;
     }

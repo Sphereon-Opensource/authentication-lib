@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.impl.config;
 
-public enum PropertyKey {
+import com.sphereon.commons.interfaces.StringValueEnum;
+
+public enum PropertyKey implements StringValueEnum {
 
     GATEWAY_BASE_URL("gateway-base-url", false),
     PERSISTENCE_MODE("persistence-mode", false),
@@ -30,7 +32,8 @@ public enum PropertyKey {
     }
 
 
-    public String getPropertyKey() {
+    @Override
+    public String getValue() {
         return propertyKey;
     }
 
@@ -42,6 +45,6 @@ public enum PropertyKey {
 
     @Override
     public String toString() {
-        return getPropertyKey();
+        return getValue();
     }
 }

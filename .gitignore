@@ -1,7 +1,8 @@
 *.class
 
 # test
-config/
+config/*.properties
+config/*.xml
 
 # Package Files #
 *.jar

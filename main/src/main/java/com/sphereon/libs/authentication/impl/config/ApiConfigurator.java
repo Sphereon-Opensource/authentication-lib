@@ -1,10 +1,10 @@
 package com.sphereon.libs.authentication.impl.config;
 
+import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 
 import java.io.File;
 

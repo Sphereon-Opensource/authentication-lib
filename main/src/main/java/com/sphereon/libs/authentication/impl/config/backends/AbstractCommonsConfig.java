@@ -41,7 +41,7 @@ abstract class AbstractCommonsConfig implements PropertyConfigBackend {
 
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
-        String value = propertyConfig.getString(propertyPrefix + key.getPropertyKey());
+        String value = propertyConfig.getString(propertyPrefix + key.getValue());
         if (StringUtils.isEmpty(value)) {
             if (StringUtils.isNotBlank(defaultValue)) {
                 saveProperty(propertyPrefix, key, defaultValue);
@@ -55,14 +55,14 @@ abstract class AbstractCommonsConfig implements PropertyConfigBackend {
     @Override
     public void saveProperty(String propertyPrefix, PropertyKey key, String value) {
         if (persistenceMode == PersistenceMode.READ_WRITE) {
-            propertyConfig.setProperty(propertyPrefix + key.getPropertyKey(), value);
+            propertyConfig.setProperty(propertyPrefix + key.getValue(), value);
         }
     }
 
 
     public void tryForcedSaveProperty(String propertyPrefix, PropertyKey key, String value) {
         try {
-            propertyConfig.setProperty(propertyPrefix + key.getPropertyKey(), value);
+            propertyConfig.setProperty(propertyPrefix + key.getValue(), value);
         } catch (Exception ignored) {
         }
     }

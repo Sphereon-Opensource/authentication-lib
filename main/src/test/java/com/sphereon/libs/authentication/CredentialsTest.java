@@ -38,7 +38,14 @@ public class CredentialsTest extends AbstractTest {
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
         this.prevToken.set(tokenResponse.getAccessToken());
-        wait(VALIDITY_PERIOD);
+        waitSeconds(2L);
+        Assert.assertFalse(tokenResponse.isExpired());
+        tokenResponse = tokenRequest.execute();
+        Assert.assertFalse(tokenResponse.isExpired());
+        waitSeconds(tokenResponse.getExpiresInSeconds());
+        Assert.assertTrue(tokenResponse.isExpired());
+        tokenResponse = tokenRequest.execute();
+        Assert.assertFalse(tokenResponse.isExpired());
     }
 
 
@@ -69,7 +76,7 @@ public class CredentialsTest extends AbstractTest {
         Assert.assertNotEquals(this.prevToken.get(), tokenResponse.getAccessToken());
         this.prevToken.set(tokenResponse.getAccessToken());
         this.refreshToken.set(refreshToken);
-        wait(VALIDITY_PERIOD);
+        waitSeconds(VALIDITY_PERIOD);
     }
 
 

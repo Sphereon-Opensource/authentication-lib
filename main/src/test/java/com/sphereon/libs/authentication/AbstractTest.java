@@ -166,9 +166,9 @@ public abstract class AbstractTest {
     }
 
 
-    protected void wait(Long duration) {
+    protected void waitSeconds(Long seconds) {
         try {
-            Thread.sleep(duration + 1000);
+            Thread.sleep((seconds + 1) * 1000);
         } catch (InterruptedException e) {
         }
     }

@@ -56,7 +56,7 @@ public abstract class AbstractTest {
 
     protected void changeGrantValues(ApiConfiguration loadedConfig) {
         switch (loadedConfig.getDefaultGrant().getGrantType()) {
-            case CLIENT_CREDENTIALS:
+            case CLIENT_CREDENTIAL:
                 break;
             case REFRESH_TOKEN:
                 RefreshTokenGrant refreshTokenGrant = (RefreshTokenGrant) loadedConfig.getDefaultGrant();

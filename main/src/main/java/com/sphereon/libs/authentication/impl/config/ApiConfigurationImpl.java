@@ -231,7 +231,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
 
             GrantType grantType = GrantType.fromString(grantTypeValue);
             switch (grantType) {
-                case CLIENT_CREDENTIALS:
+                case CLIENT_CREDENTIAL:
                     this.defaultGrant = new ClientCredentialBuilder.ClientCredentialGrantBuilder().build(false);
                     break;
                 case REFRESH_TOKEN:

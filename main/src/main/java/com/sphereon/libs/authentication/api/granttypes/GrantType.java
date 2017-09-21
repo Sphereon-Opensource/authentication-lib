@@ -4,7 +4,7 @@ import com.sphereon.commons.exceptions.EnumParseException;
 import org.apache.commons.lang3.StringUtils;
 
 public enum GrantType {
-    CLIENT_CREDENTIALS, REFRESH_TOKEN, PASSWORD, NTLM, KERBEROS, SAML2;
+    CLIENT_CREDENTIAL, REFRESH_TOKEN, PASSWORD, NTLM, KERBEROS, SAML2;
 
 
     public static GrantType fromString(String value) {

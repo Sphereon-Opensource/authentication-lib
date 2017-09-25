@@ -17,6 +17,8 @@ public interface ApiConfigurator {
 
         public Builder() {
             this.configuration = new ApiConfigurationImpl();
+            configuration.setPersistenceType(PersistenceType.DISABLED);
+            configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
         }
 
 
@@ -69,7 +71,7 @@ public interface ApiConfigurator {
         }
 
 
-        public Builder setStandaloneConfigFile(File standaloneConfigPath) {
+        public Builder withStandaloneConfigFile(File standaloneConfigPath) {
             configuration.setStandalonePropertyFile(standaloneConfigPath);
             return this;
         }

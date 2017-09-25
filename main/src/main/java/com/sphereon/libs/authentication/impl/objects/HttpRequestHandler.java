@@ -3,21 +3,29 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sphereon.commons.assertions.Assert;
+import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.Proxy;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 class HttpRequestHandler {
 
-    private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {
-    }.getType();
+    private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {}.getType();
     private static final Gson gson = new Gson();
 
-    private final OkHttpClient okHttpClient = new OkHttpClient();
+    private final OkHttpClient okHttpClient;
+
+
+    public HttpRequestHandler(ApiConfiguration configuration) {
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        // TODO: Add proxy support
+        okHttpClient = clientBuilder.build();
+    }
 
 
     public Request newTokenRequest(String urlBase, Headers headers, FormBody requestBody) {

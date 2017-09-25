@@ -14,8 +14,6 @@ import java.util.Map;
 
 class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest, RequestParameters {
 
-    private static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
-
     private static final Map<Object, TokenResponse> cachedResponses = new HashMap<>();
 
     protected Grant grant;
@@ -66,10 +64,11 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
 
     private TokenResponse buildAndExecuteRequest() {
-        FormBody requestBody = httpRequestHandler.buildBody(this);
-        Headers headers = httpRequestHandler.buildHeaders(this);
-        Request httpRequest = httpRequestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
-        return executeRequest(httpRequest);
+        HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        FormBody requestBody = requestHandler.buildBody(this);
+        Headers headers = requestHandler.buildHeaders(this);
+        Request httpRequest = requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
+        return executeRequest(requestHandler, httpRequest);
     }
 
 

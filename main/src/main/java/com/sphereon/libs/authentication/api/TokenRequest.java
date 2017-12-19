@@ -4,4 +4,11 @@ public interface TokenRequest {
 
     TokenResponse execute();
 
+    void addTokenResponseListener(TokenResponseListener listener);
+
+    void removeTokenResponseListener(TokenResponseListener listener);
+
+    interface TokenResponseListener {
+        void tokenResponse(TokenResponse tokenResponse);
+    }
 }

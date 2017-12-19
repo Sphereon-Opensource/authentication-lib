@@ -1,8 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects.granttypes;
 
+import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.GrantBuilder;
 import com.sphereon.libs.authentication.api.granttypes.NtlmGrant;
-import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 
 public interface NtlmBuilder {
 

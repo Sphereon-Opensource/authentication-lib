@@ -12,6 +12,11 @@ public interface AuthenticationApiBuilder {
         private ApiConfiguration configuration;
 
 
+        public static final Builder newInstance() {
+            return new Builder();
+        }
+
+
         public Builder() {
         }
 

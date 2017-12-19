@@ -27,5 +27,3 @@ class AuthenticationApiImpl implements AuthenticationApi {
         return new RevokeTokenRequestBuilder.Builder(configuration);
     }
 }
-
-

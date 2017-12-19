@@ -12,13 +12,15 @@ import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
     protected static final Base64 base64Encoder = new Base64();
 
-    protected static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
+    protected final List<TokenResponseListener> tokenResponseListeners = new ArrayList<>();
 
     protected final ApiConfiguration configuration;
 
@@ -65,6 +67,18 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
 
     @Override
+    public void addTokenResponseListener(TokenResponseListener listener) {
+        this.tokenResponseListeners.add(listener);
+    }
+
+
+    @Override
+    public void removeTokenResponseListener(TokenResponseListener listener) {
+        this.tokenResponseListeners.remove(listener);
+    }
+
+
+    @Override
     public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
         try {
             String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
@@ -84,12 +98,16 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
     }
 
 
-    protected TokenResponse executeRequest(Request httpRequest) {
+    protected TokenResponse executeRequest(HttpRequestHandler requestHandler, Request httpRequest) {
         try {
-            Response response = httpRequestHandler.execute(httpRequest);
-            String responseBody = httpRequestHandler.getResponseBodyContent(response);
-            Map<String, String> parameters = httpRequestHandler.parseJsonResponseBody(responseBody);
-            return new TokenResponseImpl(parameters);
+            Response response = requestHandler.execute(httpRequest);
+            String responseBody = requestHandler.getResponseBodyContent(response);
+            Map<String, String> parameters = requestHandler.parseJsonResponseBody(responseBody);
+            TokenResponse tokenResponse = new TokenResponseImpl(parameters);
+            for (TokenResponseListener listener : tokenResponseListeners) {
+                listener.tokenResponse(tokenResponse);
+            }
+            return tokenResponse;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -38,7 +38,7 @@ class ClientCredentialGrantImpl implements ClientCredentialGrant, RequestParamet
 
     @Override
     public GrantType getGrantType() {
-        return GrantType.CLIENT_CREDENTIALS;
+        return GrantType.CLIENT_CREDENTIAL;
     }
 
 }

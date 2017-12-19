@@ -16,9 +16,9 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
 
-        String value = System.getenv(propertyPrefix + key.getPropertyKey());
+        String value = System.getenv(propertyPrefix + key.getValue());
         if (StringUtils.isEmpty(value)) {
-            value = System.getProperty(propertyPrefix + key.getPropertyKey());
+            value = System.getProperty(propertyPrefix + key.getValue());
         }
         if (StringUtils.isEmpty(value)) {
             if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
@@ -35,7 +35,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
         if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE) {
             if (key.isEncrypt() && apiConfiguration.isAutoEncryptSecrets() && !PropertyValueEncryptionUtils.isEncryptedValue(value)) {
                 String encryptedValue = PropertyValueEncryptionUtils.encrypt(value, encryptor);
-                System.out.printf("Can't auto-encrypt system environment variables. The encrypted value of %s%s is %s%n", propertyPrefix, key.getPropertyKey(), encryptedValue);
+                System.out.printf("Can't auto-encrypt system environment variables. The encrypted value of %s%s is %s%n", propertyPrefix, key.getValue(), encryptedValue);
             }
         }
         super.saveProperty(propertyPrefix, key, value);

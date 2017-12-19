@@ -14,6 +14,7 @@ import org.apache.commons.configuration2.builder.ReloadingFileBasedConfiguration
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 public class SpringBootCredentialsTest {
 
     protected static final String APPLICATION_NAME = "springboot-test";
@@ -63,7 +65,7 @@ public class SpringBootCredentialsTest {
 
 
     @Test
-    public void springbootTest_20_PreConfiguredUserPassword() throws Exception {
+    public void springbootTest_05_PreConfiguredUserPassword() throws Exception {
 
         File appPropsFile = new File("./config/application.properties");
         loadPreconfiguredAppPropertiesFileConfiguration(appPropsFile);

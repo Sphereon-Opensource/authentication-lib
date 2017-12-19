@@ -1,10 +1,10 @@
 package com.sphereon.libs.authentication.impl.config;
 
+import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.commons.assertions.Assert;
 
 import java.io.File;
 
@@ -17,6 +17,8 @@ public interface ApiConfigurator {
 
         public Builder() {
             this.configuration = new ApiConfigurationImpl();
+            configuration.setPersistenceType(PersistenceType.DISABLED);
+            configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
         }
 
 
@@ -63,7 +65,13 @@ public interface ApiConfigurator {
         }
 
 
-        public Builder setStandaloneConfigFile(File standaloneConfigPath) {
+        public Builder withAutoEncryptionPassword(char[] autoEncryptionPassword) {
+            configuration.setAutoEncryptionPassword(new String(autoEncryptionPassword));
+            return this;
+        }
+
+
+        public Builder withStandaloneConfigFile(File standaloneConfigPath) {
             configuration.setStandalonePropertyFile(standaloneConfigPath);
             return this;
         }

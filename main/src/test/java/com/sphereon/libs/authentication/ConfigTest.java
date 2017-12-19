@@ -46,7 +46,7 @@ public class ConfigTest extends AbstractTest {
         standaloneConfigFile.delete();
         ApiConfiguration savedConfig = new ApiConfiguration.Builder()
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigFile(standaloneConfigFile)
+                .withStandaloneConfigFile(standaloneConfigFile)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
@@ -55,7 +55,7 @@ public class ConfigTest extends AbstractTest {
                 .build();
         ApiConfiguration loadedConfig = new ApiConfiguration.Builder()
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigFile(new File("./config/" + SPHEREON_AUTH_PROPERTIES))
+                .withStandaloneConfigFile(new File("./config/" + SPHEREON_AUTH_PROPERTIES))
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
@@ -211,7 +211,7 @@ public class ConfigTest extends AbstractTest {
         ApiConfiguration loadedConfig = new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigFile(new File("./config/" + MANUAL_PROPERTIES))
+                .withStandaloneConfigFile(new File("./config/" + MANUAL_PROPERTIES))
                 .withAutoEncryptSecrets(false)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .build();

@@ -32,7 +32,7 @@ public abstract class AbstractTest {
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigFile(standaloneConfigFile)
+                .withStandaloneConfigFile(standaloneConfigFile)
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
@@ -46,7 +46,7 @@ public abstract class AbstractTest {
         return new ApiConfiguration.Builder()
                 .withApplication(APPLICATION_NAME)
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)
-                .setStandaloneConfigFile(new File("./config/" + configFile))
+                .withStandaloneConfigFile(new File("./config/" + configFile))
                 .withAutoEncryptSecrets(true)
                 .withAutoEncryptionPassword("UnitTestPassword")
                 .withPersistenceMode(PersistenceMode.READ_WRITE)
@@ -56,7 +56,7 @@ public abstract class AbstractTest {
 
     protected void changeGrantValues(ApiConfiguration loadedConfig) {
         switch (loadedConfig.getDefaultGrant().getGrantType()) {
-            case CLIENT_CREDENTIALS:
+            case CLIENT_CREDENTIAL:
                 break;
             case REFRESH_TOKEN:
                 RefreshTokenGrant refreshTokenGrant = (RefreshTokenGrant) loadedConfig.getDefaultGrant();
@@ -166,9 +166,9 @@ public abstract class AbstractTest {
     }
 
 
-    protected void wait(Long duration) {
+    protected void waitSeconds(Long seconds) {
         try {
-            Thread.sleep(duration + 1000);
+            Thread.sleep((seconds + 1) * 1000);
         } catch (InterruptedException e) {
         }
     }

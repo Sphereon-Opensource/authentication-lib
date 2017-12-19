@@ -1,6 +1,8 @@
 package com.sphereon.libs.authentication.impl.objects;
 
-public enum RequestParameterKey {
+import com.sphereon.commons.interfaces.StringValueEnum;
+
+public enum RequestParameterKey implements StringValueEnum {
 
     GRANT_TYPE("grant_type"),
     USER_NAME("username"),
@@ -24,6 +26,7 @@ public enum RequestParameterKey {
     }
 
 
+    @Override
     public String getValue() {
         return value;
     }

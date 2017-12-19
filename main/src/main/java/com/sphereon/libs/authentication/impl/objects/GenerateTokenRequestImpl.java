@@ -9,10 +9,12 @@ import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Request;
 
+import java.util.HashMap;
 import java.util.Map;
 
 class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest, RequestParameters {
-    private static final HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
+
+    private static final Map<Object, TokenResponse> cachedResponses = new HashMap<>();
 
     protected Grant grant;
 
@@ -46,10 +48,27 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
     @Override
     public TokenResponse execute() {
-        FormBody requestBody = httpRequestHandler.buildBody(this);
-        Headers headers = httpRequestHandler.buildHeaders(this);
-        Request httpRequest = httpRequestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
-        return executeRequest(httpRequest);
+        TokenResponse cachedResponse = cachedResponses.get(this);
+        if (cachedResponse != null) {
+            if (cachedResponse.isExpired()) {
+                cachedResponses.remove(this);
+            } else {
+                return cachedResponse;
+            }
+        }
+
+        TokenResponse tokenResponse = buildAndExecuteRequest();
+        cachedResponses.put(this, tokenResponse);
+        return tokenResponse;
+    }
+
+
+    private TokenResponse buildAndExecuteRequest() {
+        HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        FormBody requestBody = requestHandler.buildBody(this);
+        Headers headers = requestHandler.buildHeaders(this);
+        Request httpRequest = requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
+        return executeRequest(requestHandler, httpRequest);
     }
 
 
@@ -71,5 +90,35 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
         }
         RequestParameters grantParameters = (RequestParameters) getGrant();
         grantParameters.bodyParameters(parameterMap);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof GenerateTokenRequestImpl)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        GenerateTokenRequestImpl that = (GenerateTokenRequestImpl) o;
+
+        if (getGrant() != null ? !getGrant().equals(that.getGrant()) : that.getGrant() != null) {
+            return false;
+        }
+        return getValidityPeriodInSeconds() != null ? getValidityPeriodInSeconds().equals(that.getValidityPeriodInSeconds()) : that.getValidityPeriodInSeconds() == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getGrant() != null ? getGrant().hashCode() : 0);
+        result = 31 * result + (getValidityPeriodInSeconds() != null ? getValidityPeriodInSeconds().hashCode() : 0);
+        return result;
     }
 }

@@ -53,6 +53,12 @@ public interface GenerateTokenRequestBuilder {
         }
 
 
+        public GenerateTokenRequestBuilder.Builder withValidityPeriod(int validityPeriodInSeconds) {
+            this.validityPeriodInSeconds = Long.valueOf(validityPeriodInSeconds);
+            return this;
+        }
+
+
         public GenerateTokenRequestBuilder.Builder withValidityPeriod(Long validityPeriodInSeconds) {
             this.validityPeriodInSeconds = validityPeriodInSeconds;
             return this;
@@ -87,8 +93,14 @@ public interface GenerateTokenRequestBuilder {
             if (StringUtils.isEmpty(consumerKey)) {
                 this.consumerKey = configuration.getConsumerKey();
             }
+            if (StringUtils.isEmpty(consumerKey)) {
+                throw new IllegalArgumentException("The consumer key variable was not found. Please check your configuration.");
+            }
             if (StringUtils.isEmpty(consumerSecret)) {
                 this.consumerSecret = configuration.getConsumerSecret();
+            }
+            if (StringUtils.isEmpty(consumerKey)) {
+                throw new IllegalArgumentException("The consumer secret variable was not found. Please check your configuration.");
             }
             if (StringUtils.isEmpty(scope)) {
                 this.scope = configuration.getDefaultScope();

@@ -5,7 +5,7 @@
 <gateway-base-url>https://gw.api.cloud.sphereon.com/</gateway-base-url>
 <persistence-mode>READ_WRITE</persistence-mode>
 <consumer-key>gJ33aNcX3Zj3iqMQhyfQc4AIpfca</consumer-key>
-<consumer-secret>ENC(wmPhb+0wtZqr2vy90vTeH+bjFQXSYO+oYhpz8W7i4SDBwHInmsc68g==)</consumer-secret>
+<consumer-secret>ENC(zd5KK4u6EQY72RabaK0JJC+0eOJ8Zhkuv6NFqrt0EEW/AzUGYK4Xpg==)</consumer-secret>
 <auto-encrypt>true</auto-encrypt>
 </expiring-tokens>
 </authentication-api>

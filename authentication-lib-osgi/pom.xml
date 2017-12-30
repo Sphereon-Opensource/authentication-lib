@@ -3,19 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.sphereon.libs</groupId>
-        <artifactId>authentication-api-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>com.sphereon.public</groupId>
+        <artifactId>authentication-lib-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../authentication-lib-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>authentication-api-bundle</artifactId>
+    <artifactId>authentication-lib-osgi</artifactId>
     <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>com.sphereon.libs</groupId>
-            <artifactId>authentication-api</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>authentication-lib-main</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -29,7 +34,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${pom.groupId}.${pom.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${pom.artifactId}</Bundle-Name>
-                        <Bundle-Version>1.0.0</Bundle-Version>
+                        <Bundle-Version>0.1.0</Bundle-Version>
                         <Private-Package>com.sphereon.libs.authentication.impl</Private-Package>
                         <Bundle-Activator>com.sphereon.libs.authentication.impl.osgi.Activator</Bundle-Activator>
                         <Import-Package>

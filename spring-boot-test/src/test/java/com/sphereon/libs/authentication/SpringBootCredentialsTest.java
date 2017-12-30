@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Ignore
 public class SpringBootCredentialsTest {
@@ -42,7 +42,8 @@ public class SpringBootCredentialsTest {
     }
 
 
-    @Test
+//    @Test
+    @Ignore
     public void springbootTest_10_UserPassword() throws Exception {
 
         createAppPropetiesFileConfiguration();
@@ -65,6 +66,7 @@ public class SpringBootCredentialsTest {
 
 
     @Test
+    @Ignore
     public void springbootTest_05_PreConfiguredUserPassword() throws Exception {
 
         File appPropsFile = new File("./config/application.properties");

@@ -3,44 +3,50 @@
   <br>
   <a href="https://www.sphereon.com"><img src="https://sphereon.com/wp-content/uploads/2016/11/sphereon-logo.png" alt="Sphereon" width="200"></a>
   <br>
-  Token API library
+  Sphereon WSO2 Authentication library
   <br>
 </h1>
 
-<h4 align="center">A Java implementation for the WSO2 <a href="https://wso2.com/api-management/" target="_blank">API Manager</a> and <a href="https://docs.wso2.com/display/AM120/API+Store" target="_blank">API Store</a> .</h4>
+<h4 align="center">A Java implementation for performing authentication against the WSO2 <a href="https://wso2.com/api-management/" target="_blank">API Manager</a> and <a href="https://docs.wso2.com/display/AM210" target="_blank">API Store</a>.</h4>
 
-<!--<p align="center">
-##  <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
-##</p> -->
-<br>
+You can use this Java library to perform authentication against the Sphereon Cloud gateways (WSO2).
+
 
 ## Key Features
 * Simple and clean request and configuration builders
+* Request (refresh) tokens with multiple supported credential types
 * Configuration manager (optional) with auto-encrypt functionality
-* Support for standard property and XML property files
-* Support for Spring application.properties  
-* System environment support
+    * Support for standard property and XML property files
+    * Support for Spring application.properties  
+    * Support for System environment variables
 
 ## How To Use
 To clone and use this library application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/) and your favorite Java IDE. 
 
 ```bash
 # Clone this repository
-> git clone https://github.com/Sphereon/tokenapi-lib.git
+> git clone https://github.com/Sphereon-OpenSource/authentication-lib.git
 
 # Go into the repository
-> cd tokenapi-lib
+> cd authentication-lib
 
 # Build and install into your Maven repository
 > mvn clean install
 
 # Use the artifact in your Maven pom or Gralde build configuration  
-        <dependency>
-            <groupId>com.sphereon.libs</groupId>
-            <artifactId>authentication-api</artifactId> <!-- Use authentication-api-bundle for OSGI  -->
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
+    <repositories>
+        <repository>
+            <id>sphereon-public</id>
+            <name>Sphereon Public</name>
+            <url>http://nexus.qa.sphereon.com/repository/sphereon-public/</url>
+         </repository>
+    </repositories>
+...
+    <dependency>
+        <groupId>com.sphereon.public</groupId>
+        <artifactId>authentication-lib-main</artifactId> <!-- Use authentication-lib-osgi for OSGI bundle  -->
+        <version>0.1.0</version>
+    </dependency>
 ```
 
 
@@ -124,7 +130,7 @@ The grant-type property supports the following values:<br>
     - Parameters: saml2-assertion
 
 #### License
-[Apache2](https://www.apache.org/licenses/LICENSE-2.0) (preliminary)
+[Apache2](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 

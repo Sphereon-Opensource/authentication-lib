@@ -5,7 +5,7 @@ node {
         checkout scm
     }
 
-    stage('Build authentication-api-lib') {
+    stage('Build authentication-lib') {
 		withMaven(
 				// Maven installation declared in the Jenkins "Global Tool Configuration"
 				maven: 'M3')

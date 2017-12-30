@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.sphereon.public</groupId>
         <artifactId>authentication-lib-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0</version>
         <relativePath>../authentication-lib-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>

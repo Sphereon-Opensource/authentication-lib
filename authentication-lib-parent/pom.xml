@@ -115,7 +115,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-configuration2</artifactId>
                 <version>${commons-configuration2.version}</version>
-                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>

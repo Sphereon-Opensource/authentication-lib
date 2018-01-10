@@ -31,8 +31,16 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
 
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
-
-        String value = System.getenv(propertyPrefix + key.getValue());
+        String propertyVarName = propertyPrefix + key.getValue();
+        String value = null;
+        try {
+            value = System.getenv(propertyVarName);
+        } catch (Throwable ignored) {
+        }
+        if (StringUtils.isEmpty(value)) {
+            // The export command on Unix OS types do not support dot's in env vars. Try read when replacing with _
+            value = System.getenv(propertyVarName.replace(".", "_"));
+        }
         if (StringUtils.isEmpty(value)) {
             value = System.getProperty(propertyPrefix + key.getValue());
         }

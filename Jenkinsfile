@@ -1,9 +1,15 @@
+@Library('github.com/Sphereon/fabric8-pipeline-library@master')
+
 node {
 
     // Checkout code from repository
     stage('Checkout source') {
         checkout scm
     }
+
+
+     echo 'is CI ' + Utils.isCI()
+     echo 'is CD ' + Utils.isCD()
 
     stage('Build authentication-lib') {
 		withMaven(

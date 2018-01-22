@@ -1,6 +1,5 @@
 #!groovy
 @Library('github.com/Sphereon/fabric8-pipeline-library@master') _
-load('SphereonUtils.groovy')
 
 node() {
 

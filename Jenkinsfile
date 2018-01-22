@@ -1,9 +1,11 @@
 #!groovy
 @Library('github.com/Sphereon/fabric8-pipeline-library@master') _
 
+def utils2 = new io.fabric8.SphereonUtils();
+utils2.init();
+
 node() {
 
-io.fabric8.SphereonUtils.init();
     // Checkout code from repository
     stage('Checkout source') {
         checkout scm
@@ -14,8 +16,7 @@ io.fabric8.SphereonUtils.init();
      echo '#################is CI ' + utils.isCI()
      echo '#################is CD ' + utils.isCD()
 
-     def utils2 = new io.fabric8.SphereonUtils();
-     utils2.init();
+
      echo '#################is CI ' + utils.isCI()
      echo '#################is CD ' + utils.isCD()
 

@@ -1,6 +1,6 @@
-@Library('github.com/Sphereon/fabric8-pipeline-library@master')
-
 node {
+
+    @Library('github.com/Sphereon/fabric8-pipeline-library@master')
 
     // Checkout code from repository
     stage('Checkout source') {

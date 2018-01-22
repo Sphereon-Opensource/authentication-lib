@@ -1,7 +1,6 @@
 #!groovy
 @Library('github.com/Sphereon/fabric8-pipeline-library@master')
 import io.fabric8.SphereonUtils
-import io.fabric8.Utils
 
 
 node() {
@@ -14,8 +13,8 @@ node() {
 
     def utils = new io.fabric8.Utils();
 
-     echo 'Utils is CI ' + utils.isCI()
-     echo 'is CD ' + utils.isCD()
+     echo '#################is CI ' + utils.isCI()
+     echo '#################is CD ' + utils.isCD()
 
     stage('Build authentication-lib') {
 		withMaven(

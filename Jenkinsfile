@@ -13,7 +13,8 @@ node() {
     }
 
 
-     echo 'is CI ' + isCI()
+     echo 'Utils is CI ' + Utils.isCI()
+     echo 'Sphereon is CI ' + SphereonUtils.isCI()
      echo 'is CD ' + isCD()
 
     stage('Build authentication-lib') {

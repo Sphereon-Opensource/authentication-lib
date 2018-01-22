@@ -12,10 +12,10 @@ node() {
         checkout scm
     }
 
+    def utils = new io.fabric8.Utils();
 
-     echo 'Utils is CI ' + Utils.isCI()
-     echo 'Sphereon is CI ' + SphereonUtils.isCI()
-     echo 'is CD ' + isCD()
+     echo 'Utils is CI ' + utils.isCI()
+     echo 'is CD ' + utils.isCD()
 
     stage('Build authentication-lib') {
 		withMaven(

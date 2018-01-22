@@ -16,6 +16,11 @@ node() {
      echo '#################is CI ' + utils.isCI()
      echo '#################is CD ' + utils.isCD()
 
+     def utils2 = new io.fabric8.SphereonUtils();
+     echo '#################is CI ' + utils.isCI()
+     echo '#################is CD ' + utils.isCD()
+
+
     stage('Build authentication-lib') {
 		withMaven(
 				// Maven installation declared in the Jenkins "Global Tool Configuration"

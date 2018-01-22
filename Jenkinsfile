@@ -3,7 +3,7 @@
 
 node() {
 
-
+io.fabric8.SphereonUtils.init();
     // Checkout code from repository
     stage('Checkout source') {
         checkout scm
@@ -19,7 +19,7 @@ node() {
      echo '#################is CI ' + utils.isCI()
      echo '#################is CD ' + utils.isCD()
 
-io.fabric8.SphereonUtils.init();
+
 
     stage('Build authentication-lib') {
 		withMaven(

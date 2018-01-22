@@ -1,6 +1,5 @@
 #!groovy
-@Library('github.com/Sphereon/fabric8-pipeline-library@master')
-import io.fabric8.SphereonUtils
+@Library('github.com/Sphereon/fabric8-pipeline-library@master') _
 
 
 node() {
@@ -17,7 +16,7 @@ node() {
      echo '#################is CD ' + utils.isCD()
 
      def utils2 = new io.fabric8.SphereonUtils();
-     echo '#################is CI ' + utils.isCI()
+     echo '#################is CI ' + utils2.isCI()
      echo '#################is CD ' + utils.isCD()
 
 

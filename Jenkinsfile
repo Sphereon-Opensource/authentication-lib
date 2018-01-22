@@ -1,5 +1,6 @@
 #!groovy
 @Library('github.com/Sphereon/fabric8-pipeline-library@master') _
+import io.fabric8.Utils
 
 def utils2 = new io.fabric8.SphereonUtils();
 utils2.init();

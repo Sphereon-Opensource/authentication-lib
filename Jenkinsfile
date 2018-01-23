@@ -5,7 +5,6 @@ sphereon.init()
 
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
-clientsTemplate {
 mavenNode {
   checkout scm
   if (utils.isCI()){
@@ -28,5 +27,4 @@ mavenNode {
   } else {
     echo "###############NOPE##################"
   }
-}
 }

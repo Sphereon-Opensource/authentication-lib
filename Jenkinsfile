@@ -1,39 +1,22 @@
-#!groovy
-@Library('github.com/Sphereon/fabric8-pipeline-library@master') _
+#!/usr/bin/groovy
+@Library('github.com/Sphereon/fabric8-pipeline-library@master')
 
+def canaryVersion = "1.0.${env.BUILD_NUMBER}"
+def utils = new io.fabric8.Utils()
+mavenNode {
+  checkout scm
+  if (utils.isCI()){
 
-node() {
+    mavenCI{}
 
+  } else if (utils.isCD()){
+    echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
+    container(name: 'maven') {
 
-def utils2 = new io.fabric8.SphereonUtils();
-utils2.init();
-
-    // Checkout code from repository
-    stage('Checkout source') {
-        checkout scm
+      stage('Build Release'){
+        mavenCanaryRelease {
+          version = canaryVersion
+        }
+      }
     }
-
-    def utils = new io.fabric8.Utils();
-
-     echo '#################is CI ' + utils.isCI()
-     echo '#################is CD ' + utils.isCD()
-
-
-     echo '#################is CI ' + utils.isCI()
-     echo '#################is CD ' + utils.isCD()
-
-
-
-    stage('Build authentication-lib') {
-		withMaven(
-				// Maven installation declared in the Jenkins "Global Tool Configuration"
-				maven: 'M3')
-			{
-
-            // Run the maven build (works on both linux and windows)
-			sh "mvn clean install"
-
-		}
-		// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
-	}
-}
+  }

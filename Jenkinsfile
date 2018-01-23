@@ -3,7 +3,7 @@
 
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
-mavenNode {
+node {
   checkout scm
   if (utils.isCI()){
 

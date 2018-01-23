@@ -11,7 +11,9 @@ node {
     echo'###########################################'
     echo'############ Build '+ canaryVersion
     echo'###########################################'
-    sh "mvn -e -U clean deploy"
+    withMaven() {
+        sh "mvn -e -U clean deploy"
+    }
 
   } else if (utils.isCD()){
 

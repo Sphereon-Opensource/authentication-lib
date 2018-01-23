@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 @Library('github.com/Sphereon/fabric8-pipeline-library@master') _
-def sphereon = new io.fabric8.SphereonUtils()
+def sphereon = new com.sphereon.ci.SphereonUtils()
 sphereon.init()
 
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"

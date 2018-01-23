@@ -1,11 +1,13 @@
 #!/usr/bin/groovy
-@Library('github.com/Sphereon/fabric8-pipeline-library@master')
+@Library('github.com/Sphereon/fabric8-pipeline-library@master') _
 
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
 mavenNode {
   checkout scm
   if (utils.isCI()){
+
+  echo'############ Version '+ canaryVersion
 
     mavenCI{}
 
@@ -19,5 +21,6 @@ mavenNode {
         }
       }
     }
-  }
+  } else {
+  echo "###############NOPE##################"
 }

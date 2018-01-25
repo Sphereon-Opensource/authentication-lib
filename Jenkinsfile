@@ -21,6 +21,12 @@ node {
 		}
 	}
 
+    def branch = getBrach();
+    def branchType = getBranchType(branch)
+    def environment = getDeploymentEnvironmentFromBranchType(branchType)
+
+    echo "======> Building branch ${branch} of type ${branchType} for env ${environment}"
+
     if (utils.isCI()){
         echo'###########################################'
         echo'############ Build '+ canaryVersion
@@ -45,5 +51,42 @@ node {
         }
     } else {
         echo "###############NOPE##################"
+    }
+}
+
+
+def getBranchType() {
+    return getBranchType(getBranch())
+}
+def getBranchType(String branchName) {
+    def devPattern = ".*develop.*"
+    def releasePattern = ".*release.**"
+    def featurePattern = ".*feature.*"
+    def hotfixPattern = ".*hotfix.*"
+    def masterPattern = ".*master.*"
+    if (branchName =~ dev_pattern) {
+        return "dev"
+    } else if (branchName =~ releasePattern) {
+        return "release"
+    } else if (branchName =~ masterPattern) {
+        return "master"
+    } else if (branchName =~ featurePattern) {
+        return "feature"
+    } else if (branchName =~ hotfixPattern) {
+        return "hotfix"
+    } else {
+        return "dev";
+    }
+}
+
+def getDeploymentEnvironmentFromBranchType(String branchType) {
+    if (branchType == "dev") {
+        return "development"
+    } else if (branchType == "release") {
+        return "staging"
+    } else if (branchType == "master") {
+        return "production"
+    } else {
+        return "development";
     }
 }

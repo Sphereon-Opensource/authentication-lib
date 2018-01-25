@@ -12,6 +12,14 @@ node {
         checkout scm
     }
 
+
+    def branch = utils.getBranch();
+    def branchType = getBranchType(branch)
+    def environment = getDeploymentEnvironmentFromBranchType(branchType)
+
+    echo "======> Building branch ${branch} of type ${branchType} for env ${environment}"
+
+
     stage('Build and Unit tests') {
         // Maven installation declared in the Jenkins "Global Tool Configuration"
     	// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
@@ -21,11 +29,6 @@ node {
 		}
 	}
 
-    def branch = utils.getBranch();
-    def branchType = getBranchType(branch)
-    def environment = getDeploymentEnvironmentFromBranchType(branchType)
-
-    echo "======> Building branch ${branch} of type ${branchType} for env ${environment}"
 
     if (utils.isCI()){
         echo'###########################################'

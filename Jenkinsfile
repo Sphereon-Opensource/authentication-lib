@@ -6,27 +6,44 @@ sphereon.init()
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
 node {
-  checkout scm
-  if (utils.isCI()){
-    echo'###########################################'
-    echo'############ Build '+ canaryVersion
-    echo'###########################################'
-    withMaven() {
-        sh "mvn -e -U clean deploy"
+
+ // Checkout code from repository
+    stage('Checkout source') {
+        checkout scm
     }
 
-  } else if (utils.isCD()){
+    stage('Build and Unit tests') {
+        // Maven installation declared in the Jenkins "Global Tool Configuration"
+    	// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
+		withMaven(maven: 'M3') {
+            // Run the maven build (works on both linux and windows)
+			sh "mvn -e -U clean test"
+		}
+	}
 
-    echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
-   container(name: 'maven') {
+    if (utils.isCI()){
+        echo'###########################################'
+        echo'############ Build '+ canaryVersion
+        echo'###########################################'
+        stage('Deploy') {
+            // Maven installation declared in the Jenkins "Global Tool Configuration"
+        	// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
+    		withMaven(maven: 'M3') {
+                // Run the maven build (works on both linux and windows)
+    			sh "mvn deploy"
+    		}
+    	}
+    } else if (utils.isCD()){
+        echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
+        container(name: 'maven') {
 
-      stage('Build Release'){
-        mavenCanaryRelease {
-          version = canaryVersion
+            stage('Build Release'){
+                mavenCanaryRelease {
+                    version = canaryVersion
+                }
+            }
         }
-      }
+    } else {
+        echo "###############NOPE##################"
     }
-  } else {
-    echo "###############NOPE##################"
-  }
 }

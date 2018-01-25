@@ -21,7 +21,7 @@ node {
 		}
 	}
 
-    def branch = getBrach();
+    def branch = getBranch();
     def branchType = getBranchType(branch)
     def environment = getDeploymentEnvironmentFromBranchType(branchType)
 
@@ -64,7 +64,7 @@ def getBranchType(String branchName) {
     def featurePattern = ".*feature.*"
     def hotfixPattern = ".*hotfix.*"
     def masterPattern = ".*master.*"
-    if (branchName =~ dev_pattern) {
+    if (branchName =~ devPattern) {
         return "dev"
     } else if (branchName =~ releasePattern) {
         return "release"

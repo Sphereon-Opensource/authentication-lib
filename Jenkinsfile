@@ -21,7 +21,7 @@ node {
 		}
 	}
 
-    def branch = getBranch();
+    def branch = utils.getBranch();
     def branchType = getBranchType(branch)
     def environment = getDeploymentEnvironmentFromBranchType(branchType)
 
@@ -56,7 +56,7 @@ node {
 
 
 def getBranchType() {
-    return getBranchType(getBranch())
+    return getBranchType(new io.fabric8.Utils().getBranch())
 }
 def getBranchType(String branchName) {
     def devPattern = ".*develop.*"

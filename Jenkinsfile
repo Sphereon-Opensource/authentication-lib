@@ -63,7 +63,7 @@ def getBranchType() {
 }
 def getBranchType(String branchName) {
     def devPattern = ".*develop.*"
-    def releasePattern = ".*release.**"
+    def releasePattern = ".*release.*"
     def featurePattern = ".*feature.*"
     def hotfixPattern = ".*hotfix.*"
     def masterPattern = ".*master.*"

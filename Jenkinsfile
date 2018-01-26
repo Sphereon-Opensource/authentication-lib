@@ -12,12 +12,22 @@ node {
         checkout scm
     }
 
-
+/**
     def branch = utils.getBranch();
     def branchType = getBranchType(branch)
     def environment = getDeploymentEnvironmentFromBranchType(branchType)
 
     echo "======> Building branch ${branch} of type ${branchType} for env ${environment}"
+*/
+
+    podTemplate(label: 'mypod') {
+            node('mypod') {
+            stage('Run shell in pod') {
+                sh 'echo hello world'
+            }
+        }
+    }
+
 
 
     stage('Build and Unit tests') {
@@ -25,7 +35,7 @@ node {
     	// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
 		withMaven(maven: 'M3') {
             // Run the maven build (works on both linux and windows)
-			sh "mvn -e -U clean test"
+			sh "mvn -e -U clean deploy"
 		}
 	}
 
@@ -58,38 +68,3 @@ node {
 }
 
 
-def getBranchType() {
-    return getBranchType(new io.fabric8.Utils().getBranch())
-}
-def getBranchType(String branchName) {
-    def devPattern = ".*develop.*"
-    def releasePattern = ".*release.*"
-    def featurePattern = ".*feature.*"
-    def hotfixPattern = ".*hotfix.*"
-    def masterPattern = ".*master.*"
-    if (branchName =~ devPattern) {
-        return "dev"
-    } else if (branchName =~ releasePattern) {
-        return "release"
-    } else if (branchName =~ masterPattern) {
-        return "master"
-    } else if (branchName =~ featurePattern) {
-        return "feature"
-    } else if (branchName =~ hotfixPattern) {
-        return "hotfix"
-    } else {
-        return "dev";
-    }
-}
-
-def getDeploymentEnvironmentFromBranchType(String branchType) {
-    if (branchType == "dev") {
-        return "development"
-    } else if (branchType == "release" || branchType == "hotfix") {
-        return "staging"
-    } else if (branchType == "master") {
-        return "production"
-    } else {
-        return "development";
-    }
-}

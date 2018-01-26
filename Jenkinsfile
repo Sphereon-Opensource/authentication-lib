@@ -85,7 +85,7 @@ def getBranchType(String branchName) {
 def getDeploymentEnvironmentFromBranchType(String branchType) {
     if (branchType == "dev") {
         return "development"
-    } else if (branchType == "release") {
+    } else if (branchType == "release" || branchType == "hotfix") {
         return "staging"
     } else if (branchType == "master") {
         return "production"

@@ -19,6 +19,8 @@ log.*
 .idea/
 *.iml
 
+**/config/sphereon-*
+
 #Maven
 target/
 pom.xml.tag

@@ -26,6 +26,7 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public abstract class AbstractTest {
 
     protected static final String SPHEREON_AUTH_PROPERTIES = "sphereon-auth.properties";
     protected static final String SPHEREON_AUTH_XML = "sphereon-auth.xml";
+    protected static final String SPHEREON_UI_PROPERTIES = "sphereon-ui-test.properties";
 
 
     protected ApiConfiguration createPropertyFileConfiguration(final String configFile) {
@@ -163,20 +165,22 @@ public abstract class AbstractTest {
             // reset environment accessibility
             theEnvironmentField.setAccessible(environmentAccessibility);
 
-            // we apply the same to the case insensitive environment
-            final Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-            final boolean insensitiveAccessibility = theCaseInsensitiveEnvironmentField.isAccessible();
-            theCaseInsensitiveEnvironmentField.setAccessible(true);
-            // Not entirely sure if this needs to be casted to ProcessEnvironment$Variable and $Value as well
-            final Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
-            if (value == null) {
-                // remove if null
-                cienv.remove(key);
-            } else {
-                cienv.put(key, value);
+            if (SystemUtils.IS_OS_WINDOWS) {
+                // we apply the same to the case insensitive environment
+                final Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+                final boolean insensitiveAccessibility = theCaseInsensitiveEnvironmentField.isAccessible();
+                theCaseInsensitiveEnvironmentField.setAccessible(true);
+                // Not entirely sure if this needs to be casted to ProcessEnvironment$Variable and $Value as well
+                final Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
+                if (value == null) {
+                    // remove if null
+                    cienv.remove(key);
+                } else {
+                    cienv.put(key, value);
+                }
+                theCaseInsensitiveEnvironmentField.setAccessible(insensitiveAccessibility);
             }
-            theCaseInsensitiveEnvironmentField.setAccessible(insensitiveAccessibility);
-        } catch (final ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (final ClassNotFoundException | NoSuchFieldException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("Failed setting environment variable <" + key + "> to <" + value + ">", e);
         }
     }
@@ -187,5 +191,13 @@ public abstract class AbstractTest {
             Thread.sleep((seconds + 1) * 1000);
         } catch (InterruptedException e) {
         }
+    }
+
+
+    @AfterClass
+    public static void cleanupConfigFiles() {
+        new File("./config/" + SPHEREON_AUTH_PROPERTIES).deleteOnExit();
+        new File("./config/" + SPHEREON_AUTH_XML).deleteOnExit();
+        new File("./config/" + SPHEREON_UI_PROPERTIES).deleteOnExit();
     }
 }

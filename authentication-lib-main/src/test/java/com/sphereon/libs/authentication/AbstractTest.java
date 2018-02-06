@@ -163,20 +163,22 @@ public abstract class AbstractTest {
             // reset environment accessibility
             theEnvironmentField.setAccessible(environmentAccessibility);
 
-            // we apply the same to the case insensitive environment
-            final Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-            final boolean insensitiveAccessibility = theCaseInsensitiveEnvironmentField.isAccessible();
-            theCaseInsensitiveEnvironmentField.setAccessible(true);
-            // Not entirely sure if this needs to be casted to ProcessEnvironment$Variable and $Value as well
-            final Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
-            if (value == null) {
-                // remove if null
-                cienv.remove(key);
-            } else {
-                cienv.put(key, value);
+            if (SystemUtils.IS_OS_WINDOWS) {
+                // we apply the same to the case insensitive environment
+                final Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+                final boolean insensitiveAccessibility = theCaseInsensitiveEnvironmentField.isAccessible();
+                theCaseInsensitiveEnvironmentField.setAccessible(true);
+                // Not entirely sure if this needs to be casted to ProcessEnvironment$Variable and $Value as well
+                final Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
+                if (value == null) {
+                    // remove if null
+                    cienv.remove(key);
+                } else {
+                    cienv.put(key, value);
+                }
+                theCaseInsensitiveEnvironmentField.setAccessible(insensitiveAccessibility);
             }
-            theCaseInsensitiveEnvironmentField.setAccessible(insensitiveAccessibility);
-        } catch (final ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (final ClassNotFoundException | NoSuchFieldException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("Failed setting environment variable <" + key + "> to <" + value + ">", e);
         }
     }

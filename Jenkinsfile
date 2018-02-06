@@ -1,20 +1,18 @@
-node {
+#!/usr/bin/groovy
+@Library('pipeline-library@master')
 
-    // Checkout code from repository
+def utils = new io.fabric8.Utils()
+
+mavenNode {
+ // Checkout code from repository
     stage('Checkout source') {
         checkout scm
+
     }
 
-    stage('Build authentication-lib') {
-		withMaven(
-				// Maven installation declared in the Jenkins "Global Tool Configuration"
-				maven: 'M3')
-			{
+    buildLibrary{}
 
-            // Run the maven build (works on both linux and windows)
-			sh "mvn clean install"
 
-		}
-		// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
-	}
 }
+
+

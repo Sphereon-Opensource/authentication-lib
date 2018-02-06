@@ -26,6 +26,7 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public abstract class AbstractTest {
 
     protected static final String SPHEREON_AUTH_PROPERTIES = "sphereon-auth.properties";
     protected static final String SPHEREON_AUTH_XML = "sphereon-auth.xml";
+    protected static final String SPHEREON_UI_PROPERTIES = "sphereon-ui-test.properties";
 
 
     protected ApiConfiguration createPropertyFileConfiguration(final String configFile) {
@@ -189,5 +191,13 @@ public abstract class AbstractTest {
             Thread.sleep((seconds + 1) * 1000);
         } catch (InterruptedException e) {
         }
+    }
+
+
+    @AfterClass
+    public static void cleanupConfigFiles() {
+        new File("./config/" + SPHEREON_AUTH_PROPERTIES).deleteOnExit();
+        new File("./config/" + SPHEREON_AUTH_XML).deleteOnExit();
+        new File("./config/" + SPHEREON_UI_PROPERTIES).deleteOnExit();
     }
 }

@@ -25,13 +25,13 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.Proxy;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 class HttpRequestHandler {
 
-    private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {}.getType();
+    private static final Type GSON_TYPE_TOKEN = new TypeToken<Map<String, String>>() {
+    }.getType();
     private static final Gson gson = new Gson();
 
     private final OkHttpClient okHttpClient;
@@ -48,18 +48,18 @@ class HttpRequestHandler {
         Assert.notNull(urlBase, "No urlBase was specified");
 
         Request.Builder request = new Request.Builder()
-                .url(urlBase + TokenPathParameters.TOKEN)
-                .headers(headers)
-                .post(requestBody);
+            .url(urlBase + TokenPathParameters.TOKEN)
+            .headers(headers)
+            .post(requestBody);
         return request.build();
     }
 
 
     public Request newRevokeRequest(String urlBase, Headers headers, FormBody requestBody) {
         Request.Builder request = new Request.Builder()
-                .url(urlBase + TokenPathParameters.REVOKE)
-                .headers(headers)
-                .post(requestBody);
+            .url(urlBase + TokenPathParameters.REVOKE)
+            .headers(headers)
+            .post(requestBody);
         return request.build();
     }
 
@@ -106,13 +106,19 @@ class HttpRequestHandler {
         Assert.notNull(responseBody, "The remote endpoint did not return a response body.");
         String responseBodyString = responseBody.string();
         Assert.isTrue(!"application/json".equals(responseBody.contentType()),
-                String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
-                        responseBody.contentType(), responseBodyString));
+            String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
+                responseBody.contentType(), responseBodyString));
         return responseBodyString;
     }
 
 
     public Response execute(Request httpRequest) throws IOException {
         return okHttpClient.newCall(httpRequest).execute();
+    }
+
+
+    public void executeAsync(Request httpRequest, Callback callback) {
+        final Call call = okHttpClient.newCall(httpRequest);
+        call.enqueue(callback);
     }
 }

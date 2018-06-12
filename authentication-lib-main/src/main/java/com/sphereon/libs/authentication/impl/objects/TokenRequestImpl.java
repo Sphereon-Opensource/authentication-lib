@@ -21,6 +21,8 @@ import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -127,6 +129,29 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    protected void executeRequestAsync(final HttpRequestHandler requestHandler, Request httpRequest) {
+        requestHandler.executeAsync(httpRequest, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                for (TokenResponseListener listener : tokenResponseListeners) {
+                    listener.exception(e);
+                }
+            }
+
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = requestHandler.getResponseBodyContent(response);
+                Map<String, String> parameters = requestHandler.parseJsonResponseBody(responseBody);
+                TokenResponse tokenResponse = new TokenResponseImpl(parameters);
+                for (TokenResponseListener listener : tokenResponseListeners) {
+                    listener.tokenResponse(tokenResponse);
+                }
+            }
+        });
     }
 
 

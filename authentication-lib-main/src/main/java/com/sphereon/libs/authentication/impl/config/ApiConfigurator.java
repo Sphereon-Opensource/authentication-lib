@@ -116,9 +116,6 @@ public interface ApiConfigurator {
 
         private void validate() {
             switch (configuration.getPersistenceType()) {
-                case DISABLED:
-                    Assert.isTrue(configuration.getPersistenceMode() == PersistenceMode.READ_ONLY, "PersistenceMode.READ_ONLY is not valid for PersistentType.DISABLED");
-                    break;
                 case STANDALONE_PROPERTY_FILE:
                     Assert.notNull(configuration.getStandalonePropertyFile(), "In PersistentType.STANDALONE_PROPERTY_FILE the method setStandalonePropertyFile(File file) must be used.");
                     break;

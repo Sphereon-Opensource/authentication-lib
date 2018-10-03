@@ -83,12 +83,6 @@ class RevokeTokenRequestImpl extends TokenRequestImpl implements TokenRequest, R
 
 
     @Override
-    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
-
-    }
-
-
-    @Override
     public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
         parameterMap.put(RequestParameterKey.TOKEN, "" + getToken());
     }

@@ -23,7 +23,7 @@ import java.util.Map;
 
 class TokenResponseImpl implements TokenResponse {
 
-    private static final int SAFETY_MARGIN_SECONDS = 5;
+    private static final int SAFETY_MARGIN_SECONDS = 30;
 
     private String accessToken;
 
@@ -96,7 +96,8 @@ class TokenResponseImpl implements TokenResponse {
         if (expiresInSeconds < 0) {
             expiresInSeconds = 0;
         }
-        return System.currentTimeMillis() > responseTimeMs + (expiresInSeconds * 1000);
+        long expiryTimeMs = expiresInSeconds * 1000;
+        return System.currentTimeMillis() > responseTimeMs + expiryTimeMs;
     }
 
 

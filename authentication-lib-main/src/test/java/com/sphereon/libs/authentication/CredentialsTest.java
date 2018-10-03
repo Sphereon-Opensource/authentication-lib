@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CredentialsTest extends AbstractTest {
 
     private static final Long VALIDITY_PERIOD = 10L;
+    private static final Long SAFETY_MARGIN_SECONDS = 30L;
 
     private static final AtomicReference<String> prevToken = new AtomicReference<>();
     private static final AtomicReference<String> refreshToken = new AtomicReference<>();
@@ -49,7 +50,7 @@ public class CredentialsTest extends AbstractTest {
                 .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
                 .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
                 .withScope("UnitTest")
-                .withValidityPeriod(VALIDITY_PERIOD)
+                .withValidityPeriod(VALIDITY_PERIOD + SAFETY_MARGIN_SECONDS)
                 .build();
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());

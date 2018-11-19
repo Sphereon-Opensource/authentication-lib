@@ -71,5 +71,9 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setAutoEncryptionPassword(String autoEncryptionPassword);
 
+    void setEnvVarPrefix(String envVarPrefix);
+
+    String getEnvVarPrefix();
+
     void persist();
 }

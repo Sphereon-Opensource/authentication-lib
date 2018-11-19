@@ -105,11 +105,22 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
         if (cachedResponse != null) {
             if (cachedResponse.isExpired()) {
                 cachedResponses.remove(this);
+                tryRevokeToken(cachedResponse);
             } else {
                 return cachedResponse;
             }
         }
         return null;
+    }
+
+
+    private void tryRevokeToken(TokenResponse cachedResponse) {
+        try {
+            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configuration);
+            revokeTokenRequest.setToken(cachedResponse.getAccessToken());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace(); // FIXME no other way to log this now
+        }
     }
 
 

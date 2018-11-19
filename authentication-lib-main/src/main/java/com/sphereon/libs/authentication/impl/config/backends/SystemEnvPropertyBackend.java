@@ -32,23 +32,49 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
         String propertyVarName = propertyPrefix + key.getValue();
-        String value = null;
-        try {
-            value = System.getenv(propertyVarName);
-        } catch (Throwable ignored) {
-        }
-        if (StringUtils.isEmpty(value)) {
-            // The export command on Unix OS types do not support dot's in env vars. Try read when replacing with _
-            value = System.getenv(propertyVarName.replace(".", "_"));
-        }
+        String value = getVarFromEnv(propertyVarName.replace('.', '_'));
+
         if (StringUtils.isEmpty(value)) {
             value = System.getProperty(propertyPrefix + key.getValue());
         }
+
         if (StringUtils.isEmpty(value)) {
             if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
                 saveProperty(propertyPrefix, key, defaultValue);
             }
             return super.readProperty(propertyPrefix, key, defaultValue);
+        }
+        return value;
+    }
+
+
+    private String getVarFromEnv(String propertyVarName) {
+        String value = null;
+
+        try {
+            value = System.getenv(propertyVarName.toUpperCase().replace('-', '_'));
+        } catch (Throwable ignored) {
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName.replace('-', '_'));
+            } catch (Throwable ignored) {
+            }
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName.toUpperCase());
+            } catch (Throwable ignored) {
+            }
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName);
+            } catch (Throwable ignored) {
+            }
         }
         return value;
     }

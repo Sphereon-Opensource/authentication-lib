@@ -115,7 +115,7 @@ public interface GenerateTokenRequestBuilder {
             if (StringUtils.isEmpty(consumerSecret)) {
                 this.consumerSecret = configuration.getConsumerSecret();
             }
-            if (StringUtils.isEmpty(consumerKey)) {
+            if (StringUtils.isEmpty(consumerSecret)) {
                 throw new IllegalArgumentException("The consumer secret variable was not found. Please check your configuration.");
             }
             if (StringUtils.isEmpty(scope)) {

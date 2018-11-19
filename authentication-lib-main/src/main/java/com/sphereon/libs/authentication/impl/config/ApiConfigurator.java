@@ -44,6 +44,12 @@ public interface ApiConfigurator {
         }
 
 
+        public Builder withEnvVarPrefix(String envVarPrefix) {
+            configuration.setEnvVarPrefix(envVarPrefix);
+            return this;
+        }
+
+
         public Builder withConsumerKey(String consumerKey) {
             configuration.setConsumerKey(consumerKey);
             return this;

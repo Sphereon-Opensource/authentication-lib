@@ -42,7 +42,12 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
             if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
                 saveProperty(propertyPrefix, key, defaultValue);
             }
-            return super.readProperty(propertyPrefix, key, defaultValue);
+            value = super.readProperty(propertyPrefix, key, defaultValue);
+            if (StringUtils.isEmpty(value) && StringUtils.containsIgnoreCase(propertyVarName, "CONSUMER")) {
+                String envVarKey = propertyVarName.toUpperCase().replace('.', '_').replace('-', '_');
+                throw new IllegalArgumentException(String.format("Variable %s could not be found in the system environment nor %s in the java environment.", envVarKey, propertyVarName));
+            }
+            return value;
         }
         return value;
     }
@@ -50,7 +55,6 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
 
     private String getVarFromEnv(String propertyVarName) {
         String value = null;
-
         try {
             value = System.getenv(propertyVarName.toUpperCase().replace('-', '_'));
         } catch (Throwable ignored) {

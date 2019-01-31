@@ -55,6 +55,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
 
     private String getVarFromEnv(String propertyVarName) {
         String value = null;
+
         try {
             value = System.getenv(propertyVarName.toUpperCase().replace('-', '_'));
         } catch (Throwable ignored) {

@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-        php: 7.3
+      java: openjdk8
   build:
     commands:
        - echo "${CODEBUILD_WEBHOOK_HEAD_REF}"

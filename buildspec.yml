@@ -15,4 +15,3 @@ phases:
              mvn clean install -s settings.xml
          fi
 
-

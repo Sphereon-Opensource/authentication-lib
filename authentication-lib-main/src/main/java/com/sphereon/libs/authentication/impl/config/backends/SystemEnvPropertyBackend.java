@@ -39,7 +39,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
         }
         if (StringUtils.isEmpty(value)) {
             // The export command on Unix OS types do not support dot's in env vars. Try read when replacing with _
-            value = System.getenv(propertyVarName.replace(".", "_"));
+            value = System.getenv(propertyVarName.replace('.', '_').replace('-', '_'));
         }
         if (StringUtils.isEmpty(value)) {
             value = System.getProperty(propertyPrefix + key.getValue());

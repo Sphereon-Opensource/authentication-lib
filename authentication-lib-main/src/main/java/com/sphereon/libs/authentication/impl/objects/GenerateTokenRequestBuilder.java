@@ -110,13 +110,17 @@ public interface GenerateTokenRequestBuilder {
                 this.consumerKey = configuration.getConsumerKey();
             }
             if (StringUtils.isEmpty(consumerKey)) {
-                throw new IllegalArgumentException("The consumer key variable was not found. Please check your configuration.");
+                throw new IllegalArgumentException(String.format(
+                    "The consumer key variable was not found for application %s. Please check your configuration.",
+                    configuration.getApplication()));
             }
             if (StringUtils.isEmpty(consumerSecret)) {
                 this.consumerSecret = configuration.getConsumerSecret();
             }
             if (StringUtils.isEmpty(consumerSecret)) {
-                throw new IllegalArgumentException("The consumer secret variable was not found. Please check your configuration.");
+                throw new IllegalArgumentException(String.format(
+                    "The consumer secret variable was not found for application %s. Please check your configuration.",
+                    configuration.getApplication()));
             }
             if (StringUtils.isEmpty(scope)) {
                 this.scope = configuration.getDefaultScope();

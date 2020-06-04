@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://www.sphereon.com"><img src="https://sphereon.com/wp-content/uploads/2016/11/sphereon-logo.png" alt="Sphereon" width="200"></a>
+  <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="200"></a>
   <br>
   Sphereon WSO2 Authentication library
   <br>

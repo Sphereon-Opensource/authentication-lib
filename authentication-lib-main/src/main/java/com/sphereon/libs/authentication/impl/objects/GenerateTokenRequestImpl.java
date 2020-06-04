@@ -118,8 +118,8 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
         try {
             RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configuration);
             revokeTokenRequest.setToken(cachedResponse.getAccessToken());
-        } catch (Throwable throwable) {
-            throwable.printStackTrace(); // FIXME no other way to log this now
+        } catch (Exception e) {
+            e.printStackTrace(); // FIXME no other way to log this now
         }
     }
 

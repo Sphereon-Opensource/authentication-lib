@@ -121,6 +121,9 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
             Response response = requestHandler.execute(httpRequest);
             String responseBody = requestHandler.getResponseBodyContent(response);
             Map<String, String> parameters = requestHandler.parseJsonResponseBody(responseBody);
+            if (parameters == null) {
+                return null;
+            }
             TokenResponse tokenResponse = new TokenResponseImpl(parameters);
             for (TokenResponseListener listener : tokenResponseListeners) {
                 listener.tokenResponse(tokenResponse);

@@ -32,7 +32,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
         String propertyVarName = propertyPrefix + key.getValue();
-        String value = getVarFromEnv(propertyVarName.replace('.', '_'));
+        String value = getVarFromEnv(propertyVarName);
 
         if (StringUtils.isEmpty(value)) {
             value = System.getProperty(propertyPrefix + key.getValue());
@@ -54,6 +54,7 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
 
 
     private String getVarFromEnv(String propertyVarName) {
+        propertyVarName = propertyVarName.replace('.', '_');
         String value = null;
 
         try {

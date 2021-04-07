@@ -23,6 +23,7 @@ You can use this Java library to perform authentication against the Sphereon API
 ## How To Use
 To clone and use this library application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/) and your favorite Java IDE. 
 
+To build locally:
 ```bash
 # Clone this repository
 > git clone https://github.com/Sphereon-OpenSource/authentication-lib.git
@@ -33,6 +34,10 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
 # Build and install into your Maven repository
 > mvn clean install
 
+```
+
+Or use the published versions in our Maven repository:
+```xml
 # Use the artifact in your Maven pom or Gralde build configuration  
     <repositories>
         <repository>
@@ -45,7 +50,7 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
     <dependency>
         <groupId>com.sphereon.public</groupId>
         <artifactId>authentication-lib-main</artifactId> <!-- Use authentication-lib-osgi for OSGI bundle  -->
-        <version>0.1.4</version>
+        <version>0.1.5</version>
     </dependency>
 ```
 
@@ -57,7 +62,7 @@ You can [find](https://mvnrepository.com) the latest version on mvnrepository.co
 
 ## Getting started
 Basic usage without configuration
-```bash
+```java
         AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
         TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withConsumerKey("<value>")
@@ -69,7 +74,7 @@ Basic usage without configuration
 ```
 
 Using the configuration manager reading from an existing property file
-```bash
+```java
         ApiConfiguration configuration = new ApiConfiguration.Builder()
                 .withApplication("demo-application")
                 .withPersistenceType(PersistenceType.STANDALONE_PROPERTY_FILE)

@@ -38,14 +38,14 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
         <repository>
             <id>sphereon-public</id>
             <name>Sphereon Public</name>
-            <url>http://nexus.qa.sphereon.com/repository/sphereon-public/</url>
+            <url>https://nexus.qa.sphereon.com/repository/sphereon-public/</url>
          </repository>
     </repositories>
 ...
     <dependency>
         <groupId>com.sphereon.public</groupId>
         <artifactId>authentication-lib-main</artifactId> <!-- Use authentication-lib-osgi for OSGI bundle  -->
-        <version>0.1.0</version>
+        <version>0.1.4</version>
     </dependency>
 ```
 

@@ -17,18 +17,23 @@
 package com.sphereon.libs.authentication.impl.config;
 
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
-import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
-import com.sphereon.libs.authentication.impl.config.backends.*;
-import org.apache.commons.lang3.StringUtils;
-
+import com.sphereon.libs.authentication.impl.config.backends.InMemoryConfig;
+import com.sphereon.libs.authentication.impl.config.backends.NoopPropertyBackend;
+import com.sphereon.libs.authentication.impl.config.backends.PropertyConfigBackend;
+import com.sphereon.libs.authentication.impl.config.backends.PropertyFileBackend;
+import com.sphereon.libs.authentication.impl.config.backends.SystemEnvPropertyBackend;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class ConfigManager {
     private static final String PROPERTY_PREFIX = "authentication-api";
+
+    private final Log log = LogFactory.getLog(ConfigManager.class);
 
     private final ApiConfiguration configuration;
 
@@ -62,11 +67,12 @@ public class ConfigManager {
 
 
     private PropertyConfigBackend selectPropertyConfig() {
+        log.info("Auth configuration is of type: " + configuration.getPersistenceType());
         switch (configuration.getPersistenceType()) {
             case DISABLED:
                 return new NoopPropertyBackend();
             case STANDALONE_PROPERTY_FILE:
-                return new PropertyFileBackend(configuration, configuration.getStandalonePropertyFile().toURI());
+                return new PropertyFileBackend(configuration, configuration.getStandalonePropertyFile());
             case SPRING_APPLICATION_PROPERTIES:
                 return createSpringPropertyBackend();
             case SYSTEM_ENVIRONMENT:
@@ -90,10 +96,12 @@ public class ConfigManager {
 
     private PropertyConfigBackend createSpringPropertyBackend() {
         URL url = null;
-        File file = null;
         String propertiesLocation = System.getProperty("spring.config.location");
         if (StringUtils.isNotEmpty(propertiesLocation)) {
+            log.info("Using custom config location as specified by 'spring.config.location': " + propertiesLocation);
             url = url(propertiesLocation);
+        } else {
+            log.info("Searching default locations for config file...");
         }
         if (url == null) {
             url = url("config" + File.separator + "application.properties");
@@ -113,14 +121,10 @@ public class ConfigManager {
         if (url == null) {
             throw new RuntimeException("application.properties was not found in default locations nor on the classpath");
         }
-        if (url.getProtocol().startsWith("jar")) {
-            configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
-        }
-        try {
-            return new PropertyFileBackend(configuration, url.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Could not read property file URL " + url, e);
-        }
+        log.info("Config file location search resulted in: " + url);
+
+        return new PropertyFileBackend(configuration, url);
+
     }
 
 

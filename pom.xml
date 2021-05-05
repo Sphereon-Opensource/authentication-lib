@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sphereon.public</groupId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
     <artifactId>authentication-lib-modules</artifactId>
     <modules>
         <module>authentication-lib-main</module>

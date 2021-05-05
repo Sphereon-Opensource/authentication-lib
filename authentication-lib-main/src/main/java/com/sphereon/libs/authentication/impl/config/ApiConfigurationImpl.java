@@ -56,6 +56,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
     private String autoEncryptionPassword;
 
     private ConfigManager configManager;
+    private String envVarPrefix;
 
 
     ApiConfigurationImpl() {
@@ -204,6 +205,17 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
     @Override
     public void setAutoEncryptionPassword(String autoEncryptionPassword) {
         this.autoEncryptionPassword = autoEncryptionPassword;
+    }
+
+
+    @Override
+    public void setEnvVarPrefix(String envVarPrefix) {
+        this.envVarPrefix = envVarPrefix;
+    }
+
+    @Override
+    public String getEnvVarPrefix() {
+        return envVarPrefix;
     }
 
 

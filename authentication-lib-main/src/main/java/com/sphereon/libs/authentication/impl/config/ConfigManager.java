@@ -47,7 +47,12 @@ public class ConfigManager {
 
     private void init() {
         this.propertyConfig = selectPropertyConfig();
-        if (StringUtils.isNotEmpty(configuration.getApplication())) {
+        if (StringUtils.isNotEmpty(configuration.getEnvVarPrefix())) {
+            this.propertyPrefix = configuration.getEnvVarPrefix();
+            if (!this.propertyPrefix.endsWith(".")) {
+                this.propertyPrefix += '.';
+            }
+        } else if (StringUtils.isNotEmpty(configuration.getApplication())) {
             this.propertyPrefix = PROPERTY_PREFIX + '.' + configuration.getApplication() + '.';
         } else {
             this.propertyPrefix = PROPERTY_PREFIX + '.';

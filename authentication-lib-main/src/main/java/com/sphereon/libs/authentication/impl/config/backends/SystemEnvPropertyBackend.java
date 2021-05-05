@@ -32,23 +32,55 @@ public class SystemEnvPropertyBackend extends InMemoryConfig {
     @Override
     public String readProperty(String propertyPrefix, PropertyKey key, String defaultValue) {
         String propertyVarName = propertyPrefix + key.getValue();
-        String value = null;
-        try {
-            value = System.getenv(propertyVarName);
-        } catch (Throwable ignored) {
-        }
-        if (StringUtils.isEmpty(value)) {
-            // The export command on Unix OS types do not support dot's in env vars. Try read when replacing with _
-            value = System.getenv(propertyVarName.replace('.', '_').replace('-', '_'));
-        }
+        String value = getVarFromEnv(propertyVarName);
+
         if (StringUtils.isEmpty(value)) {
             value = System.getProperty(propertyPrefix + key.getValue());
         }
+
         if (StringUtils.isEmpty(value)) {
             if (apiConfiguration.getPersistenceMode() == PersistenceMode.READ_WRITE && StringUtils.isNotBlank(defaultValue)) {
                 saveProperty(propertyPrefix, key, defaultValue);
             }
-            return super.readProperty(propertyPrefix, key, defaultValue);
+            value = super.readProperty(propertyPrefix, key, defaultValue);
+            if (StringUtils.isEmpty(value) && StringUtils.containsIgnoreCase(propertyVarName, "CONSUMER")) {
+                String envVarKey = propertyVarName.toUpperCase().replace('.', '_').replace('-', '_');
+                throw new IllegalArgumentException(String.format("Variable %s could not be found in the system environment nor %s in the java environment.", envVarKey, propertyVarName));
+            }
+            return value;
+        }
+        return value;
+    }
+
+
+    private String getVarFromEnv(String propertyVarName) {
+        propertyVarName = propertyVarName.replace('.', '_');
+        String value = null;
+
+        try {
+            value = System.getenv(propertyVarName.toUpperCase().replace('-', '_'));
+        } catch (Throwable ignored) {
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName.replace('-', '_'));
+            } catch (Throwable ignored) {
+            }
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName.toUpperCase());
+            } catch (Throwable ignored) {
+            }
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            try {
+                value = System.getenv(propertyVarName);
+            } catch (Throwable ignored) {
+            }
         }
         return value;
     }

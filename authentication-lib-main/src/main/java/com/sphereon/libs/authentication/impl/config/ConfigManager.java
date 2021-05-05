@@ -47,7 +47,12 @@ public class ConfigManager {
 
     private void init() {
         this.propertyConfig = selectPropertyConfig();
-        if (StringUtils.isNotEmpty(configuration.getApplication())) {
+        if (StringUtils.isNotEmpty(configuration.getEnvVarPrefix())) {
+            this.propertyPrefix = configuration.getEnvVarPrefix();
+            if (!this.propertyPrefix.endsWith(".")) {
+                this.propertyPrefix += '.';
+            }
+        } else if (StringUtils.isNotEmpty(configuration.getApplication())) {
             this.propertyPrefix = PROPERTY_PREFIX + '.' + configuration.getApplication() + '.';
         } else {
             this.propertyPrefix = PROPERTY_PREFIX + '.';
@@ -71,27 +76,30 @@ public class ConfigManager {
         }
     }
 
+    private URL url(final String location) {
+        final File file = new File(location);
+        if (!file.exists()) {
+            return null;
+        }
+        try {
+            return file.toURI().toURL();
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
 
     private PropertyConfigBackend createSpringPropertyBackend() {
         URL url = null;
+        File file = null;
         String propertiesLocation = System.getProperty("spring.config.location");
         if (StringUtils.isNotEmpty(propertiesLocation)) {
-            try {
-                url = new File(propertiesLocation).toURI().toURL();
-            } catch (MalformedURLException e) {
-            }
+            url = url(propertiesLocation);
         }
         if (url == null) {
-            try {
-                url = new File("config" + File.separator + "application.properties").toURI().toURL();
-            } catch (MalformedURLException e) {
-            }
+            url = url("config" + File.separator + "application.properties");
         }
         if (url == null) {
-            try {
-                url = new File("./application.properties").toURI().toURL();
-            } catch (MalformedURLException e) {
-            }
+            url = url("./application.properties");
         }
         if (url == null) {
             url = getClass().getClassLoader().getResource("/config/application.properties");
@@ -103,7 +111,7 @@ public class ConfigManager {
             url = getClass().getClassLoader().getResource("/application.properties");
         }
         if (url == null) {
-            throw new RuntimeException("application.properties was not found in the classpath");
+            throw new RuntimeException("application.properties was not found in default locations nor on the classpath");
         }
         if (url.getProtocol().startsWith("jar")) {
             configuration.setPersistenceMode(PersistenceMode.READ_ONLY);

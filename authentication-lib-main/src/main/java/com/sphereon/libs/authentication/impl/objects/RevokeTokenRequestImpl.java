@@ -50,10 +50,23 @@ class RevokeTokenRequestImpl extends TokenRequestImpl implements TokenRequest, R
     @Override
     public TokenResponse execute() {
         HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        Request httpRequest = buildRequest(requestHandler);
+        return executeRequest(requestHandler, httpRequest);
+    }
+
+
+    @Override
+    public void executeAsync() {
+        HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        Request httpRequest = buildRequest(requestHandler);
+        executeRequestAsync(requestHandler, httpRequest);
+    }
+
+
+    private Request buildRequest(HttpRequestHandler requestHandler) {
         FormBody requestBody = requestHandler.buildBody(this);
         Headers headers = requestHandler.buildHeaders(this);
-        Request httpRequest = requestHandler.newRevokeRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
-        return executeRequest(requestHandler, httpRequest);
+        return requestHandler.newRevokeRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
     }
 
 
@@ -65,12 +78,6 @@ class RevokeTokenRequestImpl extends TokenRequestImpl implements TokenRequest, R
 
     @Override
     public void removeTokenResponseListener(TokenResponseListener listener) {
-
-    }
-
-
-    @Override
-    public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
 
     }
 

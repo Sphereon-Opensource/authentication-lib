@@ -64,13 +64,9 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
     @Override
     public TokenResponse execute() {
-        TokenResponse cachedResponse = cachedResponses.get(this);
+        TokenResponse cachedResponse = getCachedResponse();
         if (cachedResponse != null) {
-            if (cachedResponse.isExpired()) {
-                cachedResponses.remove(this);
-            } else {
-                return cachedResponse;
-            }
+            return cachedResponse;
         }
 
         TokenResponse tokenResponse = buildAndExecuteRequest();
@@ -79,12 +75,73 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
     }
 
 
+    @Override
+    public void executeAsync() {
+        TokenResponse cachedResponse = getCachedResponse();
+        if (cachedResponse != null) {
+            for (TokenResponseListener listener : tokenResponseListeners) {
+                listener.tokenResponse(cachedResponse);
+            }
+        }
+        buildAndExecuteRequestAsync();
+        addTokenResponseListener(new TokenResponseListener() {
+            @Override
+            public void tokenResponse(TokenResponse tokenResponse) {
+                cachedResponses.put(this, tokenResponse);
+
+            }
+
+
+            @Override
+            public void exception(Throwable t) {
+
+            }
+        });
+    }
+
+
+    private TokenResponse getCachedResponse() {
+        TokenResponse cachedResponse = cachedResponses.get(this);
+        if (cachedResponse != null) {
+            if (cachedResponse.isExpired()) {
+                cachedResponses.remove(this);
+                tryRevokeToken(cachedResponse);
+            } else {
+                return cachedResponse;
+            }
+        }
+        return null;
+    }
+
+
+    private void tryRevokeToken(TokenResponse cachedResponse) {
+        try {
+            RevokeTokenRequestImpl revokeTokenRequest = new RevokeTokenRequestImpl(configuration);
+            revokeTokenRequest.setToken(cachedResponse.getAccessToken());
+        } catch (Exception e) {
+            e.printStackTrace(); // FIXME no other way to log this now
+        }
+    }
+
+
     private TokenResponse buildAndExecuteRequest() {
         HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        Request httpRequest = buildRequest(requestHandler);
+        return executeRequest(requestHandler, httpRequest);
+    }
+
+
+    private void buildAndExecuteRequestAsync() {
+        HttpRequestHandler requestHandler = new HttpRequestHandler(configuration);
+        Request httpRequest = buildRequest(requestHandler);
+        executeRequestAsync(requestHandler, httpRequest);
+    }
+
+
+    private Request buildRequest(HttpRequestHandler requestHandler) {
         FormBody requestBody = requestHandler.buildBody(this);
         Headers headers = requestHandler.buildHeaders(this);
-        Request httpRequest = requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
-        return executeRequest(requestHandler, httpRequest);
+        return requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
     }
 
 

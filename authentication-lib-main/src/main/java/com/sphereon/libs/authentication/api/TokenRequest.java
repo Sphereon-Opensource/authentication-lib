@@ -20,11 +20,15 @@ public interface TokenRequest {
 
     TokenResponse execute();
 
+    void executeAsync();
+
     void addTokenResponseListener(TokenResponseListener listener);
 
     void removeTokenResponseListener(TokenResponseListener listener);
 
     interface TokenResponseListener {
         void tokenResponse(TokenResponse tokenResponse);
+
+        void exception(Throwable t);
     }
 }

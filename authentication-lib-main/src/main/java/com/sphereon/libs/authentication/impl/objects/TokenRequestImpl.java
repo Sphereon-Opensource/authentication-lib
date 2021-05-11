@@ -26,6 +26,8 @@ import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
 
 import java.io.IOException;
@@ -36,6 +38,7 @@ import java.util.Map;
 
 abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
+    protected static final Log log = LogFactory.getLog(TokenRequest.class);
     protected static final Base64 base64Encoder = new Base64();
 
     protected final List<TokenResponseListener> tokenResponseListeners = new ArrayList<>();
@@ -118,13 +121,18 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
     protected TokenResponse executeRequest(HttpRequestHandler requestHandler, Request httpRequest) {
         try {
+            log.info(String.format("Executing auth token request scope: %s, url: %s", scope, httpRequest.url()));
             Response response = requestHandler.execute(httpRequest);
             String responseBody = requestHandler.getResponseBodyContent(response);
             Map<String, String> parameters = requestHandler.parseJsonResponseBody(responseBody);
+            if (parameters == null) {
+                return null;
+            }
             TokenResponse tokenResponse = new TokenResponseImpl(parameters);
             for (TokenResponseListener listener : tokenResponseListeners) {
                 listener.tokenResponse(tokenResponse);
             }
+            log.info(String.format("Auth token received, expires in %s seconds, url: %s", tokenResponse.getExpiresInSeconds(), httpRequest.url()));
             return tokenResponse;
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -271,9 +271,9 @@ public class ConfigTest extends AbstractTest {
         final String testPassword = "ENC(8DBFLfsbf8WhjmBZjDQJWQqJKs9+wCww)";
         final String consumerSecret = "v1XDT6Mdh_5xcCod1fnyUMYsZXsa";
         final String consumerKey = "gJ33aNcX3Zj3iqMQhyfQc4AIpfca";
-        setEnv("authentication-api.expiring-tokens.grant-type", "password");
-        setEnv("authentication-api.expiring-tokens.username", testUserName);
-        setEnv("authentication-api.expiring-tokens.password", testPassword);
+        setEnv("AUTHENTICATION-API_EXPIRING-TOKENS_GRANT-TYPE", "password");
+        setEnv("AUTHENTICATION-API_EXPIRING-TOKENS_USERNAME", testUserName);
+        setEnv("AUTHENTICATION-API_EXPIRING-TOKENS_PASSWORD", testPassword);
         System.setProperty("authentication-api.expiring-tokens.consumer-key", consumerKey);
         System.setProperty("authentication-api.expiring-tokens.consumer-secret", consumerSecret);
 

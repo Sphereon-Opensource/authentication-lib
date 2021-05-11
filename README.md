@@ -1,15 +1,16 @@
 
 <h1 align="center">
   <br>
-  <a href="https://www.sphereon.com"><img src="https://sphereon.com/wp-content/uploads/2016/11/sphereon-logo.png" alt="Sphereon" width="200"></a>
+  <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="400"></a>
   <br>
-  Sphereon WSO2 Authentication library
+  Sphereon API and WSO2 Authentication library
   <br>
 </h1>
 
 <h4 align="center">A Java implementation for performing authentication against the WSO2 <a href="https://wso2.com/api-management/" target="_blank">API Manager</a> and <a href="https://docs.wso2.com/display/AM210" target="_blank">API Store</a>.</h4>
 
-You can use this Java library to perform authentication against the Sphereon Cloud gateways (WSO2).
+You can use this Java library to perform authentication against the Sphereon API gateway (WSO2).
+
 
 
 ## Key Features
@@ -33,19 +34,23 @@ To clone and use this library application, you'll need [Git](https://git-scm.com
 # Build and install into your Maven repository
 > mvn clean install
 
+```
+
+Or use the published versions in our Maven repository:
+```xml
 # Use the artifact in your Maven pom or Gralde build configuration  
     <repositories>
         <repository>
             <id>sphereon-public</id>
             <name>Sphereon Public</name>
-            <url>http://nexus.qa.sphereon.com/repository/sphereon-public/</url>
+            <url>https://nexus.qa.sphereon.com/repository/sphereon-public/</url>
          </repository>
     </repositories>
 ...
     <dependency>
         <groupId>com.sphereon.public</groupId>
         <artifactId>authentication-lib-main</artifactId> <!-- Use authentication-lib-osgi for OSGI bundle  -->
-        <version>0.1.0</version>
+        <version>0.1.5</version>
     </dependency>
 ```
 

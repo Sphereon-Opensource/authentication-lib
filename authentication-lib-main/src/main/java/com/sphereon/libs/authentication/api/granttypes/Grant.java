@@ -16,10 +16,17 @@
 
 package com.sphereon.libs.authentication.api.granttypes;
 
-import com.sphereon.libs.authentication.impl.objects.granttypes.*;
+import com.sphereon.libs.authentication.impl.objects.granttypes.ClientCredentialBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.KerberosBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.NtlmBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.PasswordBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.RefreshTokenBuilder;
+import com.sphereon.libs.authentication.impl.objects.granttypes.Saml2Builder;
+
+import java.io.Serializable;
 
 public interface Grant extends ClientCredentialBuilder, PasswordBuilder, RefreshTokenBuilder,
-        NtlmBuilder, KerberosBuilder, Saml2Builder {
+        NtlmBuilder, KerberosBuilder, Saml2Builder, Serializable {
 
     GrantType getGrantType();
 

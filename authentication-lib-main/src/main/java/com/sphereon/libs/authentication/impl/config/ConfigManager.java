@@ -23,12 +23,13 @@ import com.sphereon.libs.authentication.impl.config.backends.NoopPropertyBackend
 import com.sphereon.libs.authentication.impl.config.backends.PropertyConfigBackend;
 import com.sphereon.libs.authentication.impl.config.backends.PropertyFileBackend;
 import com.sphereon.libs.authentication.impl.config.backends.SystemEnvPropertyBackend;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ConfigManager {
     private static final String PROPERTY_PREFIX = "authentication-api";
@@ -133,7 +134,8 @@ public class ConfigManager {
     }
 
 
-    public void saveProperty(PropertyKey key, String value) {
+    public void saveProperty(PropertyKey key,
+                             String value) {
         if (reinit) {
             init();
         }
@@ -149,7 +151,8 @@ public class ConfigManager {
     }
 
 
-    public String readProperty(PropertyKey key, String defaultValue) {
+    public String readProperty(PropertyKey key,
+                               String defaultValue) {
         if (reinit) {
             init();
         }

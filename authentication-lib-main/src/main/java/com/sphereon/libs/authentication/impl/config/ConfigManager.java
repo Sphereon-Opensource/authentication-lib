@@ -17,6 +17,7 @@
 package com.sphereon.libs.authentication.impl.config;
 
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
+import com.sphereon.libs.authentication.api.config.PersistenceMode;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.backends.InMemoryConfig;
 import com.sphereon.libs.authentication.impl.config.backends.NoopPropertyBackend;
@@ -30,9 +31,6 @@ import org.apache.commons.logging.LogFactory;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class ConfigManager {
     private static final String PROPERTY_PREFIX = "authentication-api";
@@ -161,11 +159,7 @@ public class ConfigManager {
         if (url.getProtocol().startsWith("jar")) {
             configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
         }
-        try {
-            return new PropertyFileBackend(configuration, url.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Could not read property file URL " + url, e);
-        }
+        return url;
     }
 
 

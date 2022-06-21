@@ -23,6 +23,10 @@ import com.sphereon.libs.authentication.impl.config.backends.NoopPropertyBackend
 import com.sphereon.libs.authentication.impl.config.backends.PropertyConfigBackend;
 import com.sphereon.libs.authentication.impl.config.backends.PropertyFileBackend;
 import com.sphereon.libs.authentication.impl.config.backends.SystemEnvPropertyBackend;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -103,6 +107,16 @@ public class ConfigManager {
         } else {
             log.info("Searching default locations for config file...");
         }
+
+        final String[] activeProfiles = StringUtils.split(System.getProperty("spring.profiles.active"));
+        if (activeProfiles != null) {
+            for (String profile : activeProfiles) {
+                url = getUrlForProfile("-" + profile, url);
+                if (url != null) {
+                    break;
+                }
+            }
+        }
         if (url == null) {
             url = url("config" + File.separator + "application.properties");
         }
@@ -122,9 +136,36 @@ public class ConfigManager {
             throw new RuntimeException("application.properties was not found in default locations nor on the classpath");
         }
         log.info("Config file location search resulted in: " + url);
-
         return new PropertyFileBackend(configuration, url);
+    }
 
+    private URL getUrlForProfile(String profile, URL url) {
+        if (url == null) {
+            url = url("config" + File.separator + "application.properties");
+        }
+        if (url == null) {
+            url = url("./application" + profile + ".properties");
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("/config/application" + profile + ".properties");
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("application" + profile + ".properties");
+        }
+        if (url == null) {
+            url = getClass().getClassLoader().getResource("/application" + profile + ".properties");
+        }
+        if (url == null) {
+            throw new RuntimeException("application.properties was not found in the classpath");
+        }
+        if (url.getProtocol().startsWith("jar")) {
+            configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
+        }
+        try {
+            return new PropertyFileBackend(configuration, url.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Could not read property file URL " + url, e);
+        }
     }
 
 
@@ -133,7 +174,8 @@ public class ConfigManager {
     }
 
 
-    public void saveProperty(PropertyKey key, String value) {
+    public void saveProperty(PropertyKey key,
+                             String value) {
         if (reinit) {
             init();
         }
@@ -149,7 +191,8 @@ public class ConfigManager {
     }
 
 
-    public String readProperty(PropertyKey key, String defaultValue) {
+    public String readProperty(PropertyKey key,
+                               String defaultValue) {
         if (reinit) {
             init();
         }

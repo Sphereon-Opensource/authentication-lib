@@ -51,6 +51,24 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
     @Deprecated
     public PropertyFileBackend(ApiConfiguration configuration, URI fileUri) {
         super(configuration, configuration.getPersistenceMode());
+
+        initConfig(configuration, fileUrl);
+    }
+
+    private void initConfig(final ApiConfiguration configuration, final URL fileUrl) {
+        log.info(String.format("Loading configuration from %s...", fileUrl));
+        final boolean jar = fileUrl.toString().startsWith("jar:");
+        final boolean xml = "xml".equalsIgnoreCase(FilenameUtils.getExtension(fileUrl.getFile()));
+        if (jar) {
+            log.info(String.format("Configuration %s will be loaded from classpath, meaning default values", fileUrl));
+            if (configuration.getPersistenceMode() == PersistenceMode.READ_WRITE) {
+                log.warn("Setting configuration persistence mode to read-only given we got a configuration from the classpath: " + fileUrl);
+                configuration.setPersistenceMode(PersistenceMode.READ_ONLY);
+            }
+        } else {
+            ensureConfigFileExists(fileUrl, xml);
+        }
+
         try {
             initConfig(configuration, fileUri.toURL());
         } catch (MalformedURLException e) {
@@ -113,7 +131,6 @@ public class PropertyFileBackend extends AbstractCommonsConfig {
                 }
             }
             if (!configFile.exists()) {
-
                 if (!configFile.createNewFile()) {
                     throw new IOException("Could not create new config file.");
                 }

@@ -23,8 +23,9 @@ import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 
 import java.io.File;
+import java.io.Serializable;
 
-public interface ApiConfigurator {
+public interface ApiConfigurator extends Serializable {
 
     final class Builder {
 

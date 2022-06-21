@@ -50,7 +50,7 @@ Or use the published versions in our Maven repository:
     <dependency>
         <groupId>com.sphereon.public</groupId>
         <artifactId>authentication-lib-main</artifactId> <!-- Use authentication-lib-osgi for OSGI bundle  -->
-        <version>0.1.5</version>
+        <version>0.1.7</version>
     </dependency>
 ```
 

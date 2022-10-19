@@ -53,8 +53,8 @@ class ClientCredentialGrantImpl implements ClientCredentialGrant, RequestParamet
 
     @Override
     public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        parameterMap.put(RequestParameterKey.GRANT_TYPE, GrantTypeKey.CLIENT_CREDENTIALS.getValue());
         if(clientCredentialsMode == ClientCredentialsMode.BODY) {
-            parameterMap.put(RequestParameterKey.GRANT_TYPE, GrantTypeKey.CLIENT_CREDENTIALS.getValue());
             final String clientId = getClientId();
             if (StringUtils.isNotBlank(clientId)) {
                 parameterMap.put(RequestParameterKey.CLIENT_ID, clientId);

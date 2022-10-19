@@ -22,6 +22,7 @@ import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -48,7 +49,7 @@ class HttpRequestHandler {
         Assert.notNull(urlBase, "No urlBase was specified");
 
         Request.Builder request = new Request.Builder()
-            .url(urlBase + TokenPathParameters.TOKEN)
+            .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.TOKEN)
             .headers(headers)
             .post(requestBody);
         return request.build();
@@ -57,7 +58,7 @@ class HttpRequestHandler {
 
     public Request newRevokeRequest(String urlBase, Headers headers, FormBody requestBody) {
         Request.Builder request = new Request.Builder()
-            .url(urlBase + TokenPathParameters.REVOKE)
+            .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.REVOKE)
             .headers(headers)
             .post(requestBody);
         return request.build();

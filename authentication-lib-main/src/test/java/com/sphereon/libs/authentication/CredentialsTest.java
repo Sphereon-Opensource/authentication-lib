@@ -21,6 +21,8 @@ import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.api.config.ClientCredentialsMode;
+import com.sphereon.libs.authentication.api.config.PersistenceMode;
+import com.sphereon.libs.authentication.api.config.PersistenceType;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -68,26 +70,26 @@ public class CredentialsTest extends AbstractTest {
     }
 
     @Test
-    public void test_12_ClientCredentialBody() {
-        AuthenticationApi authenticationApi = new AuthenticationApi.Builder().build();
+    public void test_12_ClientCredentialBodyMicrosoft() {
+        ApiConfiguration configuration = new ApiConfiguration.Builder()
+                .withGatewayBaseUrl("https://login.microsoftonline.com/e2a42b2f-7460-4499-afc2-425315ef058a/oauth2/v2.0")
+                .withApplication(APPLICATION_NAME)
+                .withPersistenceType(PersistenceType.IN_MEMORY)
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .build();
+
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
+                .withConfiguration(configuration)
+                .build();
+
         TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withClientCredentialsMode(ClientCredentialsMode.BODY)
-                .withConsumerKey("gJ33aNcX3Zj3iqMQhyfQc4AIpfca")
-                .withConsumerSecret("v1XDT6Mdh_5xcCod1fnyUMYsZXsa")
-                .withScope("UnitTest")
-                .withValidityPeriod(VALIDITY_PERIOD + SAFETY_MARGIN_SECONDS)
+                .withConsumerKey("a6f86e05-b1d5-4103-95ff-fd5212bba102")
+                .withConsumerSecret("5to8Q~oLPbb6qohpXpQzbyR-y4DuZJI2vHcO4csj")
+                .withScope("https://graph.microsoft.com/.default")
                 .build();
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());
-        this.prevToken.set(tokenResponse.getAccessToken());
-        waitSeconds(2L);
-        Assert.assertFalse(tokenResponse.isExpired());
-        tokenResponse = tokenRequest.execute();
-        Assert.assertFalse(tokenResponse.isExpired());
-        waitSeconds(tokenResponse.getExpiresInSeconds());
-        Assert.assertTrue(tokenResponse.isExpired());
-        tokenResponse = tokenRequest.execute();
-        Assert.assertFalse(tokenResponse.isExpired());
     }
 
 

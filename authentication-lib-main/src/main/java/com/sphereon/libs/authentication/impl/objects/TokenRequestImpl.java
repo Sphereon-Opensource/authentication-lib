@@ -20,12 +20,15 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ClientCredentialsMode;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
@@ -50,6 +53,7 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
     private transient String consumerSecret;
 
     protected String scope;
+    private ClientCredentialsMode clientCredentialsMode;
 
 
     public TokenRequestImpl(ApiConfiguration configuration) {
@@ -66,6 +70,14 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
         this.scope = scope;
     }
 
+
+    public ClientCredentialsMode getClientCredentialsMode() {
+        return clientCredentialsMode;
+    }
+
+    public void setClientCredentialsMode(final ClientCredentialsMode clientCredentialsMode) {
+        this.clientCredentialsMode = clientCredentialsMode;
+    }
 
     public String getConsumerKey() {
         return consumerKey;
@@ -101,12 +113,15 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
 
     @Override
     public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
-        try {
-            String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
-            String authorizationHeader = String.format("Basic %s", new String(base64Encoder.encode(clientParameters.getBytes("UTF-8"))));
-            parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+        // This must be available for all grant types as long as credentials mode is BASIC_HEADER
+        if (getClientCredentialsMode() == ClientCredentialsMode.BASIC_HEADER) {
+            try {
+                String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
+                String authorizationHeader = String.format("Basic %s", new String(base64Encoder.encode(clientParameters.getBytes("UTF-8"))));
+                parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -162,37 +177,19 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
         });
     }
 
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TokenRequestImpl)) {
-            return false;
-        }
+    public boolean equals(final Object o) {
+        if (this == o) return true;
 
-        TokenRequestImpl that = (TokenRequestImpl) o;
+        if (!(o instanceof TokenRequestImpl)) return false;
 
-        if (configuration != null ? !configuration.equals(that.configuration) : that.configuration != null) {
-            return false;
-        }
-        if (getConsumerKey() != null ? !getConsumerKey().equals(that.getConsumerKey()) : that.getConsumerKey() != null) {
-            return false;
-        }
-        if (getConsumerSecret() != null ? !getConsumerSecret().equals(that.getConsumerSecret()) : that.getConsumerSecret() != null) {
-            return false;
-        }
-        return getScope() != null ? getScope().equals(that.getScope()) : that.getScope() == null;
+        final TokenRequestImpl that = (TokenRequestImpl) o;
+
+        return new EqualsBuilder().append(tokenResponseListeners, that.tokenResponseListeners).append(configuration, that.configuration).append(consumerKey, that.consumerKey).append(consumerSecret, that.consumerSecret).append(scope, that.scope).append(clientCredentialsMode, that.clientCredentialsMode).isEquals();
     }
-
 
     @Override
     public int hashCode() {
-        int result = configuration != null ? configuration.hashCode() : 0;
-        result = 31 * result + (getConsumerKey() != null ? getConsumerKey().hashCode() : 0);
-        result = 31 * result + (getConsumerSecret() != null ? getConsumerSecret().hashCode() : 0);
-        result = 31 * result + (getScope() != null ? getScope().hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17, 37).append(tokenResponseListeners).append(configuration).append(consumerKey).append(consumerSecret).append(scope).append(clientCredentialsMode).toHashCode();
     }
 }

@@ -84,10 +84,10 @@ class HttpRequestHandler {
         requestParameters.headerParameters(parameterMap);
 
         Headers.Builder headerBuilder = new Headers.Builder();
+        headerBuilder.add("Content-Type", "application/x-www-form-urlencoded");
         for (Map.Entry<RequestParameterKey, String> entry : parameterMap.entrySet()) {
             Assert.notNull(entry.getValue(), "Header parameter " + entry.getKey() + " not set.");
             headerBuilder.add(entry.getKey().getValue(), entry.getValue());
-
         }
         return headerBuilder.build();
     }

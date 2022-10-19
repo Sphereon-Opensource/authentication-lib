@@ -23,6 +23,9 @@ public enum RequestParameterKey implements StringValueEnum {
     GRANT_TYPE("grant_type"),
     USER_NAME("username"),
     PASSWORD("password"),
+
+    CLIENT_ID("client_id"),
+    CLIENT_SECRET("client_secret"),
     REFRESH_TOKEN("refresh_token"),
     WINDOWS_TOKEN("windows_token"),
     KERBEROS_REALM("kerberos_realm"),

@@ -19,6 +19,7 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenRequestBuilder;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ClientCredentialsMode;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.config.ConfigManager;
 import com.sphereon.libs.authentication.impl.config.ConfigManagerProvider;
@@ -38,12 +39,18 @@ public interface GenerateTokenRequestBuilder {
         private Grant grant;
         private String scope;
         private Long validityPeriodInSeconds;
+        private ClientCredentialsMode clientCredentialsMode;
 
 
         public Builder(ApiConfiguration configuration) {
             this.configuration = configuration;
         }
 
+
+        public GenerateTokenRequestBuilder.Builder withClientCredentialsMode(final ClientCredentialsMode clientCredentialsMode) {
+            this.clientCredentialsMode = clientCredentialsMode;
+            return this;
+        }
 
         public GenerateTokenRequestBuilder.Builder withConsumerKey(String consumerKey) {
             this.consumerKey = consumerKey;
@@ -90,6 +97,7 @@ public interface GenerateTokenRequestBuilder {
             configPersistence.loadConfig(configManager);
             GenerateTokenRequestImpl tokenRequest = new GenerateTokenRequestImpl(configuration);
             tokenRequest.setGrant(grant);
+            tokenRequest.setClientCredentialsMode(clientCredentialsMode);
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
             tokenRequest.setScope(scope);
@@ -99,28 +107,37 @@ public interface GenerateTokenRequestBuilder {
 
 
         private void validate() {
+            if (clientCredentialsMode == null) {
+                this.clientCredentialsMode = ClientCredentialsMode.BASIC_HEADER; // Backwards compatibility
+            }
+
+            if(clientCredentialsMode == ClientCredentialsMode.BASIC_HEADER) {
+                if (StringUtils.isEmpty(consumerKey)) {
+                    this.consumerKey = configuration.getConsumerKey();
+                }
+                if (StringUtils.isEmpty(consumerKey)) {
+                    throw new IllegalArgumentException(String.format(
+                            "The consumer key variable was not found for application %s. Please check your configuration.",
+                            configuration.getApplication()));
+                }
+                if (StringUtils.isEmpty(consumerSecret)) {
+                    this.consumerSecret = configuration.getConsumerSecret();
+                }
+                if (StringUtils.isEmpty(consumerSecret)) {
+                    throw new IllegalArgumentException(String.format(
+                            "The consumer secret variable was not found for application %s. Please check your configuration.",
+                            configuration.getApplication()));
+                }
+            }
             if (this.grant == null) {
                 this.grant = configuration.getDefaultGrant();
             }
             if (this.grant == null) {
-                this.grant = new ClientCredentialBuilder.ClientCredentialGrantBuilder().build();
-            }
-
-            if (StringUtils.isEmpty(consumerKey)) {
-                this.consumerKey = configuration.getConsumerKey();
-            }
-            if (StringUtils.isEmpty(consumerKey)) {
-                throw new IllegalArgumentException(String.format(
-                    "The consumer key variable was not found for application %s. Please check your configuration.",
-                    configuration.getApplication()));
-            }
-            if (StringUtils.isEmpty(consumerSecret)) {
-                this.consumerSecret = configuration.getConsumerSecret();
-            }
-            if (StringUtils.isEmpty(consumerSecret)) {
-                throw new IllegalArgumentException(String.format(
-                    "The consumer secret variable was not found for application %s. Please check your configuration.",
-                    configuration.getApplication()));
+                this.grant = new ClientCredentialBuilder.ClientCredentialGrantBuilder()
+                        .withClientCredentialsMode(clientCredentialsMode)
+                        .withConsumerKey(consumerKey)
+                        .withConsumerSecret(consumerSecret)
+                        .build();
             }
             if (StringUtils.isEmpty(scope)) {
                 this.scope = configuration.getDefaultScope();

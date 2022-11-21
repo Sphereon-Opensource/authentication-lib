@@ -111,6 +111,11 @@ public interface ApiConfigurator extends Serializable {
             return this;
         }
 
+        public Builder withTokenEndpointPath(String path) {
+            configuration.setTokenEndpointPath(path);
+            return this;
+        }
+
 
         public ApiConfiguration build() {
             validate();

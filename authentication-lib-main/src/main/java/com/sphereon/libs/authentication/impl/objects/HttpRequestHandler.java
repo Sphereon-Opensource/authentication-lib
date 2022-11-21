@@ -45,22 +45,36 @@ class HttpRequestHandler {
     }
 
 
-    public Request newTokenRequest(String urlBase, Headers headers, FormBody requestBody) {
+    public Request newTokenRequest(String urlBase, final String tokenEndpointPath, Headers headers, FormBody requestBody) {
         Assert.notNull(urlBase, "No urlBase was specified");
 
+        final StringBuilder urlBuilder = new StringBuilder(urlBase);
+        if (!urlBase.endsWith("/")) {
+            urlBuilder.append('/');
+        }
+        if (StringUtils.isNotBlank(tokenEndpointPath)) {
+            if (tokenEndpointPath.startsWith("/")) {
+                urlBuilder.append(tokenEndpointPath.substring(1));
+            } else {
+                urlBuilder.append(tokenEndpointPath);
+            }
+        } else {
+            urlBuilder.append(TokenPathParameters.TOKEN.getValue());
+        }
+
         Request.Builder request = new Request.Builder()
-            .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.TOKEN)
-            .headers(headers)
-            .post(requestBody);
+                .url(urlBuilder.toString())
+                .headers(headers)
+                .post(requestBody);
         return request.build();
     }
 
 
     public Request newRevokeRequest(String urlBase, Headers headers, FormBody requestBody) {
         Request.Builder request = new Request.Builder()
-            .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.REVOKE)
-            .headers(headers)
-            .post(requestBody);
+                .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.REVOKE)
+                .headers(headers)
+                .post(requestBody);
         return request.build();
     }
 
@@ -107,8 +121,8 @@ class HttpRequestHandler {
         Assert.notNull(responseBody, "The remote endpoint did not return a response body.");
         String responseBodyString = responseBody.string();
         Assert.isTrue(!"application/json".equals(responseBody.contentType()),
-            String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
-                responseBody.contentType(), responseBodyString));
+                String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
+                        responseBody.contentType(), responseBodyString));
         return responseBodyString;
     }
 

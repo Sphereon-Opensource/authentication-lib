@@ -70,7 +70,7 @@ public class CredentialsTest extends AbstractTest {
     }
 
     @Test
-    public void test_12_ClientCredentialBodyMicrosoft() {
+    public void test_12_ClientCredentialBodyAzure() {
         ApiConfiguration configuration = new ApiConfiguration.Builder()
                 .withGatewayBaseUrl("https://login.microsoftonline.com/e2a42b2f-7460-4499-afc2-425315ef058a/oauth2/v2.0")
                 .withApplication(APPLICATION_NAME)
@@ -84,9 +84,33 @@ public class CredentialsTest extends AbstractTest {
 
         TokenRequest tokenRequest = authenticationApi.requestToken()
                 .withClientCredentialsMode(ClientCredentialsMode.BODY)
-                .withConsumerKey("a6f86e05-b1d5-4103-95ff-fd5212bba102")
-                .withConsumerSecret("5to8Q~oLPbb6qohpXpQzbyR-y4DuZJI2vHcO4csj")
+                .withConsumerKey("6b2b3ffe-cc9a-4e5a-968a-613a847237e5")
+                .withConsumerSecret("URb8Q~jFhn8KKw08s5izc4cxCdhcEmRy4s0e0cLG")
                 .withScope("https://graph.microsoft.com/.default")
+                .build();
+        TokenResponse tokenResponse = tokenRequest.execute();
+        Assert.assertNotNull(tokenResponse.getAccessToken());
+    }
+
+    @Test
+    public void test_14_ClientCredentialBodySharepoint() {
+        ApiConfiguration configuration = new ApiConfiguration.Builder()
+                .withGatewayBaseUrl("https://accounts.accesscontrol.windows.net/e2a42b2f-7460-4499-afc2-425315ef058a")
+                .withTokenEndpointPath("tokens/OAuth/2")
+                .withApplication(APPLICATION_NAME)
+                .withPersistenceType(PersistenceType.IN_MEMORY)
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .build();
+
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
+                .withConfiguration(configuration)
+                .build();
+
+        TokenRequest tokenRequest = authenticationApi.requestToken()
+                .withClientCredentialsMode(ClientCredentialsMode.BODY)
+                .withConsumerKey("9a78b885-4d8c-4a3a-a409-6989d6711d8a@e2a42b2f-7460-4499-afc2-425315ef058a")
+                .withConsumerSecret("iuDRQ1MrLJY1Uqyf8pMjWbk3xd9kfEH4y9THe3mNgZM=")
+                .withResource("00000003-0000-0ff1-ce00-000000000000/sphereon.sharepoint.com@e2a42b2f-7460-4499-afc2-425315ef058a")
                 .build();
         TokenResponse tokenResponse = tokenRequest.execute();
         Assert.assertNotNull(tokenResponse.getAccessToken());

@@ -38,6 +38,7 @@ public interface GenerateTokenRequestBuilder {
         private String consumerSecret;
         private Grant grant;
         private String scope;
+        private String resource;
         private Long validityPeriodInSeconds;
         private ClientCredentialsMode clientCredentialsMode;
 
@@ -75,6 +76,11 @@ public interface GenerateTokenRequestBuilder {
             return this;
         }
 
+        public GenerateTokenRequestBuilder.Builder withResource(String resource) {
+            this.resource = resource;
+            return this;
+        }
+
 
         public GenerateTokenRequestBuilder.Builder withValidityPeriod(int validityPeriodInSeconds) {
             this.validityPeriodInSeconds = Long.valueOf(validityPeriodInSeconds);
@@ -101,6 +107,7 @@ public interface GenerateTokenRequestBuilder {
             tokenRequest.setConsumerKey(consumerKey);
             tokenRequest.setConsumerSecret(consumerSecret);
             tokenRequest.setScope(scope);
+            tokenRequest.setResource(resource);
             tokenRequest.setValidityPeriodInSeconds(validityPeriodInSeconds);
             return tokenRequest;
         }
@@ -111,7 +118,7 @@ public interface GenerateTokenRequestBuilder {
                 this.clientCredentialsMode = ClientCredentialsMode.BASIC_HEADER; // Backwards compatibility
             }
 
-            if(clientCredentialsMode == ClientCredentialsMode.BASIC_HEADER) {
+            if (clientCredentialsMode == ClientCredentialsMode.BASIC_HEADER) {
                 if (StringUtils.isEmpty(consumerKey)) {
                     this.consumerKey = configuration.getConsumerKey();
                 }

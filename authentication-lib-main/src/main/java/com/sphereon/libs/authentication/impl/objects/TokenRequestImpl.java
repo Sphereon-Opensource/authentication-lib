@@ -53,6 +53,7 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
     private transient String consumerSecret;
 
     protected String scope;
+    protected String resource;
     private ClientCredentialsMode clientCredentialsMode;
 
 
@@ -70,6 +71,13 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
         this.scope = scope;
     }
 
+    public void setResource(final String resource) {
+        this.resource = resource;
+    }
+
+    public String getResource() {
+        return resource;
+    }
 
     public ClientCredentialsMode getClientCredentialsMode() {
         return clientCredentialsMode;

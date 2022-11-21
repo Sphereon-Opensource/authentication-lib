@@ -141,7 +141,7 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
     private Request buildRequest(HttpRequestHandler requestHandler) {
         FormBody requestBody = requestHandler.buildBody(this);
         Headers headers = requestHandler.buildHeaders(this);
-        return requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), headers, requestBody);
+        return requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), configuration.getTokenEndpointPath(), headers, requestBody);
     }
 
 
@@ -161,37 +161,10 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
         if (getScope() != null) {
             parameterMap.put(RequestParameterKey.SCOPE, "" + getScope());
         }
+        if (getResource() != null) {
+            parameterMap.put(RequestParameterKey.RESOURCE, "" + getResource());
+        }
         RequestParameters grantParameters = (RequestParameters) getGrant();
         grantParameters.bodyParameters(parameterMap);
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof GenerateTokenRequestImpl)) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        GenerateTokenRequestImpl that = (GenerateTokenRequestImpl) o;
-
-        if (getGrant() != null ? !getGrant().equals(that.getGrant()) : that.getGrant() != null) {
-            return false;
-        }
-        return getValidityPeriodInSeconds() != null ? getValidityPeriodInSeconds().equals(that.getValidityPeriodInSeconds()) : that.getValidityPeriodInSeconds() == null;
-    }
-
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getGrant() != null ? getGrant().hashCode() : 0);
-        result = 31 * result + (getValidityPeriodInSeconds() != null ? getValidityPeriodInSeconds().hashCode() : 0);
-        return result;
     }
 }

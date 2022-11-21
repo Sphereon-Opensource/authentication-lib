@@ -33,6 +33,7 @@ public enum RequestParameterKey implements StringValueEnum {
     ASSERTION("assertions"),
     VALIDITY_PERIOD("validity_period"),
     SCOPE("scope"),
+    RESOURCE("resource"),
     AUTHORIZATION("Authorization"),
     TOKEN("token");
 

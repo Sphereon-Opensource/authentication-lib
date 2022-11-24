@@ -24,7 +24,6 @@ public interface TokenRequestBuilder {
 
     TokenRequest build();
 
-
     final class Builder {
 
         private final ApiConfiguration configuration;

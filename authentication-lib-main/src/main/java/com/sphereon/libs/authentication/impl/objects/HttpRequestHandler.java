@@ -22,6 +22,7 @@ import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -44,22 +45,36 @@ class HttpRequestHandler {
     }
 
 
-    public Request newTokenRequest(String urlBase, Headers headers, FormBody requestBody) {
+    public Request newTokenRequest(String urlBase, final String tokenEndpointPath, Headers headers, FormBody requestBody) {
         Assert.notNull(urlBase, "No urlBase was specified");
 
+        final StringBuilder urlBuilder = new StringBuilder(urlBase);
+        if (!urlBase.endsWith("/")) {
+            urlBuilder.append('/');
+        }
+        if (StringUtils.isNotBlank(tokenEndpointPath)) {
+            if (tokenEndpointPath.startsWith("/")) {
+                urlBuilder.append(tokenEndpointPath.substring(1));
+            } else {
+                urlBuilder.append(tokenEndpointPath);
+            }
+        } else {
+            urlBuilder.append(TokenPathParameters.TOKEN.getValue());
+        }
+
         Request.Builder request = new Request.Builder()
-            .url(urlBase + TokenPathParameters.TOKEN)
-            .headers(headers)
-            .post(requestBody);
+                .url(urlBuilder.toString())
+                .headers(headers)
+                .post(requestBody);
         return request.build();
     }
 
 
     public Request newRevokeRequest(String urlBase, Headers headers, FormBody requestBody) {
         Request.Builder request = new Request.Builder()
-            .url(urlBase + TokenPathParameters.REVOKE)
-            .headers(headers)
-            .post(requestBody);
+                .url(StringUtils.appendIfMissing(urlBase, "/") + TokenPathParameters.REVOKE)
+                .headers(headers)
+                .post(requestBody);
         return request.build();
     }
 
@@ -84,10 +99,10 @@ class HttpRequestHandler {
         requestParameters.headerParameters(parameterMap);
 
         Headers.Builder headerBuilder = new Headers.Builder();
+        headerBuilder.add("Content-Type", "application/x-www-form-urlencoded");
         for (Map.Entry<RequestParameterKey, String> entry : parameterMap.entrySet()) {
             Assert.notNull(entry.getValue(), "Header parameter " + entry.getKey() + " not set.");
             headerBuilder.add(entry.getKey().getValue(), entry.getValue());
-
         }
         return headerBuilder.build();
     }
@@ -106,8 +121,8 @@ class HttpRequestHandler {
         Assert.notNull(responseBody, "The remote endpoint did not return a response body.");
         String responseBodyString = responseBody.string();
         Assert.isTrue(!"application/json".equals(responseBody.contentType()),
-            String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
-                responseBody.contentType(), responseBodyString));
+                String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
+                        responseBody.contentType(), responseBodyString));
         return responseBodyString;
     }
 

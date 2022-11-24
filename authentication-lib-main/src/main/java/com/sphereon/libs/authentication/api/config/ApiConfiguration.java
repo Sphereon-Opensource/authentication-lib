@@ -31,6 +31,10 @@ public interface ApiConfiguration extends ApiConfigurator {
 
     void setGatewayBaseUrl(String gatewayBaseUrl);
 
+    String getTokenEndpointPath();
+
+    void setTokenEndpointPath(String tokenEndpointPath);
+
     PersistenceType getPersistenceType();
 
     void setPersistenceType(PersistenceType persistenceType);

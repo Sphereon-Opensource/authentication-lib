@@ -38,6 +38,7 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
     private PersistenceMode persistenceMode = PersistenceMode.READ_ONLY;
 
     private String gatewayBaseUrl = DEFAULT_GATEWAY_URL;
+    private String tokenEndpointPath;
 
     private File standalonePropertyFile;
 
@@ -87,6 +88,15 @@ class ApiConfigurationImpl implements ApiConfiguration, ConfigPersistence, Confi
         this.gatewayBaseUrl = gatewayBaseUrl;
     }
 
+    @Override
+    public String getTokenEndpointPath() {
+        return tokenEndpointPath;
+    }
+
+    @Override
+    public void setTokenEndpointPath(final String tokenEndpointPath) {
+        this.tokenEndpointPath = tokenEndpointPath;
+    }
 
     @Override
     public PersistenceType getPersistenceType() {

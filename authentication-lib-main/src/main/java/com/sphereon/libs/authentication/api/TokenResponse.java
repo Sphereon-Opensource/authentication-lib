@@ -30,5 +30,7 @@ public interface TokenResponse {
 
     Long getResponseTimeMs();
 
+    String getApiEndpoint();
+
     boolean isExpired();
 }

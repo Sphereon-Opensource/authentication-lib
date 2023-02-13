@@ -20,7 +20,7 @@ import com.sphereon.commons.exceptions.EnumParseException;
 import org.apache.commons.lang3.StringUtils;
 
 public enum ClientCredentialsMode {
-    BASIC_HEADER, BODY;
+    BASIC_HEADER, BODY, SESSION_TOKEN;
 
 
     public static ClientCredentialsMode fromString(String value) {

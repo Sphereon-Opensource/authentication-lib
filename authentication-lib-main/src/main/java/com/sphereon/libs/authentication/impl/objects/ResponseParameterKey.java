@@ -20,7 +20,13 @@ import com.sphereon.commons.interfaces.StringValueEnum;
 
 public enum ResponseParameterKey implements StringValueEnum {
 
-    ACCESS_TOKEN("access_token"), REFRESH_TOKEN("refresh_token"), SCOPE("scope"), TOKEN_TYPE("token_type"), EXPIRES_IN("expires_in");
+    ACCESS_TOKEN("access_token"),
+    ACCESS_TOKEN_ALT("token"),
+    REFRESH_TOKEN("refresh_token"),
+    SCOPE("scope"),
+    TOKEN_TYPE("token_type"),
+    EXPIRES_IN("expires_in"),
+    API_ENDPOINT("baseUrl");
 
 
     private final String value;

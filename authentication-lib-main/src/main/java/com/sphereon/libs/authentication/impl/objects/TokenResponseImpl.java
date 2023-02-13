@@ -35,11 +35,16 @@ class TokenResponseImpl implements TokenResponse {
 
     private Long expiresInSeconds;
 
+    private String apiEndpoint;
+
     private final long responseTimeMs = System.currentTimeMillis();
 
 
     TokenResponseImpl(Map<String, String> parameters) {
         accessToken = parameters.get(ResponseParameterKey.ACCESS_TOKEN.getValue());
+        if(StringUtils.isEmpty(accessToken)) {
+            accessToken =  parameters.get(ResponseParameterKey.ACCESS_TOKEN_ALT.getValue());
+        }
         refreshToken = parameters.get(ResponseParameterKey.REFRESH_TOKEN.getValue());
         scope = parameters.get(ResponseParameterKey.SCOPE.getValue());
         tokenType = parameters.get(ResponseParameterKey.TOKEN_TYPE.getValue());
@@ -47,6 +52,7 @@ class TokenResponseImpl implements TokenResponse {
         if (StringUtils.isNotEmpty(stringExpiresIn)) {
             expiresInSeconds = Long.parseLong(stringExpiresIn);
         }
+        apiEndpoint =  parameters.get(ResponseParameterKey.API_ENDPOINT.getValue());
     }
 
 
@@ -83,6 +89,11 @@ class TokenResponseImpl implements TokenResponse {
     @Override
     public Long getResponseTimeMs() {
         return responseTimeMs;
+    }
+
+    @Override
+    public String getApiEndpoint() {
+        return apiEndpoint;
     }
 
 

@@ -51,7 +51,7 @@ public interface ClientCredentialBuilder {
 
         private void validate() {
             Assert.notNull(clientCredentialsMode, "clientCredentialsMode is not set in ClientCredentialGrantBuilder");
-            if(clientCredentialsMode == ClientCredentialsMode.BODY) {
+            if(clientCredentialsMode == ClientCredentialsMode.BODY || clientCredentialsMode == ClientCredentialsMode.SESSION_TOKEN) {
                 Assert.notNull(consumerKey, "consumerKey is not set in ClientCredentialGrantBuilder");
                 Assert.notNull(consumerSecret, "consumerSecret is not set in ClientCredentialGrantBuilder");
             }

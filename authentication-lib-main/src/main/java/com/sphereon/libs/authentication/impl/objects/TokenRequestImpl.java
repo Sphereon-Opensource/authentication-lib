@@ -39,7 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.sphereon.commons.SigUtils.hmacSha256;
+import static com.sphereon.commons.SigUtils.toBase64;
+
 abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
+
+    private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
 
     protected static final Log log = LogFactory.getLog(TokenRequest.class);
     protected static final Base64 base64Encoder = new Base64();
@@ -122,15 +127,33 @@ abstract class TokenRequestImpl implements TokenRequest, RequestParameters {
     @Override
     public void headerParameters(Map<RequestParameterKey, String> parameterMap) {
         // This must be available for all grant types as long as credentials mode is BASIC_HEADER
-        if (getClientCredentialsMode() == ClientCredentialsMode.BASIC_HEADER) {
-            try {
-                String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
-                String authorizationHeader = String.format("Basic %s", new String(base64Encoder.encode(clientParameters.getBytes("UTF-8"))));
-                parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+        switch (getClientCredentialsMode()) {
+            case BASIC_HEADER:
+                try {
+                    String clientParameters = String.format("%s:%s", getConsumerKey(), getConsumerSecret());
+                    String authorizationHeader = String.format("Basic %s", new String(base64Encoder.encode(clientParameters.getBytes("UTF-8"))));
+                    parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case SESSION_TOKEN:
+            String authorizationHeader = String.format("Bearer %s", createSessionRequestToken());
+            parameterMap.put(RequestParameterKey.AUTHORIZATION, authorizationHeader);
         }
+    }
+
+    private String createSessionRequestToken() {
+        // This method was created for the Djuma interface using a JWT session request mechanism
+        // (Create JSON without extra deps)
+
+        final long expirationSecs = (System.currentTimeMillis() / 1000) + 60;
+        final String jwtPayload = new StringBuilder()
+                .append("{\"exp\": \"").append(expirationSecs).append("\",")
+                .append("\"clientidentifier\": \"").append(getConsumerKey()).append("\"}")
+                .toString();
+        final String signature = hmacSha256(toBase64(JWT_HEADER) + "." + toBase64(jwtPayload), getConsumerSecret());
+        return toBase64(JWT_HEADER) + "." + toBase64(jwtPayload) + "." + signature;
     }
 
 

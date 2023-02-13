@@ -17,6 +17,9 @@
 package com.sphereon.libs.authentication.impl.objects;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.sphereon.commons.assertions.Assert;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
@@ -62,11 +65,14 @@ class HttpRequestHandler {
             urlBuilder.append(TokenPathParameters.TOKEN.getValue());
         }
 
-        Request.Builder request = new Request.Builder()
+        final Request.Builder builder = new Request.Builder()
                 .url(urlBuilder.toString())
-                .headers(headers)
-                .post(requestBody);
-        return request.build();
+                .headers(headers);
+        if (requestBody != null && requestBody.size() > 0) {
+            return builder.post(requestBody).build();
+        } else {
+            return builder.get().build();
+        }
     }
 
 
@@ -100,6 +106,7 @@ class HttpRequestHandler {
 
         Headers.Builder headerBuilder = new Headers.Builder();
         headerBuilder.add("Content-Type", "application/x-www-form-urlencoded");
+        headerBuilder.add("Accept", "*/*");
         for (Map.Entry<RequestParameterKey, String> entry : parameterMap.entrySet()) {
             Assert.notNull(entry.getValue(), "Header parameter " + entry.getKey() + " not set.");
             headerBuilder.add(entry.getKey().getValue(), entry.getValue());
@@ -109,14 +116,35 @@ class HttpRequestHandler {
 
 
     public Map<String, String> parseJsonResponseBody(String jsonResponse) {
-        return gson.fromJson(jsonResponse, GSON_TYPE_TOKEN);
+        final JsonElement root = new JsonParser().parse(jsonResponse);
+        final JsonObject asJsonObject = root.getAsJsonObject();
+        boolean allPrimitives = true;
+        for (String keyName : asJsonObject.keySet()) {
+            final JsonElement item = asJsonObject.get(keyName);
+            if(!item.isJsonPrimitive()) {
+                allPrimitives = false;
+            }
+            if (StringUtils.containsIgnoreCase(keyName, "error") && (!item.isJsonNull() || item.isJsonPrimitive())) {
+                throw new RuntimeException("Response error: " + item.getAsString());
+            }
+        }
+        if(allPrimitives) {
+            return gson.fromJson(root, GSON_TYPE_TOKEN);
+        }
+        for (String keyName : asJsonObject.keySet()) {
+            final JsonElement item = asJsonObject.get(keyName);
+            if (StringUtils.equalsIgnoreCase(keyName, "payload") && !item.isJsonNull()) {
+                return gson.fromJson(item, GSON_TYPE_TOKEN);
+            }
+        }
+        throw new IllegalArgumentException("Expected a payload element");
     }
 
 
     public String getResponseBodyContent(Response response) throws IOException {
         ResponseBody responseBody = response.body();
         if (response.code() != 200) {
-            throw new RuntimeException(String.format("Generate request failed with http code %d, message:%s", response.code(), response.message()));
+            throw new RuntimeException(formatErrorMessage(response, responseBody));
         }
         Assert.notNull(responseBody, "The remote endpoint did not return a response body.");
         String responseBodyString = responseBody.string();
@@ -124,6 +152,23 @@ class HttpRequestHandler {
                 String.format("The remote endpoint responded with content type %s while application/json is expected. Content:%n%s",
                         responseBody.contentType(), responseBodyString));
         return responseBodyString;
+    }
+
+    private static String formatErrorMessage(final Response response, final ResponseBody responseBody) throws
+            IOException {
+        final StringBuilder message = new StringBuilder();
+        final String msg1 = response.message();
+        final String msg2 = responseBody.string();
+        if (StringUtils.isNotEmpty(msg1)) {
+            message.append(msg1);
+        }
+        if (message.length() > 0) {
+            message.append(" - ");
+        }
+        if (StringUtils.isNotEmpty(msg2)) {
+            message.append(msg2);
+        }
+        return String.format("Generate request failed with http code %d, message: %s", response.code(), message);
     }
 
 

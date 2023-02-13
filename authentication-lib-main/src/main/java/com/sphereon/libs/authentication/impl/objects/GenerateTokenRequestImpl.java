@@ -19,6 +19,7 @@ package com.sphereon.libs.authentication.impl.objects;
 import com.sphereon.libs.authentication.api.TokenRequest;
 import com.sphereon.libs.authentication.api.TokenResponse;
 import com.sphereon.libs.authentication.api.config.ApiConfiguration;
+import com.sphereon.libs.authentication.api.config.ClientCredentialsMode;
 import com.sphereon.libs.authentication.api.granttypes.Grant;
 import com.sphereon.libs.authentication.impl.RequestParameters;
 import okhttp3.FormBody;
@@ -139,6 +140,7 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
 
     private Request buildRequest(HttpRequestHandler requestHandler) {
+
         FormBody requestBody = requestHandler.buildBody(this);
         Headers headers = requestHandler.buildHeaders(this);
         return requestHandler.newTokenRequest(configuration.getGatewayBaseUrl(), configuration.getTokenEndpointPath(), headers, requestBody);
@@ -155,11 +157,13 @@ class GenerateTokenRequestImpl extends TokenRequestImpl implements TokenRequest,
 
     @Override
     public void bodyParameters(Map<RequestParameterKey, String> parameterMap) {
+        if(getClientCredentialsMode() == ClientCredentialsMode.SESSION_TOKEN) {
+            parameterMap.clear();
+            return;
+        }
+        super.bodyParameters(parameterMap);
         if (getValidityPeriodInSeconds() != null) {
             parameterMap.put(RequestParameterKey.VALIDITY_PERIOD, "" + getValidityPeriodInSeconds());
-        }
-        if (getScope() != null) {
-            parameterMap.put(RequestParameterKey.SCOPE, "" + getScope());
         }
         if (getResource() != null) {
             parameterMap.put(RequestParameterKey.RESOURCE, "" + getResource());

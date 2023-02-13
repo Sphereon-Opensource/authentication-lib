@@ -118,6 +118,29 @@ public class CredentialsTest extends AbstractTest {
 
 
     @Test
+    public void test_16_ClientCredentialVisma() {
+        ApiConfiguration configuration = new ApiConfiguration.Builder()
+                .withGatewayBaseUrl("https://accesscontrolapitest.circlesoftware.nl/api/REST/DevId/endpoints/dummy-api/") // TODO DO NOT COMMIT
+                .withApplication(APPLICATION_NAME)
+                .withPersistenceType(PersistenceType.IN_MEMORY)
+                .withPersistenceMode(PersistenceMode.READ_WRITE)
+                .build();
+
+        AuthenticationApi authenticationApi = new AuthenticationApi.Builder()
+                .withConfiguration(configuration)
+                .build();
+
+        TokenRequest tokenRequest = authenticationApi.requestToken()
+                .withClientCredentialsMode(ClientCredentialsMode.SESSION_TOKEN)
+                .withConsumerKey("Sphereon")
+                .withConsumerSecret("v4DMnPRYPpMa1PS6kaiTIhqD0QFxCwcRmEc127bYHWkRbbdJVme12LToOaWH") // TODO DO NOT COMMIT
+                .build();
+        TokenResponse tokenResponse = tokenRequest.execute();
+        Assert.assertNotNull(tokenResponse.getAccessToken());
+        Assert.assertNotNull(tokenResponse.getApiEndpoint());
+    }
+
+    @Test
     public void test_20_UserPassword() {
 
         ApiConfiguration configuration = createPropertyFileConfiguration(SPHEREON_AUTH_PROPERTIES);
